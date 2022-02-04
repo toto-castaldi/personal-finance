@@ -26,4 +26,4 @@ services:
       - postgresql
 
 volumes:
-  personal-finance:
+  personal-finance-postgres:
