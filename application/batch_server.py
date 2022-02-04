@@ -8,7 +8,10 @@ import common.coinbase as coinbase
 
 logger = utils.init_log()
 
-def job():
+def tick_job():
+    logger.info("tick...")
+
+def coinbase_job():
     logger.info("coinbase")
     accounts = db.load_all_accounts()
     for account in accounts:
@@ -18,14 +21,14 @@ def job():
 
 
 if os.getenv("ENV", None) == "DEV":
-    job()
+    coinbase_job()
 else:
     db.connection_param["host"] = "postgresql"
     if __name__ == '__main__':
-        #schedule.every(10).seconds.do(job)
+        schedule.every(10).seconds.do(tick_job)
         #schedule.every(10).minutes.do(job)
         #schedule.every().hour.do(job)
-        schedule.every().day.at("10:30").do(job)
+        schedule.every().day.at("10:30").do(coinbase_job)
         #schedule.every(5).to(10).minutes.do(job)
         #schedule.every().monday.do(job)
         #schedule.every().wednesday.at("13:15").do(job)
