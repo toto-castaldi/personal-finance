@@ -10,8 +10,6 @@ services:
     image: postgres:11.5
     volumes:
       - personal-finance-postgres:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
     environment:
       - POSTGRES_PASSWORD=dbpsql
       - POSTGRES_USER=dbpsql
