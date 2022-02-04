@@ -2,8 +2,8 @@ import time
 import os
 import schedule
 import utils
-import db
-import coinbase
+import common.db as db
+import common.coinbase as coinbase
 
 
 logger = utils.init_log()

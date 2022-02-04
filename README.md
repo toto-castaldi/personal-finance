@@ -35,8 +35,9 @@ run it if something in the schema is changed
 
 ```
 . .venv/bin/activate
-cd application
+cd application/batch
 pip install -r requirements.txt
+cd ..
 LOG_LEVEL=DEBUG ENV=DEV python batch_server.py
 ```
 

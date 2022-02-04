@@ -1,0 +1,15 @@
+FROM python:3.9.5
+
+WORKDIR /app
+COPY ./common /app/common
+COPY ./batch /app/batch
+COPY ./batch_server.py /app
+
+RUN pip install --no-cache-dir --upgrade -r /app/batch/requirements.txt
+RUN mkdir -p /app/log/
+
+EXPOSE 5000
+
+ENV ENV=DOCKER
+
+CMD ["python", "batch_server.py"]

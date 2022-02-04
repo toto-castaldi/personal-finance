@@ -16,6 +16,19 @@
     trigger_condition_paths:
       - "/postgresql-liquibase"
     trigger_condition: "ON_CHANGE_AT_PATH"
+  - action: "[BATCH] Build Docker image"
+    type: "DOCKERFILE"
+    login: "${DOCKER_HUB_USER}"
+    password: "${DOCKER_HUB_PASSWORD}"
+    docker_image_tag: "latest"
+    dockerfile_path: "application/Dockerfile-batch"
+    context_path: "application"
+    repository: "totocastaldi/personal-finance-batch"
+    build_args:
+    - "version=${BUDDY_EXECUTION_REVISION}"
+    trigger_condition_paths:
+      - "/application"
+    trigger_condition: "ON_CHANGE_AT_PATH"
   - action: "update docker-compose"
     type: "SFTP"
     input_type: "SCM_REPOSITORY"
