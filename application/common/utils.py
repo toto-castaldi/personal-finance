@@ -1,6 +1,7 @@
 import logging
 import logging.handlers
 import os
+from datetime import timedelta
 
 LOG_LEVELS = {
   'INFO' : 20,
@@ -37,3 +38,7 @@ def init_log():
     logger.setLevel(log_level)
     
   return logger
+
+def daterange(start_date, end_date):
+    for n in range(int((end_date - start_date).days)):
+        yield start_date + timedelta(n)

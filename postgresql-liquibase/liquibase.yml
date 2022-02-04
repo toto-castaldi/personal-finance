@@ -75,4 +75,35 @@ databaseChangeLog:
             baseTableName:  coinbase_trx
             referencedColumnNames:  account_id  
             referencedTableName:  account
+  - changeSet:
+      id: 2
+      author: toto
+      changes:
+        - createTable:
+            tableName: crypto_rate
+            columns:
+              - column:
+                  name: crypto_currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: native_currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date
+                  type: date
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: money
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            columnNames:  crypto_currency, native_currency, date
+            constraintName:  pk_crypto_rate
+            tableName:  crypto_rate
       

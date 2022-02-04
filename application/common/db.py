@@ -27,9 +27,9 @@ on conflict (trx_id) do nothing;
 
 @dataclass
 class Account:
-    id: str
-    coinbase_api_key: str
-    coinbase_api_secret: str
+  id: str
+  coinbase_api_key: str
+  coinbase_api_secret: str
 
 def get_conn():
   global conn
@@ -55,16 +55,24 @@ def fetch(query, args={}, all=False):
       return result
 
 def load_all_accounts():
-    return list(map(lambda e: Account(e["account_id"], e["coinbase_api_key"], e["coinbase_api_secret"]), fetch(ALL_ACCOUNTS, all=True)))
+  return list(map(lambda e: Account(e["account_id"], e["coinbase_api_key"], e["coinbase_api_secret"]), fetch(ALL_ACCOUNTS, all=True)))
     
 
 def merge_transactions(user, transactions):
-    logger.debug(user)
-    for transaction in transactions:  
-      with get_conn() as conn:  
-        with conn.cursor() as cursor:
-          arg = asdict(transaction)
-          arg["account_id"] = user.id
-          logger.debug(arg)
-          cursor.execute(INSERT_COINBASE_TRANSACTION, arg)
-      
+  logger.debug(user)
+  for transaction in transactions:  
+    with get_conn() as conn:  
+      with conn.cursor() as cursor:
+        arg = asdict(transaction)
+        arg["account_id"] = user.id
+        logger.debug(arg)
+        cursor.execute(INSERT_COINBASE_TRANSACTION, arg)
+
+def currency_from_to():
+  return []
+
+def min_max_date_trx():
+  return None, None
+
+def save_crypto_rate(the_date, currency_from, currency_to, rate):
+  pass
