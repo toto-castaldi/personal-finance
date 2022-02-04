@@ -1,5 +1,5 @@
 import psycopg2
-import utils
+import common.utils as utils
 from psycopg2.extras import RealDictCursor
 from dataclasses import dataclass, asdict
 
