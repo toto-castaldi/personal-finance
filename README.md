@@ -66,3 +66,12 @@ apt install curl
 curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
 chmod +x /usr/local/bin/docker-compose
 ```
+
+## CONNECT DB
+
+```shell
+
+cd /var/lib/buddy
+docker exec -it buddy_postgresql_1 psql -U dbpsql
+
+```
