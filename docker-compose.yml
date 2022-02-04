@@ -6,6 +6,8 @@ services:
       - postgresql
     depends_on:
       - postgresql-liquibase
+    volumes:
+      - /var/lib/buddy/log:/app/log
   postgresql:
     image: postgres:11.5
     volumes:
