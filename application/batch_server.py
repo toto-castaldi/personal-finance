@@ -22,18 +22,27 @@ def coinbase_job():
 
 def coinapi_job():
     logger.info("coinapi")
+    today = datetime.today().date()
     currencys_from_to = db.coinbase_currency_from_to()
     for currency_from_to in currencys_from_to:
         logger.debug(currency_from_to)
         min_date_trx, _ = db.min_max_date_trx()
+        min_date_trx = min_date_trx.date()
+        
         logger.debug(f"{min_date_trx}")
-        for single_date in utils.daterange(min_date_trx, datetime.today()):
+
+        for single_date in utils.daterange(min_date_trx, today):
             logger.debug(single_date)
-            rate = coinapi.rate(currency_from_to[0], currency_from_to[1], single_date)
-            db.save_crypto_rate(single_date, currency_from_to[0], currency_from_to[1], rate)
+            rate = db.get_crypto_rate(single_date, currency_from_to[0], currency_from_to[1])
+            if rate is None:
+                rate = coinapi.rate(currency_from_to[0], currency_from_to[1], single_date)
+                db.save_crypto_rate(single_date, currency_from_to[0], currency_from_to[1], rate)
+            if utils.is_dev_env():
+                #just one execution
+                return
 
 
-if os.getenv("ENV", None) == "DEV":
+if utils.is_dev_env():
     #coinbase_job()
     coinapi_job()
 else:

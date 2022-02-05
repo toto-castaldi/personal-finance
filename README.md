@@ -41,7 +41,7 @@ cd application/batch
 pip install -r requirements.txt
 cd ..
 mkdir log
-LOG_LEVEL=DEBUG ENV=DEV python batch_server.py
+LOG_LEVEL=DEBUG ENV=DEV COINAPI_KEY=[YOUR_COINAPI_KEY] python batch_server.py
 ```
 
 # CLOUD SERVER

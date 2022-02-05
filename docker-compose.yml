@@ -8,6 +8,7 @@ services:
       - postgresql-liquibase
     volumes:
       - /var/lib/buddy/log:/app/log
+      - /var/lib/buddy/config/config-be.json:/app/common/config.json
   postgresql:
     image: postgres:11.5
     volumes:

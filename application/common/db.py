@@ -27,6 +27,10 @@ SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT='''
  select min(updated_at), max(updated_at) from coinbase_trx ;
 '''
 
+SELECT_CRYPTO_RATE='''
+ select amount from crypto_rate where crypto_currency = %(crypto_currency)s and native_currency = %(native_currency)s and date = %(date)s;
+'''
+
 INSERT_COINBASE_TRANSACTION = '''
 INSERT INTO coinbase_trx (account_id, trx_id, updated_at, native_amount_amount, crypto_amount_amount, buy_sell, native_amount_currency, crypto_amount_currency)
 VALUES (%(account_id)s, %(id)s, %(updated_at)s, %(native_amount_amount)s, %(crypto_amount_amount)s, %(type)s, %(native_amount_currency)s, %(crypto_amount_currency)s)
@@ -85,3 +89,10 @@ def min_max_date_trx():
 
 def save_crypto_rate(the_date, currency_from, currency_to, rate):
   pass
+
+def get_crypto_rate(the_date, crypto_currency, native_currency):
+  return fetch(SELECT_CRYPTO_RATE, {
+    "crypto_currency" : crypto_currency,
+    "native_currency" : native_currency,
+    "date" : the_date
+  })

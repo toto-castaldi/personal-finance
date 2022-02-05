@@ -16,6 +16,9 @@ logger_files = ['batch']
 logger = None
 
 
+def is_dev_env():
+  return os.getenv("ENV", None) == "DEV"
+
 def init_log():
   global logger
 
