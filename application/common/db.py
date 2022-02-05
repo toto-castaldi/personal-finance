@@ -15,8 +15,16 @@ conn = None
 
 logger = utils.init_log()
 
-ALL_ACCOUNTS = '''
+SELECT_ALL_ACCOUNTS = '''
 SELECT * FROM ACCOUNT
+'''
+
+SELECT_COINBASE_TRX_FROM_TO = '''
+select distinct(crypto_amount_currency, native_amount_currency) from coinbase_trx 
+'''
+
+SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT='''
+ select min(updated_at), max(updated_at) from coinbase_trx ;
 '''
 
 INSERT_COINBASE_TRANSACTION = '''
@@ -55,7 +63,7 @@ def fetch(query, args={}, all=False):
       return result
 
 def load_all_accounts():
-  return list(map(lambda e: Account(e["account_id"], e["coinbase_api_key"], e["coinbase_api_secret"]), fetch(ALL_ACCOUNTS, all=True)))
+  return list(map(lambda e: Account(e["account_id"], e["coinbase_api_key"], e["coinbase_api_secret"]), fetch(SELECT_ALL_ACCOUNTS, all=True)))
     
 
 def merge_transactions(user, transactions):
@@ -68,11 +76,12 @@ def merge_transactions(user, transactions):
         logger.debug(arg)
         cursor.execute(INSERT_COINBASE_TRANSACTION, arg)
 
-def currency_from_to():
-  return []
+def coinbase_currency_from_to():
+  return list(map(lambda e: tuple(e["row"][1:-1].split(',')), fetch(SELECT_COINBASE_TRX_FROM_TO, all=True)))
 
 def min_max_date_trx():
-  return None, None
+  min_max = fetch(SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT)
+  return min_max["min"], min_max["max"]
 
 def save_crypto_rate(the_date, currency_from, currency_to, rate):
   pass

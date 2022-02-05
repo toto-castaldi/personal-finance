@@ -18,26 +18,27 @@ fi
 ## DB
 
 ```shell
-    $ mkdir -p postgres-data
-    $ docker run -it --rm --name some-postgres -v `pwd`/postgres-data:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=dbpsql -e POSTGRES_USER=dbpsql -e POSTGRES_DB=dbpsql postgres:11.5
+mkdir -p postgres-data
+docker run -it --rm --name some-postgres -v `pwd`/postgres-data:/var/lib/postgresql/data -p 5432:5432 -e POSTGRES_PASSWORD=dbpsql -e POSTGRES_USER=dbpsql -e POSTGRES_DB=dbpsql postgres:11.5
 ```
 
 ### Init DB
 
 run it if something in the schema is changed
 
-```bash
-    $ cd postgresql-liquibase
-    $ docker run -it -v `pwd`:/drivers -v `pwd`/liquibase.yml:/liquibase.yml --link some-postgres:postgres -e "LIQUIBASE_URL=jdbc:postgresql://postgres/dbpsql" -e "LIQUIBASE_USERNAME=dbpsql" -e "LIQUIBASE_PASSWORD=dbpsql" skillbillsrl/liquibase update
+```shell
+cd postgresql-liquibase
+docker run -it -v `pwd`:/drivers -v `pwd`/liquibase.yml:/liquibase.yml --link some-postgres:postgres -e "LIQUIBASE_URL=jdbc:postgresql://postgres/dbpsql" -e "LIQUIBASE_USERNAME=dbpsql" -e "LIQUIBASE_PASSWORD=dbpsql" skillbillsrl/liquibase update
 ```
 
 ## BATCH
 
-```
+```shell
 . .venv/bin/activate
 cd application/batch
 pip install -r requirements.txt
 cd ..
+mkdir log
 LOG_LEVEL=DEBUG ENV=DEV python batch_server.py
 ```
 
