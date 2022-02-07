@@ -52,9 +52,10 @@ if utils.is_dev_env():
 else:
     db.connection_param["host"] = "postgresql"
     if __name__ == '__main__':
-        schedule.every().hour.do(tick_job)
-        schedule.every().day.at("10:30").do(coinbase_job)
-        schedule.every().day.at("12:30").do(coinapi_job)
+        schedule.every(10).minutes.do(tick_job)
+        #schedule.every().hour.do(tick_job)
+        schedule.every().day.at("14:30").do(coinbase_job)
+        schedule.every().day.at("13:30").do(coinapi_job)
 
         #schedule.every(10).seconds.do(tick_job)
         #schedule.every(10).minutes.do(tick_job)
