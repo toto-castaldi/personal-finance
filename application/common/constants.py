@@ -1,5 +1,6 @@
 import json
 import os
+import common.utils as utils
 
 config = None
 
@@ -7,7 +8,7 @@ config = None
 def get_config():
   global config
   if not config:
-    if os.getenv("ENV", None) == "DEV":
+    if utils.is_dev_env():
         config = {
             "coinapi_key" : os.getenv("COINAPI_KEY")
         }

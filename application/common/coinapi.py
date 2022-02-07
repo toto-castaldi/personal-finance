@@ -18,7 +18,6 @@ class CoinApiAuth(AuthBase):
         return request
 
 def rate(currency_from, currency_to, date):
-
     auth = CoinApiAuth(constants.get_config()["coinapi_key"])
     str_time = date.isoformat()#strftime("%yyyy-%mm-%dd")
     url = f"https://rest.coinapi.io/v1/exchangerate/{currency_from}/{currency_to}?time={str_time}"
@@ -28,6 +27,7 @@ def rate(currency_from, currency_to, date):
     logger.debug(json_response)
     if r.status_code == 200:
         logger.debug("OK")
+        return json_response["rate"]
     else:
         logger.debug("KO")
-    pass
+        return None

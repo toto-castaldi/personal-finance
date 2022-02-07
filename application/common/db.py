@@ -37,6 +37,12 @@ VALUES (%(account_id)s, %(id)s, %(updated_at)s, %(native_amount_amount)s, %(cryp
 on conflict (trx_id) do nothing;
 '''
 
+INSERT_CRYPTO_RATE = '''
+INSERT INTO crypto_rate (crypto_currency, native_currency, date, amount)
+VALUES (%(crypto_currency)s, %(native_currency)s, %(date)s, %(amount)s)
+on conflict (crypto_currency, native_currency, date) do nothing;
+'''
+
 @dataclass
 class Account:
   id: str
@@ -88,7 +94,14 @@ def min_max_date_trx():
   return min_max["min"], min_max["max"]
 
 def save_crypto_rate(the_date, currency_from, currency_to, rate):
-  pass
+  with get_conn() as conn:  
+      with conn.cursor() as cursor:
+        cursor.execute(INSERT_CRYPTO_RATE, {
+          "crypto_currency" : currency_from,
+          "native_currency" : currency_to,
+          "date" : the_date,
+          "amount" : rate
+        })
 
 def get_crypto_rate(the_date, crypto_currency, native_currency):
   return fetch(SELECT_CRYPTO_RATE, {
