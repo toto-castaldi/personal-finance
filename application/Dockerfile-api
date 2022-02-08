@@ -1,0 +1,15 @@
+FROM python:3.9.5
+
+WORKDIR /app
+COPY ./common /app/common
+COPY ./api /app/api
+COPY ./api_server.py /app
+
+RUN pip install --no-cache-dir --upgrade -r /app/api/requirements.txt
+RUN mkdir -p /app/log/
+
+EXPOSE 5000
+
+ENV ENV=DOCKER
+
+CMD ["python", "api_server.py"]

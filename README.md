@@ -44,6 +44,17 @@ mkdir log
 LOG_LEVEL=DEBUG ENV=DEV COINAPI_KEY=[YOUR_COINAPI_KEY] python batch_server.py
 ```
 
+## API
+
+```shell
+. .venv/bin/activate
+cd application/api
+pip install -r requirements.txt
+cd ..
+mkdir log
+LOG_LEVEL=DEBUG ENV=DEV python api_server.py
+```
+
 # CLOUD SERVER
 
 ## INSTALLATION
