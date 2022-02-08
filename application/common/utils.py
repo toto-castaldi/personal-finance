@@ -11,9 +11,19 @@ LOG_LEVELS = {
   'CRITICAL' : 50
 }
 
-log_level =  LOG_LEVELS.get(os.environ.get('LOG_LEVEL','INFO'))
-logger_files = ['batch']
+log_level =  LOG_LEVELS.get(os.environ.get("LOG_LEVEL","INFO"))
+logger_files = ["batch", "api"]
 logger = None
+
+class ProcessnameFilter(logging.Filter):
+  processName = None
+
+  def __init__(self, processName):
+    super().__init__()
+    self.processName = processName 
+
+  def filter(self, record):
+    return True if self.processName in record.processName else False
 
 
 def is_dev_env():
@@ -34,6 +44,7 @@ def init_log():
     for lf in logger_files:
       f_handler = logging.handlers.TimedRotatingFileHandler(f'./log/{lf}.log', when='midnight', backupCount=10)
       f_handler.setFormatter(formatter)
+      f_handler.addFilter(ProcessnameFilter(lf))
       f_handler.setLevel(log_level)
       
       logger.addHandler(f_handler)
