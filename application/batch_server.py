@@ -6,16 +6,18 @@ import common.batch as batch
 
 
 if utils.is_dev_env():
-    batch.coinbase_job()
-    batch.coinapi_job()
+    #batch.coinbase_job()
+    #batch.coinapi_job()
+    batch.portfolio_value_history_job()
 else:
     db.connection_param["host"] = "postgresql"
     if __name__ == '__main__':
         schedule.every(10).minutes.do(batch.tick_job)
-        #schedule.every().hour.do(tick_job)
-        schedule.every().day.at("14:30").do(batch.coinbase_job)
         schedule.every().day.at("13:30").do(batch.coinapi_job)
+        schedule.every().day.at("14:30").do(batch.coinbase_job)
+        schedule.every().day.at("15:30").do(batch.portfolio_value_history_job)
 
+        #schedule.every().hour.do(tick_job)
         #schedule.every(10).seconds.do(tick_job)
         #schedule.every(10).minutes.do(tick_job)
         #schedule.every(5).to(10).minutes.do(tick_job)

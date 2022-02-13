@@ -3,6 +3,7 @@ import common.db as db
 import common.coinbase as coinbase
 import common.coinapi as coinapi
 from datetime import datetime
+from datetime import timedelta
 
 
 logger = utils.init_log()
@@ -27,6 +28,8 @@ def coinapi_job():
         currency_to = currency_from_to[1]
         min_date_trx, _ = db.min_max_date_trx()
         min_date_trx = min_date_trx.date()
+
+        min_date_trx -= timedelta(days=1)
         
         logger.debug(f"{min_date_trx}")
 
@@ -41,3 +44,10 @@ def coinapi_job():
                     if utils.is_dev_env():
                         #just one execution
                         return
+
+def portfolio_value_history_job():
+    logger.info("portfolio value history")
+    accounts = db.load_all_accounts()
+    for account in accounts:
+        logger.info(f"{account}")    
+        #min_trx_crypto_for_user = 

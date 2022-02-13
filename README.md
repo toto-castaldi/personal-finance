@@ -40,7 +40,6 @@ docker run -it -v `pwd`:/drivers -v `pwd`/liquibase.yml:/liquibase.yml --link so
 cd application/batch
 pip install -r requirements.txt
 cd ..
-mkdir log
 LOG_LEVEL=DEBUG ENV=DEV COINAPI_KEY=[YOUR_COINAPI_KEY] python batch_server.py
 ```
 
@@ -51,7 +50,6 @@ LOG_LEVEL=DEBUG ENV=DEV COINAPI_KEY=[YOUR_COINAPI_KEY] python batch_server.py
 cd application/api
 pip install -r requirements.txt
 cd ..
-mkdir log
 LOG_LEVEL=DEBUG ENV=DEV python api_server.py
 ```
 
