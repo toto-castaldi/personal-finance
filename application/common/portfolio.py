@@ -46,10 +46,25 @@ class Portfolio():
             if len(prev_amounts) == 0:
                 self.values.append(build_point(crypto_trx, 0, remaining_amounts))
             elif len(prev_amounts) == 1:
-                self.values.append(build_point(crypto_trx, prev_amounts[0].total_amount, remaining_amounts))
+                self.values.append(build_point(crypto_trx, prev_amounts[0].amount, remaining_amounts))
             else:
                 raise ValueError("too many values")
 
 
-    def asset_points(self):
-        return self.values
+    def asset_points(self, native_currency = None):
+        if native_currency:
+
+            #result = []
+            #for portfolio_point in self.values:
+            #    for asset in portfolio_point.assets:
+            #        convertes_assets = []
+            #        if asset.type == "CRYPTO":
+            #            rate = 2 #db.crypto_rate(value.sub_type, native_currency, )
+            #            if rate:
+            #                converted_asset_amount = ConvertedAssetAmount(
+            #                    
+            #                )
+            #                result.append(converted_value)
+            return self.values
+        else:
+            return self.values

@@ -23,9 +23,15 @@ class CoinbaseTransaction:
 
 @dataclass
 class AssetAmount:
-    total_amount : Decimal
+    amount : Decimal
     type : str
     sub_type : str
+
+@dataclass
+class ConvertedAssetAmount(AssetAmount):
+    native_amount : Decimal
+    native_currency : str
+
 
 @dataclass
 class PortfolioPoint:

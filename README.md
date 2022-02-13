@@ -10,8 +10,8 @@ PERSONAL-FINANCE
 ```
 if [ ! -d ".venv" ]
 then
-    pyenv install 3.9.5
-    pyenv local 3.9.5 
+    pyenv install 3.10.2
+    pyenv local 3.10.2
     pip install virtualenv
     virtualenv .venv
 fi

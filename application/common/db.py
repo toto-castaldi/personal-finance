@@ -23,6 +23,10 @@ SELECT_ALL_ACCOUNTS = '''
 SELECT * FROM ACCOUNT
 '''
 
+SELECT_ACCOUNT_INFO = '''
+SELECT * FROM ACCOUNT where account_id = %(account_id)s
+'''
+
 SELECT_COINBASE_TRX_FROM_TO = '''
 select distinct(crypto_amount_currency, native_amount_currency) from coinbase_trx 
 '''
@@ -78,6 +82,15 @@ def fetch(query, args={}, all=False):
       cursor.execute(query, args)
       result = cursor.fetchall() if all else cursor.fetchone()
       return result
+
+def account_info(account_id):
+  c = fetch(SELECT_ACCOUNT_INFO, {
+    "account_id" : account_id,
+  })
+  if c:
+    return bean.Account(c["account_id"], c["coinbase_api_key"], c["coinbase_api_secret"])
+  else:
+    return None
 
 def load_all_accounts():
   return list(map(lambda e: bean.Account(e["account_id"], e["coinbase_api_key"], e["coinbase_api_secret"]), fetch(SELECT_ALL_ACCOUNTS, all=True)))
