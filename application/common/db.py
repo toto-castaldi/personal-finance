@@ -63,6 +63,7 @@ def get_conn():
       conn = None
 
   if not conn and connection_param:
+    logger.debug(connection_param)
     conn = psycopg2.connect(dbname=connection_param["dbname"], user=connection_param["user"], password=connection_param["password"], host=connection_param["host"], port=connection_param["port"], cursor_factory=RealDictCursor)
        
   return conn
