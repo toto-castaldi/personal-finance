@@ -147,8 +147,12 @@ def save_crypto_rate(the_date, currency_from, currency_to, rate):
         })
 
 def get_crypto_rate(the_date, crypto_currency, native_currency):
-  return fetch(SELECT_CRYPTO_RATE, {
+  c = fetch(SELECT_CRYPTO_RATE, {
     "crypto_currency" : crypto_currency,
     "native_currency" : native_currency,
     "date" : the_date
   })
+  if c :
+    return c["amount"]
+  else:
+    return None
