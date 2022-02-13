@@ -16,7 +16,7 @@ conn = None
 
 logger = utils.init_log()
 
-if utils.is_dev_env():
+if utils.is_dev_env() is not True:
   connection_param["host"] = "postgresql"
 
 SELECT_ALL_ACCOUNTS = '''
