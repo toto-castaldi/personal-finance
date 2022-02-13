@@ -16,6 +16,9 @@ conn = None
 
 logger = utils.init_log()
 
+if utils.is_dev_env():
+  connection_param["host"] = "postgresql"
+
 SELECT_ALL_ACCOUNTS = '''
 SELECT * FROM ACCOUNT
 '''

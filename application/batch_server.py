@@ -10,7 +10,6 @@ if utils.is_dev_env():
     batch.coinapi_job()
     pass
 else:
-    db.connection_param["host"] = "postgresql"
     if __name__ == '__main__':
         schedule.every(10).minutes.do(batch.tick_job)
         schedule.every().day.at("13:30").do(batch.coinapi_job)
