@@ -26,19 +26,29 @@ class Portfolio():
                 self.add_crypto(down_range, crypto_trx)
 
     def add_crypto(self, the_data, crypto_trx):
-        if len(self.values) == 0:
-            logger.debug(the_data, crypto_trx)
-            assets = [bean.AssetAmount(
-              crypto_trx.crypto_amount_amount if crypto_trx.type == "buy" else -  crypto_trx.crypto_amount_amount,
+        def build_point(crypto_trx, prev_amount = 0, remaining_amounts = []):
+            remaining_amounts.append(bean.AssetAmount(
+              prev_amount + ( crypto_trx.crypto_amount_amount if crypto_trx.type == "buy" else -  crypto_trx.crypto_amount_amount),
               "CRYPTO",
               crypto_trx.crypto_amount_currency
-            )]
-            self.values.append(bean.PortfolioPoint(
-                the_data,
-                assets
             ))
+            return bean.PortfolioPoint(
+                the_data,
+                remaining_amounts
+            )
+        if len(self.values) == 0:
+            logger.debug(the_data, crypto_trx)
+            self.values.append(build_point(crypto_trx))
         else:
-            pass
+            last_val = self.values[-1]
+            prev_amounts = [x for x in last_val.assets if x.type == "CRYPTO" and x.sub_type == crypto_trx.crypto_amount_currency]
+            remaining_amounts = [x for x in last_val.assets if x.type != "CRYPTO" or x.sub_type != crypto_trx.crypto_amount_currency]
+            if len(prev_amounts) == 0:
+                self.values.append(build_point(crypto_trx, 0, remaining_amounts))
+            elif len(prev_amounts) == 1:
+                self.values.append(build_point(crypto_trx, prev_amounts[0].total_amount, remaining_amounts))
+            else:
+                raise ValueError("too many values")
 
 
     def asset_points(self):

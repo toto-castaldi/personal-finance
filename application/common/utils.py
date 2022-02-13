@@ -1,7 +1,13 @@
+from decimal import Decimal
 import logging
 import logging.handlers
 import os
+import dataclasses
+import json
 from datetime import timedelta
+from datetime import date
+from datetime import datetime
+
 
 LOG_LEVELS = {
   'INFO' : 20,
@@ -14,6 +20,17 @@ LOG_LEVELS = {
 log_level =  LOG_LEVELS.get(os.environ.get("LOG_LEVEL","INFO"))
 logger_filename = os.environ.get("LOG_FILE_NAME", None)
 logger = None
+
+def json_serial(obj):
+    """JSON serializer for objects not serializable by default json code"""
+
+    if isinstance(obj, (datetime, date)):
+        return obj.isoformat()
+    if dataclasses.is_dataclass(obj):
+        return dataclasses.asdict(obj)
+    if isinstance(obj, Decimal):
+        return str(obj)
+    raise TypeError ("Type %s not serializable" % type(obj))
 
 
 def is_dev_env():
