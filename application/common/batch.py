@@ -41,13 +41,3 @@ def coinapi_job():
                 if rate is not None:
                     db.save_crypto_rate(single_date, currency_from, currency_to, rate)
                     logger.info(f"saved rate {single_date} {currency_from} -> {currency_to} = {rate}")
-                    if utils.is_dev_env():
-                        #just one execution
-                        return
-
-def portfolio_value_history_job():
-    logger.info("portfolio value history")
-    accounts = db.load_all_accounts()
-    for account in accounts:
-        logger.info(f"{account}")    
-        #min_trx_crypto_for_user = 

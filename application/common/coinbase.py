@@ -3,23 +3,11 @@ import hashlib
 import requests
 import common.utils as utils
 import time
-from datetime import datetime
-from decimal import Decimal
+import common.bean as bean
 from requests.auth import AuthBase
-from dataclasses import dataclass
 
 
 logger = utils.init_log()
-
-@dataclass
-class CoinbaseTransaction:
-    id: str
-    updated_at : datetime
-    native_amount_amount : Decimal
-    native_amount_currency : str
-    type : str
-    crypto_amount_amount : Decimal
-    crypto_amount_currency : str
 
 class CoinbaseWalletAuth(AuthBase):
     def __init__(self, api_key, secret_key):
@@ -64,7 +52,7 @@ def load_all_transactions(user):
                         type = trx["type"]
                         crypto_amount_amount = trx["amount"]["amount"]
                         crypto_amount_currency = trx["amount"]["currency"]
-                        result.append(CoinbaseTransaction(
+                        result.append(bean.CoinbaseTransaction(
                             id, 
                             updated_at, 
                             native_amount_amount, 

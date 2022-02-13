@@ -1,7 +1,8 @@
 import psycopg2
 import common.utils as utils
+import common.bean as bean
 from psycopg2.extras import RealDictCursor
-from dataclasses import dataclass, asdict
+from dataclasses import asdict
 
 connection_param = {
         "dbname" : "dbpsql", 
@@ -24,11 +25,19 @@ select distinct(crypto_amount_currency, native_amount_currency) from coinbase_tr
 '''
 
 SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT='''
- select min(updated_at), max(updated_at) from coinbase_trx ;
+select min(updated_at), max(updated_at) from coinbase_trx ;
+'''
+
+SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT_BY_ACCOUNT='''
+select min(updated_at), max(updated_at) from coinbase_trx where account_id = %(account)s
 '''
 
 SELECT_CRYPTO_RATE='''
  select amount from crypto_rate where crypto_currency = %(crypto_currency)s and native_currency = %(native_currency)s and date = %(date)s;
+'''
+
+SELECT_COINBASE_TRX_BY_ACCOUN_DATES='''
+select * from coinbase_trx where account_id = %(account)s and updated_at >= %(date_from)s and updated_at < %(date_to)s
 '''
 
 INSERT_COINBASE_TRANSACTION = '''
@@ -42,12 +51,6 @@ INSERT INTO crypto_rate (crypto_currency, native_currency, date, amount)
 VALUES (%(crypto_currency)s, %(native_currency)s, %(date)s, %(amount)s)
 on conflict (crypto_currency, native_currency, date) do nothing;
 '''
-
-@dataclass
-class Account:
-  id: str
-  coinbase_api_key: str
-  coinbase_api_secret: str
 
 def get_conn():
   global conn
@@ -73,8 +76,31 @@ def fetch(query, args={}, all=False):
       return result
 
 def load_all_accounts():
-  return list(map(lambda e: Account(e["account_id"], e["coinbase_api_key"], e["coinbase_api_secret"]), fetch(SELECT_ALL_ACCOUNTS, all=True)))
+  return list(map(lambda e: bean.Account(e["account_id"], e["coinbase_api_key"], e["coinbase_api_secret"]), fetch(SELECT_ALL_ACCOUNTS, all=True)))
     
+def load_crypto_trxs_by_user_and_date(account, down_range, up_range):
+  return list(map(lambda e: 
+      bean.CoinbaseTransaction(
+                            e["trx_id"], 
+                            e["updated_at"], 
+                            e["native_amount_amount"],  
+                            e["native_amount_currency"],
+                            e["buy_sell"],
+                            e["crypto_amount_amount"],  
+                            e["crypto_amount_currency"]
+      ),
+    fetch(SELECT_COINBASE_TRX_BY_ACCOUN_DATES, {
+      "account" : account,
+      "date_from" : down_range,
+      "date_to" : up_range
+    }, all=True))
+  )
+
+def min_max_date_trx_by_account(account):
+  min_max = fetch(SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT_BY_ACCOUNT, {
+    "account" : account
+  })
+  return min_max["min"], min_max["max"]
 
 def merge_transactions(user, transactions):
   logger.debug(user)
