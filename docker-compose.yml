@@ -10,6 +10,7 @@ services:
       - postgresql-liquibase
     environment:
       - LOG_LEVEL=DEBUG
+      - LOG_FILE_NAME=api
     volumes:
       - /var/lib/buddy/log:/app/log
       - /var/lib/buddy/config/config-be.json:/app/common/config.json
@@ -21,6 +22,7 @@ services:
       - postgresql-liquibase
     environment:
       - LOG_LEVEL=DEBUG
+      - LOG_FILE_NAME=batch
     volumes:
       - /var/lib/buddy/log:/app/log
       - /var/lib/buddy/config/config-be.json:/app/common/config.json
