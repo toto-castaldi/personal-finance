@@ -5,8 +5,7 @@ COPY package*.json ./
 RUN npm install
 COPY ./src/ ./src/
 COPY ./public/ ./public/
-COPY vue.config.js ./
-COPY babel.config.js ./
+COPY vite.config.js ./
 COPY package.json ./
 COPY package-lock.json ./
 RUN npm run build
