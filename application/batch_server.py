@@ -12,7 +12,7 @@ if utils.is_dev_env():
 else:
     if __name__ == '__main__':
         schedule.every(10).minutes.do(batch.tick_job)
-        schedule.every().day.at("13:30").do(batch.coinapi_job)
+        schedule.every().day.at("00:01").do(batch.coinapi_job)
         schedule.every().day.at("14:30").do(batch.coinbase_job)
         
         #schedule.every().hour.do(tick_job)

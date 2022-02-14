@@ -53,6 +53,15 @@ cd ..
 LOG_LEVEL=DEBUG ENV=DEV python api_server.py
 ```
 
+## FE
+
+```shell
+cd site
+npm install
+npm run lint
+npm run dev
+```
+
 # CLOUD SERVER
 
 ## INSTALLATION

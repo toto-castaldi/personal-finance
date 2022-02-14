@@ -42,6 +42,19 @@
     trigger_condition_paths:
       - "/application"
     trigger_condition: "ON_CHANGE_AT_PATH"
+  - action: "[SITE] Build Docker image"
+    type: "DOCKERFILE"
+    login: "${DOCKER_HUB_USER}"
+    password: "${DOCKER_HUB_PASSWORD}"
+    docker_image_tag: "latest"
+    dockerfile_path: "site/Dockerfile"
+    context_path: "site"
+    repository: "totocastaldi/personal-finance-site"
+    build_args:
+    - "version=${BUDDY_EXECUTION_REVISION}"
+    trigger_condition_paths:
+      - "/application"
+    trigger_condition: "ON_CHANGE_AT_PATH"
   - action: "update docker-compose"
     type: "SFTP"
     input_type: "SCM_REPOSITORY"
