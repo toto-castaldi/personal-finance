@@ -88,6 +88,51 @@ curl -L "https://github.com/docker/compose/releases/download/1.26.2/docker-compo
 chmod +x /usr/local/bin/docker-compose
 ```
 
+```shell
+apt-get update
+apt-get install nginx
+apt install certbot python3-certbot-nginx
+rm /etc/nginx/sites-enabled/*
+vi /etc/nginx/sites-enabled/default
+# VER 1
+systemctl reload nginx
+certbot --nginx -d personal-finance.toto-castaldi.com
+systemctl reload nginx
+vi /etc/nginx/sites-enabled/default
+# VER 1
+systemctl reload nginx
+```
+
+### VER1
+
+```
+server {
+    listen 80 default_server;
+    listen [::]:80 default_server;
+    root /var/www/html;
+    server_name pre.tetbrx.skillbill.net;
+}
+```
+
+### VER2
+
+add this
+
+```
+location / {
+    proxy_pass http://127.0.0.1:8080;
+    add_header Cache-Control 'must-revalidate, proxy-revalidate, max-age=0';
+}
+
+location /api {
+    rewrite ^/api/(.*)$ /$1 break;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_pass http://127.0.0.1:5000;
+}
+```
+
+
+
 ## CONNECT DB
 
 ```shell
