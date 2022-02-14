@@ -3,13 +3,13 @@ services:
   site:
     image : "totocastaldi/personal-finance-site:${TAG}"
     ports:
-      - "80:80"
+      - "127.0.0.1:80:80"
     volumes:
       - /config/config-fe.json:/data/www/config.json
   api:
     image : "totocastaldi/personal-finance-api:${TAG}"
     ports:
-      - "5000:5000"
+      - "127.0.0.1:5000:5000"
     links:
       - postgresql
     depends_on:
