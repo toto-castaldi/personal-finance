@@ -35,7 +35,9 @@ class Portfolio():
         
         self.values.append(bean.PortfolioPoint(
                 the_data,
-                prev
+                prev,
+                None,
+                None
         ))
 
     def add_crypto(self, the_data, crypto_trx):
@@ -47,7 +49,9 @@ class Portfolio():
             ))
             return bean.PortfolioPoint(
                 the_data,
-                remaining_amounts
+                remaining_amounts,
+                None,
+                None
             )
 
         last_val = self.values[-1]
@@ -67,21 +71,33 @@ class Portfolio():
             result = []
             for portfolio_point in self.values:
                 convertes_assets = []
+                total_currency = None
+                total_amount = 0
                 for asset in portfolio_point.assets:
                     if asset.type == "CRYPTO":
                         rate = db.get_crypto_rate(portfolio_point.the_date, asset.sub_type, native_currency )
                         if rate is not None:
+                            amount = asset.amount * rate
                             converted_asset_amount = bean.ConvertedAssetAmount(
                                 asset.amount,
                                 asset.type,
                                 asset.sub_type,
-                                asset.amount * rate,
+                                amount,
                                 native_currency
                             )
+                            total_amount += amount
                             convertes_assets.append(converted_asset_amount)
+                            if total_currency is None:
+                                total_currency = native_currency
+                            else:
+                                if total_currency != native_currency:
+                                    raise ValueError(f"wrong currency : was {total_currency} now is {native_currency}")
                         else:
                             convertes_assets.append(asset)
                 portfolio_point.assets = convertes_assets
+                if total_currency is not None:
+                    portfolio_point.total_amount = total_amount
+                    portfolio_point.total_currency = total_currency
                 result.append(portfolio_point)
             return result
         else:

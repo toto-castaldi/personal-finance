@@ -37,3 +37,5 @@ class ConvertedAssetAmount(AssetAmount):
 class PortfolioPoint:
     the_date : datetime
     assets : List[AssetAmount]
+    total_amount : Decimal
+    total_currency : str

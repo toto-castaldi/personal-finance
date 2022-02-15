@@ -29,11 +29,7 @@ def portfolio_values_csv(account_id: str, currency: str):
         headers = {"Content-Disposition": "attachment;filename=portfolio.csv"}
         res = "DATE, AMOUNT" 
         for ap in asset_points:
-            total = 0
-            for a in ap.assets:
-                if isinstance(a, bean.ConvertedAssetAmount):
-                    total += a.native_amount
-            res += "\n" + f"{ap.the_date},{total}"
+            res += "\n" + f"{ap.the_date},{ap.total_amount}"
         return Response(content=res, media_type="text/csv", headers=headers)
     else:
         raise HTTPException(status_code=404, detail="wrong account")
