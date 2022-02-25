@@ -99,7 +99,7 @@ systemctl reload nginx
 certbot --nginx -d personal-finance.toto-castaldi.com
 systemctl reload nginx
 vi /etc/nginx/sites-enabled/default
-# VER 1
+# VER 2
 systemctl reload nginx
 ```
 
@@ -110,7 +110,7 @@ server {
     listen 80 default_server;
     listen [::]:80 default_server;
     root /var/www/html;
-    server_name pre.tetbrx.skillbill.net;
+    server_name personal-finance.toto-castaldi.com;
 }
 ```
 
