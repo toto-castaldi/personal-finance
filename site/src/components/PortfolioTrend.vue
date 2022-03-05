@@ -1,29 +1,65 @@
 <template>
-  <DoughnutChart :chartData="testData" />
+  <LineChart :chartData="state.data" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-import { DoughnutChart } from 'vue-chart-3';
+import { onMounted, reactive, defineComponent } from "vue";
+import { LineChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
+
+/*
+const labels = ["a", "b", "c", "d", "e", "f"];
+const data = {
+  labels: labels,
+  datasets: [{
+    label: 'My First Dataset',
+    data: [65, 59, 80, 81, 56, 55, 40],
+    fill: false,
+    borderColor: 'rgb(75, 192, 192)',
+    tension: 0.1
+  }]
+};
+*/
 
 Chart.register(...registerables);
 
-export default defineComponent({
-  name: 'Home',
-  components: { DoughnutChart },
-  setup() {
-    const testData = {
-      labels: ['Paris', 'Nîmes', 'Toulon', 'Perpignan', 'Autre'],
-      datasets: [
-        {
-          data: [30, 40, 60, 70, 5],
-          backgroundColor: ['#77CEFF', '#0079AF', '#123E6B', '#97B0C4', '#A5C8ED'],
-        },
-      ],
-    };
 
-    return { testData };
+export default defineComponent({
+  components: { LineChart },
+  setup() {
+
+    const state = reactive({
+      data: null,
+    });
+
+
+    onMounted(async () => {
+      const response = await fetch(`${window.config.apiUrl}/portfolio-values/nhriZ1orHofgLw72aiEmZoBBEOs2/EUR`);
+      const rjson = await response.json();
+      const labels = [];
+      const dataset = {
+        label: 'Porfolio',
+        data : [],
+        fill : false,
+        borderColor: 'rgb(75, 192, 192)',
+        tension: 0.1
+      };
+      for (const r of rjson) {
+        labels.push(r.the_date);
+        dataset.data.push(r.total_amount ? r.total_amount : 0);
+      }
+      
+      state.data = {
+        datasets: [dataset],
+        labels
+      };
+    });
+
+    
+
+    return {
+      state
+    };
   },
 });
 </script>
