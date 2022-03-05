@@ -53,7 +53,7 @@
     build_args:
     - "version=${BUDDY_EXECUTION_REVISION}"
     trigger_condition_paths:
-      - "/application"
+      - "/site"
     trigger_condition: "ON_CHANGE_AT_PATH"
   - action: "update docker-compose"
     type: "SFTP"
