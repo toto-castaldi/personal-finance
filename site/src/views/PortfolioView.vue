@@ -4,6 +4,6 @@
 
 <template>
   <main>
-    <p>Benvenuto in Personal Finance</p>
+    <p>Portfolio</p>
   </main>
 </template>
