@@ -27,15 +27,17 @@ export default defineComponent({
       const rjson = await response.json();
       const labels = [];
       const dataset = {
-        label: 'Porfolio',
+        label: 'Crypto',
         data : [],
         fill : false,
         borderColor: 'rgb(75, 192, 192)',
         tension: 0.1
       };
       for (const r of rjson) {
-        labels.push(r.the_date);
-        dataset.data.push(r.total_amount ? r.total_amount : 0);
+        if (r.total_amount != null) {
+          labels.push(r.the_date);
+          dataset.data.push(r.total_amount);
+        }
       }
       
       state.data = {

@@ -1,9 +1,11 @@
 <script setup>
-
+import PortfolioTrend from "../components/PortfolioTrend.vue";
 </script>
 
 <template>
   <main>
-    <p>Benvenuto in Personal Finance</p>
+    <p>Portfolio</p>
+
+    <portfolio-trend></portfolio-trend>
   </main>
 </template>
