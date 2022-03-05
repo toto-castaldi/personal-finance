@@ -7,19 +7,6 @@ import { onMounted, reactive, defineComponent } from "vue";
 import { LineChart } from 'vue-chart-3';
 import { Chart, registerables } from "chart.js";
 
-/*
-const labels = ["a", "b", "c", "d", "e", "f"];
-const data = {
-  labels: labels,
-  datasets: [{
-    label: 'My First Dataset',
-    data: [65, 59, 80, 81, 56, 55, 40],
-    fill: false,
-    borderColor: 'rgb(75, 192, 192)',
-    tension: 0.1
-  }]
-};
-*/
 
 Chart.register(...registerables);
 
@@ -34,7 +21,9 @@ export default defineComponent({
 
 
     onMounted(async () => {
-      const response = await fetch(`${window.config.apiUrl}/portfolio-values/nhriZ1orHofgLw72aiEmZoBBEOs2/EUR`);
+      const jConfig = await fetch("/config.json");
+      const config = await jConfig.json();
+      const response = await fetch(`${config.apiUrl}/portfolio-values/nhriZ1orHofgLw72aiEmZoBBEOs2/EUR`);
       const rjson = await response.json();
       const labels = [];
       const dataset = {

@@ -1,5 +1,14 @@
-<script setup>
+<script lang="ts">
 import { RouterLink, RouterView } from "vue-router";
+import { onMounted, defineComponent } from "vue";
+
+export default defineComponent({
+  setup() {
+    onMounted(async () => {
+      const resp = await fetch("/config.json");
+    })
+  }
+})
 </script>
 
 <template>
