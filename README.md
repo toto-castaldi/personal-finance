@@ -3,7 +3,7 @@
 PERSONAL-FINANCE
 ================
 
-[DEMO](https://personal-finance.toto-castaldi.com/portfolio)
+[DEMO](https://personal-finance.toto-castaldi.com/)
 
 # DEV
 
