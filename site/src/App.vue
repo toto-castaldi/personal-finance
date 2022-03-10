@@ -32,7 +32,11 @@ export default defineComponent({
     </nav>
   </header>
 
-  <RouterView></RouterView>
+  <main>
+    <RouterView></RouterView>
+  </main>
+
+  
 </template>
 
 <style></style>
