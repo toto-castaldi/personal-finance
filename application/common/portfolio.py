@@ -41,9 +41,17 @@ class Portfolio():
         ))
 
     def add_crypto(self, the_data, crypto_trx):
+        def trx_amount(crypto_trx):
+            if crypto_trx.type == "buy":
+                return abs(crypto_trx.crypto_amount_amount)
+            if crypto_trx.type == "send":
+                return -abs(crypto_trx.crypto_amount_amount)
+            logger.warn(f"unknow trx type {crypto_trx.type}")
+            return crypto_trx.crypto_amount_amount
+
         def build_point(crypto_trx, prev_amount = 0, remaining_amounts = []):
             remaining_amounts.append(bean.AssetAmount(
-              prev_amount + ( crypto_trx.crypto_amount_amount if crypto_trx.type == "buy" else -  crypto_trx.crypto_amount_amount),
+              prev_amount + trx_amount(crypto_trx),
               "CRYPTO",
               crypto_trx.crypto_amount_currency
             ))
