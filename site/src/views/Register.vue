@@ -6,7 +6,6 @@
           <p><input type="text" v-model="email" placeholder="Email" /></p>
           <p><input type="password" v-model="password" placeholder="Password" /></p>
           <p><button @click="register">Submit</button></p>
-          <p><button @click="signInWithGoogle">Sign In with Google</button></p>
       </div>
     </div>
   </div>
@@ -29,7 +28,5 @@
             alert(error.message);
         })
     }
-    const signInWithGoogle = () => {
-
-    }
+    
 </script>
