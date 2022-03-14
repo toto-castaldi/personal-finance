@@ -1,11 +1,30 @@
-import "bootstrap/dist/css/bootstrap.min.css"
+import "bootstrap/dist/css/bootstrap.min.css";
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+// TODO: Add SDKs for Firebase products that you want to use
+// https://firebase.google.com/docs/web/setup#available-libraries
+
+// Your web app's Firebase configuration
+// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+const firebaseConfig = {
+    apiKey: "AIzaSyCfzN6Xogvmd6AasFEDSEUMGgpgG3RNir0",
+    authDomain: "personal-finance-2eb2f.firebaseapp.com",
+    projectId: "personal-finance-2eb2f",
+    storageBucket: "personal-finance-2eb2f.appspot.com",
+    messagingSenderId: "327454650091",
+    appId: "1:327454650091:web:7cfc5ca31f8a54780958ae",
+    measurementId: "G-44KYTWMYKP"
+};
+
+// Initialize Firebase
+initializeApp(firebaseConfig);
 
 const app = createApp(App);
 
 app.use(router);
 app.mount("#app");
 
-import "bootstrap/dist/js/bootstrap.js"
+import "bootstrap/dist/js/bootstrap.js";
