@@ -37,7 +37,7 @@
   <main>
     <router-view />
 
-    <ToastStack />
+    <toast-stack></toast-stack>
   </main>
 </template>
 
