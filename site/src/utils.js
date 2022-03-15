@@ -4,5 +4,8 @@ export default {
             return false;
         }
         return typeof obj[Symbol.iterator] === 'function';
+    },
+    alert: (msg) => {
+
     }
 }
