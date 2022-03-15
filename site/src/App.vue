@@ -1,10 +1,10 @@
 <template>
   <header>
-    <nav class="navbar navbar-expand-lg navbar-desk bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-desk navbar-dark bg-dark">
       <div class="container">
         <router-link class="navbar-brand" to="/">Personal Finance</router-link>
         <button
-          class="navbar-toggler"
+          class="navbar-toggler navbar-light white"
           type="button"
           data-bs-toggle="collapse"
           data-bs-target="#navbarSupportedContent"
