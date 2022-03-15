@@ -36,10 +36,13 @@
 
   <main>
     <router-view />
+
+    <ToastStack />
   </main>
 </template>
 
 <script setup>
+  import ToastStack from "./components/ToastStack.vue";
   import { onMounted, ref } from "vue";
   import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
   import { useRouter} from "vue-router";
