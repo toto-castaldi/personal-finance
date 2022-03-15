@@ -1,14 +1,18 @@
 <template>
     <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-12">
-          <h1>Register</h1>
-          <p><input type="text" v-model="email" placeholder="Email" /></p>
-          <p><input type="password" v-model="password" placeholder="Password" /></p>
-          <p><button @click="register">Submit</button></p>
-      </div>
+        <form>
+            <div class="mb-3">
+                <label for="registerEmail" class="form-label">Email address</label>
+                <input type="email" v-model="email" class="form-control" id="registerEmail" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="registerPassword" class="form-label">Password</label>
+                <input v-model="password" type="password" class="form-control" id="registerPassword">
+            </div>
+            <button type="submit" @click="register" class="btn btn-primary">Register</button>
+        </form>
     </div>
-  </div>
 </template>
 <script setup>
     import { ref } from "vue";

@@ -25,7 +25,7 @@
         signInWithEmailAndPassword(auth, email.value, password.value)
         .then((data) => {
             console.log("successfully signed in");
-            console.log(auth.currentUser);
+            console.log(auth.currentUser.uid);
             router.push("/portfolio");
         })
         .catch((error) => {

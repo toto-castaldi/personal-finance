@@ -6,6 +6,9 @@
 import { onMounted, reactive, defineComponent } from "vue";
 import { LineChart } from "vue-chart-3";
 import { Chart, registerables } from "chart.js";
+import { getAuth } from "firebase/auth";
+import utils from "../utils.js";
+
 
 Chart.register(...registerables);
 
@@ -19,8 +22,9 @@ export default defineComponent({
     onMounted(async () => {
       const jConfig = await fetch("/config.json");
       const config = await jConfig.json();
+      const uid = getAuth().currentUser.uid;
       const response = await fetch(
-        `${config.apiUrl}/portfolio-values/nhriZ1orHofgLw72aiEmZoBBEOs2/EUR`
+        `${config.apiUrl}/portfolio-values/${uid}/EUR`
       );
       const rjson = await response.json();
       const labels = [];
@@ -31,10 +35,12 @@ export default defineComponent({
         borderColor: "rgb(75, 192, 192)",
         tension: 0.1,
       };
-      for (const r of rjson) {
-        if (r.total_amount != null) {
-          labels.push(r.the_date);
-          dataset.data.push(r.total_amount);
+      if (utils.isIterable(rjson)) {
+        for (const r of rjson) {
+          if (r.total_amount != null) {
+            labels.push(r.the_date);
+            dataset.data.push(r.total_amount);
+          }
         }
       }
 
