@@ -3,12 +3,7 @@ import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import { createPinia } from "pinia";
 const firebaseConfig = {
     apiKey: "AIzaSyCfzN6Xogvmd6AasFEDSEUMGgpgG3RNir0",
     authDomain: "personal-finance-2eb2f.firebaseapp.com",
@@ -19,11 +14,10 @@ const firebaseConfig = {
     measurementId: "G-44KYTWMYKP"
 };
 
-// Initialize Firebase
 initializeApp(firebaseConfig);
-
 const app = createApp(App);
 
+app.use(createPinia());
 app.use(router);
 app.mount("#app");
 
