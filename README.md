@@ -3,7 +3,10 @@
 PERSONAL-FINANCE
 ================
 
-[DEMO](https://personal-finance.toto-castaldi.com/)
+* [Coinbase](https://www.coinbase.com/) integration to load Coinbase exchange transactions
+* [Coinapi](https://www.coinapi.io/) integratin to have Crypto rates
+
+[DEMO](https://personal-finance.toto-castaldi.com/) (demo@demo.com / demo1234)
 
 # DEV
 
