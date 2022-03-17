@@ -1,12 +1,21 @@
-[![buddy pipeline](https://app.buddy.works/skillbill-bw/personal-finance/pipelines/pipeline/373011/badge.svg?token=107d3bbbb60ecabcdb08e0c4f842888977cc5d7b269e84936f8b8074747daf78 "buddy pipeline")](https://app.buddy.works/skillbill-bw/personal-finance/pipelines/pipeline/373011)
-
 PERSONAL-FINANCE
 ================
 
-* [Coinbase](https://www.coinbase.com/) integration to load Coinbase exchange transactions
-* [Coinapi](https://www.coinapi.io/) integratin to have Crypto rates
+[![buddy pipeline](https://app.buddy.works/skillbill-bw/personal-finance/pipelines/pipeline/373011/badge.svg?token=107d3bbbb60ecabcdb08e0c4f842888977cc5d7b269e84936f8b8074747daf78 "buddy pipeline")](https://app.buddy.works/skillbill-bw/personal-finance/pipelines/pipeline/373011)
 
 [DEMO](https://personal-finance.toto-castaldi.com/) (demo@demo.com / demo1234)
+
+# INTEGRATIONS
+
+## GENERAL
+
+* [Coinapi](https://www.coinapi.io/) for Crypto rates
+
+## USER
+
+* [Coinbase](https://www.coinbase.com/) USER Coinbase exchange transactions
+
+
 
 # DEV
 
