@@ -17,18 +17,18 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <router-link class="nav-link active" to="/portfolio">Portfolio</router-link>
+              <router-link class="nav-link active" to="/portfolio" :class="{ disabled: isLoggedOut }" >Portfolio</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link active" to="/register">Register</router-link>
+              <router-link class="nav-link active" to="/register" :class="{ disabled: isLoggedIn }" >Register</router-link>
             </li>
             <li class="nav-item">
-              <router-link class="nav-link active" to="/sign-in">Sign In</router-link>
-            </li>
-            <li class="nav-item">
-              <button @click="handleSignOut" v-if="isLoggedIn" >Sign Out</button>
+              <router-link class="nav-link active" to="/sign-in" :class="{ disabled: isLoggedIn }" >Sign In</router-link>
             </li>
           </ul>
+          <form class="d-flex">
+            <button class="btn btn-primary" @click="handleSignOut" :disabled="isLoggedOut" >Sign Out</button>
+          </form>
         </div>
       </div>
     </nav>
@@ -47,6 +47,7 @@
   import { getAuth, onAuthStateChanged, signOut } from "firebase/auth";
   import { useRouter} from "vue-router";
   const isLoggedIn = ref(false);
+  const isLoggedOut = ref(true);
   const router = useRouter();
   let auth;
   onMounted(() => {
@@ -54,8 +55,10 @@
     onAuthStateChanged(auth, (user) => {
       if (user) {
         isLoggedIn.value = true;
+        isLoggedOut.value = false;
       } else {
         isLoggedIn.value = false;
+        isLoggedOut.value = true;
       }
     });
   });
@@ -66,3 +69,10 @@
     });
   }
 </script>
+
+<style scoped>
+  .disabled {
+      opacity: 0.5;
+      pointer-events: none;
+  }
+</style>

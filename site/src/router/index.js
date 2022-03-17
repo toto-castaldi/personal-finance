@@ -9,9 +9,9 @@ const router = createRouter({
         { path: "/", component: () =>
                 import ("../views/Home.vue") },
         { path: "/register", component: () =>
-                import ("../views/Register.vue") },
+                import ("../views/Register.vue"), meta: { requiresAuth: false } },
         { path: "/sign-in", component: () =>
-                import ("../views/SignIn.vue") },
+                import ("../views/SignIn.vue"), meta: { requiresAuth: false } },
         { path: "/portfolio", component: () =>
                 import ("../views/Portfolio.vue"), meta: { requiresAuth: true } },
     ],
@@ -28,16 +28,25 @@ const getCurrentUser = () => {
 
 router.beforeEach(async(to, from, next) => {
     const store = useToastStore();
-    if (to.matched.some((record) => record.meta.requiresAuth)) {
-        if (await getCurrentUser()) {
+    if ("requiresAuth" in to.meta) {
+        const user = await getCurrentUser();
+        const logged = user != null;
+        console.log(logged);
+        if (to.meta.requiresAuth && logged) {
             next();
-        } else {
+        } else if (!to.meta.requiresAuth && !logged) {
+            next();
+        } else if (to.meta.requiresAuth && !logged) {
+            store.error("you can't access");
+            next("/sign-in");
+        } else if (!to.meta.requiresAuth && logged) {
             store.error("you can't access");
             next("/");
         }
     } else {
         next();
     }
+
 });
 
 export default router;
