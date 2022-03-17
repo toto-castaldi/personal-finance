@@ -27,7 +27,7 @@
             </li>
           </ul>
           <form class="d-flex">
-            <button class="btn btn-primary" @click="handleSignOut" :disabled="isLoggedOut" >Sign Out</button>
+            <button class="btn btn-primary" @click.stop.prevent="handleSignOut" :disabled="isLoggedOut" >Sign Out</button>
           </form>
         </div>
       </div>

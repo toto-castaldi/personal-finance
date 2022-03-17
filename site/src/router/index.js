@@ -31,7 +31,7 @@ router.beforeEach(async(to, from, next) => {
     if ("requiresAuth" in to.meta) {
         const user = await getCurrentUser();
         const logged = user != null;
-        console.log(logged);
+        console.log(logged, to.meta.requiresAuth, to);
         if (to.meta.requiresAuth && logged) {
             next();
         } else if (!to.meta.requiresAuth && !logged) {
@@ -44,6 +44,7 @@ router.beforeEach(async(to, from, next) => {
             next("/");
         }
     } else {
+        console.log(to);
         next();
     }
 

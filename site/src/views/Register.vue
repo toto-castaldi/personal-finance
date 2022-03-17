@@ -24,7 +24,6 @@
     const register = () => {
         createUserWithEmailAndPassword(getAuth(), email.value, password.value)
         .then((data) => {
-            console.log("successfully registered");
             router.push("/portfolio");
         })
         .catch((error) => {

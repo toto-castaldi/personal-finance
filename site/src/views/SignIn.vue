@@ -24,8 +24,6 @@
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email.value, password.value)
         .then((data) => {
-            console.log("successfully signed in");
-            console.log(auth.currentUser.uid);
             router.push("/portfolio");
         })
         .catch((error) => {
@@ -44,7 +42,6 @@
         const provide = new GoogleAuthProvider();
         signInWithPopup(getAuth(), provide)
             .then((result) => {
-                console.log(result.user);
                 router.push("/portfolio");
             })
             .catch((error) => {
