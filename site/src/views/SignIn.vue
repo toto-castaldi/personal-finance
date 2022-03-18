@@ -1,39 +1,55 @@
 <template>
     <div class="container mt-5">
-    <div class="row">
-      <div class="col-md-12">
-          <h1>Sign In</h1>
-          <p><input type="text" v-model="email" placeholder="Email" /></p>
-          <p><input type="password" v-model="password" placeholder="Password" /></p>
-          <p v-if="errorMessage">{{errorMessage}}</p>
-          <p><button @click="register">Submit</button></p>
-          <p><button @click="signInWithGoogle">Sign In with Google</button></p>
-      </div>
+        <h1>Sign In</h1>
+
+        <form>
+            <div class="mb-3">
+                <label for="registerEmail" class="form-label">Email address</label>
+                <input type="email" v-model="email" class="form-control" id="registerEmail" aria-describedby="emailHelp">
+                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+            </div>
+            <div class="mb-3">
+                <label for="registerPassword" class="form-label">Password</label>
+                <input v-model="password" type="password" class="form-control" id="registerPassword">
+            </div>
+            <div class="mb-3">
+                <button type="button" @click.stop.prevent="signIn" class="btn btn-primary" :disabled="formInvalid()" >Sing In</button>
+            </div>
+            <div class="mb-3">
+                <button type="button" @click.stop.prevent="signInWithGoogle" class="btn btn-primary" >Sign In with Google</button>
+            </div>
+        </form>
     </div>
-  </div>
 </template>
 <script setup>
     import { ref } from "vue";
     import { getAuth, signInWithEmailAndPassword , GoogleAuthProvider, signInWithPopup} from "firebase/auth";
     import { useRouter} from "vue-router";
+    import { useToastStore } from "../stores/messages";
+
+    const toastStore = useToastStore();
     const email = ref("");
     const password = ref("");
-    const errorMessage = ref();
     const router = useRouter();
-    const register = () => {
+
+    const formInvalid = () => {
+        if (!(email.value.length != 0 && password.value.length >= 8)) return true;
+
+        return false;
+    }
+    const signIn = () => {
         const auth = getAuth();
         signInWithEmailAndPassword(auth, email.value, password.value)
         .then((data) => {
             router.push("/portfolio");
         })
         .catch((error) => {
-            console.log(error.code);
             switch(error.code) {
                 case "auth/invalid-email":
-                    errorMessage.value = "Invalid Email";
+                    toastStore.error("Invalid Email");
                     break;
                 default:
-                    errorMessage.value = "Invalid Email or Password";
+                    toastStore.error("Invalid Email or Password");
                     break;
             }
         })
@@ -45,7 +61,7 @@
                 router.push("/portfolio");
             })
             .catch((error) => {
-
+                toastStore.error(error);
             });
     }
 </script>

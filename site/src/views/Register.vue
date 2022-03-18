@@ -1,5 +1,7 @@
 <template>
     <div class="container mt-5">
+        <h1>Register</h1>
+
         <form>
             <div class="mb-3">
                 <label for="registerEmail" class="form-label">Email address</label>
@@ -10,7 +12,11 @@
                 <label for="registerPassword" class="form-label">Password</label>
                 <input v-model="password" type="password" class="form-control" id="registerPassword">
             </div>
-            <button @click.stop.prevent="register" class="btn btn-primary" :disabled="formInvalid()" >Register</button>
+            <div class="mb-3">
+                <label for="registerConfirmPassword" class="form-label">Confirm password</label>
+                <input v-model="confirmPassword" type="password" class="form-control" id="registerConfirmPassword">
+            </div>
+            <button type="button" @click.stop.prevent="register" class="btn btn-primary" :disabled="formInvalid()" >Register</button>
         </form>
     </div>
 </template>
@@ -24,10 +30,10 @@
     const toastStore = useToastStore();
     const email = ref("");
     const password = ref("");
+    const confirmPassword = ref("");
     const router = useRouter();
 
     const register = () => {
-        console.log(email.value, password.value);
         createUserWithEmailAndPassword(getAuth(), email.value, password.value)
         .then((data) => {
             router.push("/portfolio");
@@ -40,6 +46,7 @@
     const formInvalid = () => {
         if (!(email.value.length != 0 && password.value.length >= 8)) return true;
         if (!utils.emailValid(email.value)) return true;
+        if (password.value != confirmPassword.value) return true;
 
         return false;
     }
