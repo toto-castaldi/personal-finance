@@ -32,7 +32,6 @@ export default {
   setup() {
     const store = useToastStore();
     return {
-      alert,
       store
     };
   },

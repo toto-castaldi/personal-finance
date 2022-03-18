@@ -10,7 +10,7 @@
                 <label for="registerPassword" class="form-label">Password</label>
                 <input v-model="password" type="password" class="form-control" id="registerPassword">
             </div>
-            <button type="submit" @click="register" class="btn btn-primary">Register</button>
+            <button @click.stop.prevent="register" class="btn btn-primary" :disabled="formInvalid()" >Register</button>
         </form>
     </div>
 </template>
@@ -18,18 +18,31 @@
     import { ref } from "vue";
     import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
     import { useRouter} from "vue-router";
+    import utils from "../utils.js";
+    import { useToastStore } from "../stores/messages";
+
+    const toastStore = useToastStore();
     const email = ref("");
     const password = ref("");
     const router = useRouter();
+
     const register = () => {
+        console.log(email.value, password.value);
         createUserWithEmailAndPassword(getAuth(), email.value, password.value)
         .then((data) => {
             router.push("/portfolio");
         })
         .catch((error) => {
-            console.log(error.code);
-            alert(error.message);
+            toastStore.error(error.message);
         })
     }
+
+    const formInvalid = () => {
+        if (!(email.value.length != 0 && password.value.length >= 8)) return true;
+        if (!utils.emailValid(email.value)) return true;
+
+        return false;
+    }
+    
     
 </script>
