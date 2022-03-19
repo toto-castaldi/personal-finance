@@ -29,38 +29,41 @@ class CoinbaseWalletAuth(AuthBase):
         return request
 
 def load_all_transactions(user):
-    result = []
-    api_url = "https://api.coinbase.com/v2/"
-    auth = CoinbaseWalletAuth(user.coinbase_api_key, user.coinbase_api_secret)
+    if user.coinbase_api_key:
+        result = []
+        api_url = "https://api.coinbase.com/v2/"
+        auth = CoinbaseWalletAuth(user.coinbase_api_key, user.coinbase_api_secret)
 
-    r = requests.get(api_url + "accounts", auth=auth)
-    json_response = r.json()
-    for account in json_response.get("data"):
-        id = account.get('id')
+        r = requests.get(api_url + "accounts", auth=auth)
+        json_response = r.json()
+        for account in json_response.get("data"):
+            id = account.get('id')
+            
+            if id and len(id) > 12:
+                r = requests.get(api_url + f"accounts/{id}/transactions", auth=auth)
+                json_response = r.json()
+                data = json_response.get("data")
+                if len(data) > 0:
+                    for trx in data:
+                        if trx["status"] == 'completed':
+                            id = trx["id"]
+                            updated_at = trx["updated_at"]
+                            native_amount_amount = trx["native_amount"]["amount"]
+                            native_amount_currency = trx["native_amount"]["currency"]
+                            type = trx["type"]
+                            crypto_amount_amount = trx["amount"]["amount"]
+                            crypto_amount_currency = trx["amount"]["currency"]
+                            result.append(bean.CoinbaseTransaction(
+                                id, 
+                                updated_at, 
+                                native_amount_amount, 
+                                native_amount_currency,
+                                type,
+                                crypto_amount_amount,
+                                crypto_amount_currency
+                            ))
+
         
-        if id and len(id) > 12:
-            r = requests.get(api_url + f"accounts/{id}/transactions", auth=auth)
-            json_response = r.json()
-            data = json_response.get("data")
-            if len(data) > 0:
-                for trx in data:
-                    if trx["status"] == 'completed':
-                        id = trx["id"]
-                        updated_at = trx["updated_at"]
-                        native_amount_amount = trx["native_amount"]["amount"]
-                        native_amount_currency = trx["native_amount"]["currency"]
-                        type = trx["type"]
-                        crypto_amount_amount = trx["amount"]["amount"]
-                        crypto_amount_currency = trx["amount"]["currency"]
-                        result.append(bean.CoinbaseTransaction(
-                            id, 
-                            updated_at, 
-                            native_amount_amount, 
-                            native_amount_currency,
-                            type,
-                            crypto_amount_amount,
-                            crypto_amount_currency
-                        ))
-
-    
-    return result
+        return result
+    else:
+        return []

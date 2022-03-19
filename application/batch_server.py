@@ -18,8 +18,8 @@ else:
         #schedule.every(2).hours.do(batch.coinbase_job)
         #schedule.every().day.at("01:00").do(batch.demo_data_job)
 
-        schedule.every().day.at("11:03").do(batch.demo_data_job)
-        schedule.every().day.at("11:15").do(batch.coinapi_job)
+        schedule.every().day.at("10:17").do(batch.demo_data_job)
+        schedule.every().day.at("10:18").do(batch.coinapi_job)
         
         #schedule.every().hour.do(tick_job)
         #schedule.every(10).seconds.do(tick_job)
