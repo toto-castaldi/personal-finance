@@ -106,4 +106,23 @@ databaseChangeLog:
             columnNames:  crypto_currency, native_currency, date
             constraintName:  pk_crypto_rate
             tableName:  crypto_rate
+  - changeSet:  
+      id: 3
+      author: toto
+      changes:  
+        - dropNotNullConstraint:  
+            columnDataType: varchar
+            columnName: coinbase_api_key
+            tableName: account
+        - dropNotNullConstraint:  
+            columnDataType: varchar
+            columnName: coinbase_api_secret
+            tableName: account
+        - insert:  
+            tableName: account
+            columns:
+              - column:  
+                  name: account_id
+                  value: 'C5Cgj6smJnUdvgxHt8OOTh6LHpF2'
+              
       

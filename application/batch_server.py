@@ -6,14 +6,20 @@ import common.batch as batch
 
 
 if utils.is_dev_env():
-    batch.coinbase_job()
-    batch.coinapi_job()
+    batch.demo_data_job()
+    #batch.coinbase_job()
+    #batch.coinapi_job()
     pass
 else:
     if __name__ == '__main__':
         schedule.every(10).minutes.do(batch.tick_job)
-        schedule.every().day.at("00:01").do(batch.coinapi_job)
-        schedule.every(2).hours.do(batch.coinbase_job)
+
+        #schedule.every().day.at("00:01").do(batch.coinapi_job)
+        #schedule.every(2).hours.do(batch.coinbase_job)
+        #schedule.every().day.at("01:00").do(batch.demo_data_job)
+
+        schedule.every().day.at("11:03").do(batch.demo_data_job)
+        schedule.every().day.at("11:15").do(batch.coinapi_job)
         
         #schedule.every().hour.do(tick_job)
         #schedule.every(10).seconds.do(tick_job)

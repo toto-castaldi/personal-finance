@@ -2,6 +2,10 @@ import common.utils as utils
 import common.db as db
 import common.coinbase as coinbase
 import common.coinapi as coinapi
+import common.constants as constants
+import random
+import common.bean as bean
+import uuid
 from datetime import datetime
 from datetime import timedelta
 
@@ -41,3 +45,20 @@ def coinapi_job():
                 if rate is not None:
                     db.save_crypto_rate(single_date, currency_from, currency_to, rate)
                     logger.info(f"saved rate {single_date} {currency_from} -> {currency_to} = {rate}")
+
+def demo_data_job():
+    logger.info("demo data")
+    account = db.account_info(constants.get_config()["demo_account_id"])
+    logger.info("coinbase trx")
+    if random.uniform(0, 1) < 2: #always
+        account_transactions = [bean.CoinbaseTransaction(
+            str(uuid.uuid4()),
+            datetime.today(),
+            random.randint(30, 500),
+            "EUR",
+            "buy",
+            random.uniform(0, 0.003),
+            random.choice(["ETH", "BTC"])
+        )]
+        db.merge_transactions(account, account_transactions)
+

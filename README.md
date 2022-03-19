@@ -5,6 +5,8 @@ PERSONAL-FINANCE
 
 [DEMO](https://personal-finance.toto-castaldi.com/) (demo@demo.com / demo1234)
 
+![Demo Portfolio](Screenshot_2022-03-19_10-57-23.png)
+
 # INTEGRATIONS
 
 ## GENERAL
@@ -54,7 +56,7 @@ docker run -it -v `pwd`:/drivers -v `pwd`/liquibase.yml:/liquibase.yml --link so
 cd application/batch
 pip install -r requirements.txt
 cd ..
-LOG_LEVEL=DEBUG ENV=DEV COINAPI_KEY=[YOUR_COINAPI_KEY] python batch_server.py
+LOG_LEVEL=DEBUG ENV=DEV COINAPI_KEY=[YOUR_COINAPI_KEY] DEMO_ACCOUNT_ID=[FIREBASE_DEMO_ACCOUNT_ID] python batch_server.py
 ```
 
 ## API
