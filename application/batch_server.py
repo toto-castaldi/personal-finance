@@ -24,7 +24,7 @@ else:
         schedule.every(2).hours.do(batch.blockchaincom_job)
         schedule.every(2).hours.do(batch.etherscan_job)
         
-        schedule.every().day.at("23:10").do(batch.etherscan_job)
+        schedule.every().day.at("23:18").do(batch.etherscan_job)
         
         
         #schedule.every().day.at("01:00").do(batch.demo_data_job)
