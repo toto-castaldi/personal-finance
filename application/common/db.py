@@ -39,6 +39,10 @@ SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT_BY_ACCOUNT='''
 select min(updated_at), max(updated_at) from coinbase_trx where account_id = %(account)s
 '''
 
+SELECT_PUBLIC_BITCOIN_MIN_MAX_UPDATED_AT_BY_ACCOUNT='''
+select min(pbb.updated_at), max(pbb.updated_at) from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and ba.account_id = %(account)s
+'''
+
 SELECT_CRYPTO_RATE='''
  select amount from crypto_rate where crypto_currency = %(crypto_currency)s and native_currency = %(native_currency)s and date = %(date)s;
 '''
@@ -49,6 +53,10 @@ select * from coinbase_trx where account_id = %(account)s and updated_at >= %(da
 
 SELECT_PUBLIC_ADDRESSES_BY_ACCOUNT='''
 select * from bitcoin_address where account_id = %(account)s
+'''
+
+SELECT_PUBLIC_BITCOIN_AT='''
+select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and pbb.updated_at <= %(updated_at)s and ba.account_id = %(account_id)s order by updated_at desc limit 1
 '''
 
 INSERT_COINBASE_TRANSACTION = '''
@@ -135,6 +143,12 @@ def min_max_coinbase_date_trx_by_account(account):
   })
   return min_max["min"], min_max["max"]
 
+def min_max_public_bitcoins_date_trx_by_account(account):
+  min_max = fetch(SELECT_PUBLIC_BITCOIN_MIN_MAX_UPDATED_AT_BY_ACCOUNT, {
+    "account" : account
+  })
+  return min_max["min"], min_max["max"]
+
 def coinbase_currency_from_to():
   return list(map(lambda e: tuple(e["row"][1:-1].split(',')), fetch(SELECT_COINBASE_TRX_FROM_TO, all=True)))
 
@@ -147,6 +161,16 @@ def get_crypto_rate(the_date, crypto_currency, native_currency):
     "crypto_currency" : crypto_currency,
     "native_currency" : native_currency,
     "date" : the_date
+  })
+  if c :
+    return c["amount"]
+  else:
+    return None
+
+def load_public_bitcoins_amount_at(the_date, account):
+  c = fetch(SELECT_PUBLIC_BITCOIN_AT, {
+    "updated_at" : the_date,
+    "account_id" : account
   })
   if c :
     return c["amount"]

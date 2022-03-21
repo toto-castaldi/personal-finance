@@ -12,40 +12,42 @@ class Portfolio():
         self.account = account
         self.today = datetime.today().date()
 
-        #self.add_public_bitcoins()
+        self.dates()
+
+        self.public_bitcoins()
         self.coinbase()
 
-    def coinbase(self):
-        def new_date(the_data):
-            prev = []
-            if len(self.values) > 0:
-                last_val = self.values[-1]
-                prev = last_val.assets
-            
+    def dates(self):
+        bitcoin_min_date, _ = db.min_max_public_bitcoins_date_trx_by_account(self.account)
+        coinbase_min_date, _ = db.min_max_coinbase_date_trx_by_account(self.account)
+        min_date = min(bitcoin_min_date, coinbase_min_date)
+        min_date = min_date.date()
+        for the_date in utils.daterange(min_date, self.today):
+            logger.debug(the_date)
             self.values.append(bean.PortfolioPoint(
-                    the_data,
-                    prev,
-                    None,
-                    None
+                the_date,
+                [],
+                None,
+                None
             ))
 
+    def asset(self, porfolio_point, type, sub_type):
+        assets = [x for x in porfolio_point.assets if x.type == type and x.sub_type == sub_type]
+        if len(assets) == 1:
+            return assets[0]
+        else:
+            res = bean.AssetAmount(0, type, sub_type);
+            porfolio_point.assets.append(res)
+            return res
 
-        coinbase_min_trx_crypto_account, _ = db.min_max_coinbase_date_trx_by_account(self.account)
-        min_trx_crypto_account = coinbase_min_trx_crypto_account.date()
-        min_trx_crypto_account -= timedelta(days=1)
-        
-        logger.debug(f"{min_trx_crypto_account}")
-
-        for down_range in utils.daterange(min_trx_crypto_account, self.today):
-            logger.debug(down_range)
-            new_date(down_range)
-            up_range = down_range + timedelta(days=1)
-            coinbase_crypto_trxs = db.load_coinbase_crypto_trxs_by_user_and_date(self.account, down_range, up_range)
-                        
-            for crypto_trx in coinbase_crypto_trxs:
-                self.add_coinbase_crypto(down_range, crypto_trx)
-
-    def add_coinbase_crypto(self, the_data, crypto_trx):
+    def public_bitcoins(self):
+        for porfolio_point in self.values:
+            amount = db.load_public_bitcoins_amount_at(porfolio_point.the_date, self.account)
+            if amount:
+                asset_amount = self.asset(porfolio_point, "CRYPTO", "BTC")
+                asset_amount.amount += amount              
+            
+    def coinbase(self):
         def trx_amount(crypto_trx):
             if crypto_trx.type == "buy":
                 return abs(crypto_trx.crypto_amount_amount)
@@ -54,29 +56,19 @@ class Portfolio():
             logger.warn(f"unknow trx type {crypto_trx.type}")
             return crypto_trx.crypto_amount_amount
 
-        def build_point(crypto_trx, prev_amount = 0, remaining_amounts = []):
-            remaining_amounts.append(bean.AssetAmount(
-              prev_amount + trx_amount(crypto_trx),
-              "CRYPTO",
-              crypto_trx.crypto_amount_currency
-            ))
-            return bean.PortfolioPoint(
-                the_data,
-                remaining_amounts,
-                None,
-                None
-            )
+        coinbase_balance = {}
 
-        last_val = self.values[-1]
-        prev_amounts = [x for x in last_val.assets if x.type == "CRYPTO" and x.sub_type == crypto_trx.crypto_amount_currency]
-        remaining_amounts = [x for x in last_val.assets if x.type != "CRYPTO" or x.sub_type != crypto_trx.crypto_amount_currency]
-        if len(prev_amounts) == 0:
-            self.values[-1] = build_point(crypto_trx, 0, remaining_amounts)
-        elif len(prev_amounts) == 1:
-            self.values[-1] = build_point(crypto_trx, prev_amounts[0].amount, remaining_amounts)
-        else:
-            raise ValueError("too many values")
+        for porfolio_point in self.values:
+            up_range = porfolio_point.the_date + timedelta(days=1)
+            coinbase_crypto_trxs = db.load_coinbase_crypto_trxs_by_user_and_date(self.account, porfolio_point.the_date, up_range)
+                        
+            for crypto_trx in coinbase_crypto_trxs:
+                prev_amount = coinbase_balance[crypto_trx.crypto_amount_currency] if crypto_trx.crypto_amount_currency in coinbase_balance else 0
+                coinbase_balance[crypto_trx.crypto_amount_currency] = prev_amount + trx_amount(crypto_trx)
 
+            for balance_currency, balance_amount in coinbase_balance.items():
+                asset_amount = self.asset(porfolio_point, "CRYPTO", balance_currency)
+                asset_amount.amount += balance_amount
 
     def asset_points(self, native_currency = None):
         if native_currency:
