@@ -6,44 +6,44 @@ from datetime import timedelta
 
 logger = utils.init_log()
 
-
-
 class Portfolio():
     def __init__(self, account):
         self.values = []
-        today = datetime.today().date()
-        min_trx_crypto_account, _ = db.min_max_coinbase_date_trx_by_account(account)
-        min_trx_crypto_account = min_trx_crypto_account.date()
-        min_trx_crypto_account -= timedelta(days=1)
-        public_addresses = db.load_bitcoin_addresses(account)
-        self.public_bitcoin = {}
-        
-        #for address in public_addresses:
-        #    self.public_bitcoin[address] = db.load_public_bitcoin_amounts(address)
+        self.account = account
+        self.today = datetime.today().date()
 
+        #self.add_public_bitcoins()
+        self.coinbase()
+
+    def coinbase(self):
+        def new_date(the_data):
+            prev = []
+            if len(self.values) > 0:
+                last_val = self.values[-1]
+                prev = last_val.assets
+            
+            self.values.append(bean.PortfolioPoint(
+                    the_data,
+                    prev,
+                    None,
+                    None
+            ))
+
+
+        coinbase_min_trx_crypto_account, _ = db.min_max_coinbase_date_trx_by_account(self.account)
+        min_trx_crypto_account = coinbase_min_trx_crypto_account.date()
+        min_trx_crypto_account -= timedelta(days=1)
+        
         logger.debug(f"{min_trx_crypto_account}")
 
-        for down_range in utils.daterange(min_trx_crypto_account, today):
+        for down_range in utils.daterange(min_trx_crypto_account, self.today):
             logger.debug(down_range)
-            self.new_date(down_range)
+            new_date(down_range)
             up_range = down_range + timedelta(days=1)
-            coinbase_crypto_trxs = db.load_coinbase_crypto_trxs_by_user_and_date(account, down_range, up_range)
-            
+            coinbase_crypto_trxs = db.load_coinbase_crypto_trxs_by_user_and_date(self.account, down_range, up_range)
+                        
             for crypto_trx in coinbase_crypto_trxs:
                 self.add_coinbase_crypto(down_range, crypto_trx)
-
-    def new_date(self, the_data):
-        prev = []
-        if len(self.values) > 0:
-            last_val = self.values[-1]
-            prev = last_val.assets
-        
-        self.values.append(bean.PortfolioPoint(
-                the_data,
-                prev,
-                None,
-                None
-        ))
 
     def add_coinbase_crypto(self, the_data, crypto_trx):
         def trx_amount(crypto_trx):
