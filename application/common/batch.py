@@ -52,7 +52,7 @@ def coinbase_job():
 def coinapi_job():
     logger.info("coinapi")
     today = datetime.today().date()
-    currencys_from_to = db.coinbase_currency_from_to()
+    currencys_from_to = db.crypto_from_to()
     for currency_from_to in currencys_from_to:
         logger.debug(currency_from_to)
         currency_from = currency_from_to[0]

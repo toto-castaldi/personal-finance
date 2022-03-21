@@ -31,12 +31,12 @@ SELECT_ACCOUNT_INFO = '''
 SELECT * FROM ACCOUNT where account_id = %(account_id)s
 '''
 
-SELECT_COINBASE_TRX_FROM_TO = '''
-select distinct(crypto_amount_currency, native_amount_currency) from coinbase_trx 
+SELECT_CRYPTO_FROM_TO = '''
+select distinct(crypto_amount_currency, native_amount_currency) from coinbase_trx union all select distinct(name, 'EUR') from ethereum_rc20 er
 '''
 
-SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT='''
-select min(updated_at), max(updated_at) from coinbase_trx ;
+SELECT_CRYPTO_MIN_MAX_UPDATED_AT='''
+select min(updated_at), max(updated_at) from (select updated_at from coinbase_trx ct union all select updated_at from public_ethereum_balance where smart_contract_address is null) aa;
 '''
 
 SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT_BY_ACCOUNT='''
@@ -180,11 +180,11 @@ def min_max_public_bitcoins_date_trx_by_account(account):
   })
   return min_max["min"], min_max["max"]
 
-def coinbase_currency_from_to():
-  return list(map(lambda e: tuple(e["row"][1:-1].split(',')), fetch(SELECT_COINBASE_TRX_FROM_TO, all=True)))
+def crypto_from_to():
+  return list(map(lambda e: tuple(e["row"][1:-1].split(',')), fetch(SELECT_CRYPTO_FROM_TO, all=True)))
 
 def min_max_date_trx():
-  min_max = fetch(SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT)
+  min_max = fetch(SELECT_CRYPTO_MIN_MAX_UPDATED_AT)
   return min_max["min"], min_max["max"]
 
 def get_crypto_rate(the_date, crypto_currency, native_currency):

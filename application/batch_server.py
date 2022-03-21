@@ -6,11 +6,11 @@ import common.batch as batch
 
 
 if utils.is_dev_env():
-    batch.etherscan_job()
+    #batch.etherscan_job()
     #batch.blockchaincom_job()
     #batch.demo_data_job()
     #batch.coinbase_job()
-    #batch.coinapi_job()
+    batch.coinapi_job()
     pass
 else:
     if __name__ == '__main__':
@@ -24,8 +24,7 @@ else:
         schedule.every(2).hours.do(batch.blockchaincom_job)
         schedule.every(2).hours.do(batch.etherscan_job)
         
-        schedule.every().day.at("23:18").do(batch.etherscan_job)
-        
+        schedule.every().day.at("00:00").do(batch.coinapi_job)
         
         #schedule.every().day.at("01:00").do(batch.demo_data_job)
         #schedule.every().day.at("10:17").do(batch.demo_data_job)
