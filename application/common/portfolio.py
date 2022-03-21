@@ -12,9 +12,14 @@ class Portfolio():
     def __init__(self, account):
         self.values = []
         today = datetime.today().date()
-        min_trx_crypto_account, _ = db.min_max_date_trx_by_account(account)
+        min_trx_crypto_account, _ = db.min_max_coinbase_date_trx_by_account(account)
         min_trx_crypto_account = min_trx_crypto_account.date()
         min_trx_crypto_account -= timedelta(days=1)
+        public_addresses = db.load_bitcoin_addresses(account)
+        self.public_bitcoin = {}
+        
+        #for address in public_addresses:
+        #    self.public_bitcoin[address] = db.load_public_bitcoin_amounts(address)
 
         logger.debug(f"{min_trx_crypto_account}")
 
@@ -22,10 +27,10 @@ class Portfolio():
             logger.debug(down_range)
             self.new_date(down_range)
             up_range = down_range + timedelta(days=1)
-            crypto_trxs = db.load_crypto_trxs_by_user_and_date(account, down_range, up_range)
+            coinbase_crypto_trxs = db.load_coinbase_crypto_trxs_by_user_and_date(account, down_range, up_range)
             
-            for crypto_trx in crypto_trxs:
-                self.add_crypto(down_range, crypto_trx)
+            for crypto_trx in coinbase_crypto_trxs:
+                self.add_coinbase_crypto(down_range, crypto_trx)
 
     def new_date(self, the_data):
         prev = []
@@ -40,7 +45,7 @@ class Portfolio():
                 None
         ))
 
-    def add_crypto(self, the_data, crypto_trx):
+    def add_coinbase_crypto(self, the_data, crypto_trx):
         def trx_amount(crypto_trx):
             if crypto_trx.type == "buy":
                 return abs(crypto_trx.crypto_amount_amount)

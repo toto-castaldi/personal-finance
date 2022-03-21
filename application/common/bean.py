@@ -20,7 +20,6 @@ class CoinbaseTransaction:
     crypto_amount_amount : Decimal
     crypto_amount_currency : str
 
-
 @dataclass
 class AssetAmount:
     amount : Decimal

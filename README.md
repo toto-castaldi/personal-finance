@@ -16,7 +16,7 @@ PERSONAL-FINANCE
 ## USER
 
 * [Coinbase](https://www.coinbase.com/) USER Coinbase exchange transactions
-
+* [Blockchain.com](https://www.blockchain.com/api) USER Bitcoin public addresses amount
 
 
 # DEV

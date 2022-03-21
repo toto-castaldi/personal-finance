@@ -124,5 +124,49 @@ databaseChangeLog:
               - column:  
                   name: account_id
                   value: 'C5Cgj6smJnUdvgxHt8OOTh6LHpF2'
-              
-      
+  - changeSet:  
+      id: 4
+      author: toto
+      changes:
+        - createTable:
+            tableName: bitcoin_address
+            columns:
+              - column:
+                  name: account_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: public_address
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    unique : true
+        - addForeignKeyConstraint:
+            constraintName : fk_bitcoint_address_account
+            baseColumnNames:  account_id
+            baseTableName:  bitcoin_address
+            referencedColumnNames:  account_id  
+            referencedTableName:  account
+        - addUniqueConstraint:  
+            columnNames:  public_address
+            constraintName:  unique_bitcoin_address_public_address
+            tableName:  bitcoin_address
+        - createTable:
+            tableName: public_bitcoin_balance
+            columns:
+              - column:
+                  name: public_address
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: money
+                  constraints:
+                    nullable: false

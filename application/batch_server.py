@@ -6,7 +6,8 @@ import common.batch as batch
 
 
 if utils.is_dev_env():
-    batch.demo_data_job()
+    batch.blockchaincom_job()
+    #batch.demo_data_job()
     #batch.coinbase_job()
     #batch.coinapi_job()
     pass

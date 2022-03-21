@@ -1,5 +1,6 @@
 import common.utils as utils
 import common.db as db
+import common.blockchaincom as blockchaincom
 import common.coinbase as coinbase
 import common.coinapi as coinapi
 import common.constants as constants
@@ -14,6 +15,17 @@ logger = utils.init_log()
 
 def tick_job():
     logger.info("tick...")
+
+def blockchaincom_job():
+    logger.info("blockchaincom")
+    accounts = db.load_all_accounts()
+    for account in accounts:
+        addresses = db.load_bitcoin_addresses(account)
+        for address in addresses:
+            today = datetime.today()
+            bitcoin_amount = blockchaincom.load_bitcoin_amount(address)
+            db.save_address_bitcoin_amount(today, address, bitcoin_amount)
+
 
 def coinbase_job():
     logger.info("coinbase")
