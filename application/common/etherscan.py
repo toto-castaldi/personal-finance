@@ -15,7 +15,7 @@ def load_ethereum_amount(address):
     logger.debug(json_response)
     if r.status_code == 200 and json_response["status"] == "1":
         logger.debug("OK")
-        return Decimal(json_response["result"])
+        return utils.wei_to_ether(Decimal(json_response["result"]))
     else:
         logger.debug("KO")
         return None
@@ -28,7 +28,7 @@ def load_rc20_amount(address, contract_address):
     logger.debug(json_response)
     if r.status_code == 200 and json_response["status"] == "1":
         logger.debug("OK")
-        return Decimal(json_response["result"])
+        return utils.wei_to_ether(Decimal(json_response["result"]))
     else:
         logger.debug("KO")
         return None

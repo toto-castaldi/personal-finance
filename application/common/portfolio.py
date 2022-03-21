@@ -15,6 +15,7 @@ class Portfolio():
         self.dates()
 
         self.public_bitcoins()
+        self.public_ethers()
         self.coinbase()
 
     def dates(self):
@@ -46,6 +47,20 @@ class Portfolio():
             if amount:
                 asset_amount = self.asset(porfolio_point, "CRYPTO", "BTC")
                 asset_amount.amount += amount              
+
+    def public_ethers(self):
+        for porfolio_point in self.values:
+            amount = db.load_public_ethers_amount_at(porfolio_point.the_date, self.account, None)
+            if amount:
+                asset_amount = self.asset(porfolio_point, "CRYPTO", "ETH")
+                asset_amount.amount += amount              
+            rc20s = db.load_all_rc20()
+            for rc20 in rc20s:
+                amount = db.load_public_ethers_amount_at(porfolio_point.the_date, self.account, rc20.contract_address)
+                if amount:
+                    asset_amount = self.asset(porfolio_point, "CRYPTO", rc20.name)
+                    asset_amount.amount += amount
+            
             
     def coinbase(self):
         def trx_amount(crypto_trx):

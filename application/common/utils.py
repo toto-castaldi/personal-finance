@@ -65,3 +65,6 @@ def daterange(start_date, end_date):
 
 def satoshi_to_bitcoin(satoshi):
     return satoshi / 100000000
+
+def wei_to_ether(wei):
+    return wei / (10 ** 18)

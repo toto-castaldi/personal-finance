@@ -67,6 +67,14 @@ SELECT_PUBLIC_BITCOIN_AT='''
 select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and pbb.updated_at <= %(updated_at)s and ba.account_id = %(account_id)s order by updated_at desc limit 1
 '''
 
+SELECT_PUBLIC_ETHEREUM_AT='''
+select peb.* from (select * from public_ethereum_balance left join ethereum_rc20 on smart_contract_address = contract_address) peb, ethereum_address ea   where peb.public_address = ea.public_address and peb.updated_at <= %(updated_at)s and ea.account_id = %(account_id)s and peb.smart_contract_address  is null order by updated_at desc limit 1
+'''
+
+SELECT_PUBLIC_ETHEREUM_RC20_AT='''
+select peb.* from (select * from public_ethereum_balance left join ethereum_rc20 on smart_contract_address = contract_address) peb, ethereum_address ea   where peb.public_address = ea.public_address and peb.updated_at <= %(updated_at)s and ea.account_id = %(account_id)s and peb.smart_contract_address = %(smart_contract_address)s order by updated_at desc limit 1
+'''
+
 INSERT_COINBASE_TRANSACTION = '''
 INSERT INTO coinbase_trx (account_id, trx_id, updated_at, native_amount_amount, crypto_amount_amount, buy_sell, native_amount_currency, crypto_amount_currency)
 VALUES (%(account_id)s, %(id)s, %(updated_at)s, %(native_amount_amount)s, %(crypto_amount_amount)s, %(type)s, %(native_amount_currency)s, %(crypto_amount_currency)s)
@@ -194,6 +202,17 @@ def load_public_bitcoins_amount_at(the_date, account):
   c = fetch(SELECT_PUBLIC_BITCOIN_AT, {
     "updated_at" : the_date,
     "account_id" : account
+  })
+  if c :
+    return c["amount"]
+  else:
+    return None
+    
+def load_public_ethers_amount_at(the_date, account, smart_contract_address):
+  c = fetch(SELECT_PUBLIC_ETHEREUM_AT if smart_contract_address is None else SELECT_PUBLIC_ETHEREUM_RC20_AT, {
+    "updated_at" : the_date,
+    "account_id" : account,
+    "smart_contract_address" : smart_contract_address
   })
   if c :
     return c["amount"]
