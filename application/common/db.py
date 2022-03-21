@@ -23,6 +23,10 @@ SELECT_ALL_ACCOUNTS = '''
 SELECT * FROM ACCOUNT
 '''
 
+SELECT_ALL_RC20 = '''
+SELECT * FROM ETHEREUM_RC20
+'''
+
 SELECT_ACCOUNT_INFO = '''
 SELECT * FROM ACCOUNT where account_id = %(account_id)s
 '''
@@ -55,6 +59,10 @@ SELECT_PUBLIC_ADDRESSES_BY_ACCOUNT='''
 select * from bitcoin_address where account_id = %(account)s
 '''
 
+SELECT_PUBLIC_ETHEREUM_ADDRESSES_BY_ACCOUNT='''
+select * from ethereum_address where account_id = %(account)s
+'''
+
 SELECT_PUBLIC_BITCOIN_AT='''
 select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and pbb.updated_at <= %(updated_at)s and ba.account_id = %(account_id)s order by updated_at desc limit 1
 '''
@@ -74,6 +82,11 @@ on conflict (crypto_currency, native_currency, date) do nothing;
 INSERT_PUBLIC_BITCOIN_ADDRESS = '''
 INSERT INTO public_bitcoin_balance (public_address, updated_at, amount)
 VALUES (%(public_address)s, %(updated_at)s, %(amount)s)
+'''
+
+INSERT_PUBLIC_ETHEREUM_ADDRESS = '''
+INSERT INTO public_ethereum_balance (public_address, updated_at, amount, smart_contract_address)
+VALUES (%(public_address)s, %(updated_at)s, %(amount)s, %(smart_contract_address)s)
 '''
 
 def get_conn():
@@ -112,9 +125,19 @@ def account_info(account_id):
 def load_all_accounts():
   return list(map(lambda e: bean.Account(e["account_id"], e["coinbase_api_key"], e["coinbase_api_secret"]), fetch(SELECT_ALL_ACCOUNTS, all=True)))
 
+def load_all_rc20():
+  return list(map(lambda e: bean.RC20(e["name"], e["contract_address"]), fetch(SELECT_ALL_RC20, all=True)))
+
 def load_bitcoin_addresses(account):
   return list(map(lambda e: e["public_address"],
     fetch(SELECT_PUBLIC_ADDRESSES_BY_ACCOUNT, {
+      "account" : account.id
+    }, all=True))
+  )
+
+def load_ethereum_addresses(account):
+  return list(map(lambda e: e["public_address"],
+    fetch(SELECT_PUBLIC_ETHEREUM_ADDRESSES_BY_ACCOUNT, {
       "account" : account.id
     }, all=True))
   )
@@ -204,4 +227,14 @@ def save_address_bitcoin_amount(today, address, bitcoin_amount):
           "updated_at" : today,
           "public_address" : address,
           "amount" : bitcoin_amount
+        })
+
+def save_address_ethereum_amount(today, address, bitcoin_amount, smart_contract):
+  with get_conn() as conn:  
+      with conn.cursor() as cursor:
+        cursor.execute(INSERT_PUBLIC_ETHEREUM_ADDRESS, {
+          "updated_at" : today,
+          "public_address" : address,
+          "amount" : bitcoin_amount,
+          "smart_contract_address" : smart_contract
         })

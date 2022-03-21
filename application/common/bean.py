@@ -11,6 +11,11 @@ class Account:
     coinbase_api_secret: str
 
 @dataclass
+class RC20:
+    name: str
+    contract_address: str
+
+@dataclass
 class CoinbaseTransaction:
     id: str
     updated_at : datetime

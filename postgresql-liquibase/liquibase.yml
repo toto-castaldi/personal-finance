@@ -170,3 +170,86 @@ databaseChangeLog:
                   type: money
                   constraints:
                     nullable: false
+  - changeSet:  
+      id: 5
+      author: toto
+      changes:
+        - createTable:
+            tableName: ethereum_rc20
+            columns:
+              - column:
+                  name: contract_address
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    unique : true
+        - addUniqueConstraint:  
+            columnNames:  contract_address
+            constraintName:  unique_rc20_address
+            tableName:  ethereum_rc20
+        - insert:  
+            tableName: ethereum_rc20
+            columns:
+              - column:  
+                  name: contract_address
+                  value: '0xae7ab96520DE3A18E5e111B5EaAb095312D7fE84'
+              - column:  
+                  name: name
+                  value: 'STETH'
+        - createTable:
+            tableName: ethereum_address
+            columns:
+              - column:
+                  name: account_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: public_address
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    unique : true
+        - addForeignKeyConstraint:
+            constraintName : fk_ethereum_address_account
+            baseColumnNames:  account_id
+            baseTableName:  ethereum_address
+            referencedColumnNames:  account_id  
+            referencedTableName:  account
+        - addUniqueConstraint:  
+            columnNames:  public_address
+            constraintName:  unique_ethereum_address_public_address
+            tableName:  ethereum_address
+        - createTable:
+            tableName: public_ethereum_balance
+            columns:
+              - column:
+                  name: public_address
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: smart_contract_address
+                  type: varchar
+        - addForeignKeyConstraint:
+            constraintName : fk_eth_bal_smart_contract
+            baseColumnNames:  smart_contract_address
+            baseTableName:  public_ethereum_balance
+            referencedColumnNames:  contract_address  
+            referencedTableName:  ethereum_rc20
+        

@@ -1,5 +1,6 @@
 import common.utils as utils
 import common.db as db
+import common.etherscan as etherscan
 import common.blockchaincom as blockchaincom
 import common.coinbase as coinbase
 import common.coinapi as coinapi
@@ -15,6 +16,20 @@ logger = utils.init_log()
 
 def tick_job():
     logger.info("tick...")
+
+def etherscan_job():
+    logger.info("etherscan")
+    accounts = db.load_all_accounts()
+    for account in accounts:
+        addresses = db.load_ethereum_addresses(account)
+        for address in addresses:
+            today = datetime.today()
+            amount = etherscan.load_ethereum_amount(address)
+            db.save_address_ethereum_amount(today, address, amount, None)
+            rc20s = db.load_all_rc20()
+            for rc20 in rc20s:
+                amount = etherscan.load_rc20_amount(address, rc20.contract_address)
+                db.save_address_ethereum_amount(today, address, amount, rc20.contract_address)
 
 def blockchaincom_job():
     logger.info("blockchaincom")

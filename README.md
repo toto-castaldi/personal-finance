@@ -16,7 +16,8 @@ PERSONAL-FINANCE
 ## USER
 
 * [Coinbase](https://www.coinbase.com/) USER Coinbase exchange transactions
-* [Blockchain.com](https://www.blockchain.com/api) USER Bitcoin public addresses amount
+* [Blockchain.com](https://www.blockchain.com/api) USER Bitcoin amount
+* [Etherscan](https://etherscan.io/apis) USER Ethereum and RC20 Tokens amount
 
 
 # DEV
@@ -56,7 +57,7 @@ docker run -it -v `pwd`:/drivers -v `pwd`/liquibase.yml:/liquibase.yml --link so
 cd application/batch
 pip install -r requirements.txt
 cd ..
-LOG_LEVEL=DEBUG ENV=DEV COINAPI_KEY=[YOUR_COINAPI_KEY] DEMO_ACCOUNT_ID=[FIREBASE_DEMO_ACCOUNT_ID] python batch_server.py
+LOG_LEVEL=DEBUG ENV=DEV ETHERSCAN_KEY=[KEY] COINAPI_KEY=[KEY] DEMO_ACCOUNT_ID=[ACCOUNT_ID] python batch_server.py
 ```
 
 ## API
