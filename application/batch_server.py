@@ -24,8 +24,6 @@ else:
         schedule.every(2).hours.do(batch.blockchaincom_job)
         schedule.every(2).hours.do(batch.etherscan_job)
         
-        schedule.every().day.at("00:00").do(batch.coinapi_job)
-        
         #schedule.every().day.at("01:00").do(batch.demo_data_job)
         #schedule.every().day.at("10:17").do(batch.demo_data_job)
         #schedule.every().day.at("10:18").do(batch.coinapi_job)
