@@ -1,9 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
+import "./assets/global.css";
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
 import { initializeApp } from "firebase/app";
 import { createPinia } from "pinia";
+
 const firebaseConfig = {
     apiKey: "AIzaSyCfzN6Xogvmd6AasFEDSEUMGgpgG3RNir0",
     authDomain: "personal-finance-2eb2f.firebaseapp.com",

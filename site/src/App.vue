@@ -37,7 +37,7 @@
   <main>
     <router-view />
 
-    <toast-stack></toast-stack>
+    <ToastStack />
   </main>
 </template>
 
@@ -69,10 +69,3 @@
     });
   }
 </script>
-
-<style scoped>
-  .disabled {
-      opacity: 0.5;
-      pointer-events: none;
-  }
-</style>
