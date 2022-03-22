@@ -1,12 +1,10 @@
 <template>
   <div class="container mt-5">
-    <!--
     <div class="row mb-5">
       <div class="col-md-12">
         <PortfolioSummary />
       </div>
     </div>
-    -->
     <div class="row">
       <div class="col-md-12">
         <div class="card border-primary">

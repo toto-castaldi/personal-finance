@@ -33,11 +33,9 @@ class Portfolio():
         min_date = min_date.date()
         for the_date in utils.daterange(min_date, self.today):
             logger.debug(the_date)
-            self.values.append(bean.PortfolioPoint(
+            self.values.append(bean.PortfolioDay(
                 the_date,
-                [],
-                None,
-                None
+                []
             ))
 
     def asset(self, porfolio_point, type, sub_type):
