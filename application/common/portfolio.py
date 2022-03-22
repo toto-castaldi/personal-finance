@@ -22,7 +22,14 @@ class Portfolio():
     def dates(self):
         bitcoin_min_date, _ = db.min_max_public_bitcoins_date_trx_by_account(self.account)
         coinbase_min_date, _ = db.min_max_coinbase_date_trx_by_account(self.account)
-        min_date = min(bitcoin_min_date if bitcoin_min_date else datetime.today(), coinbase_min_date if coinbase_min_date else datetime.today())
+        bank_min_date, _ = db.min_max_bank_by_account(self.account)
+
+
+        min_date = min(
+            bitcoin_min_date if bitcoin_min_date else datetime.today(), 
+            coinbase_min_date if coinbase_min_date else datetime.today(),
+            bank_min_date if bank_min_date else datetime.today(),
+        )
         min_date = min_date.date()
         for the_date in utils.daterange(min_date, self.today):
             logger.debug(the_date)

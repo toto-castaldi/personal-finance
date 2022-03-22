@@ -43,6 +43,10 @@ SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT_BY_ACCOUNT='''
 select min(updated_at), max(updated_at) from coinbase_trx where account_id = %(account)s
 '''
 
+SELECT_BANK_MIN_MAX_UPDATED_AT_BY_ACCOUNT='''
+select min(updated_at), max(updated_at) from bank_account_balance where account_id = %(account)s
+'''
+
 SELECT_PUBLIC_BITCOIN_MIN_MAX_UPDATED_AT_BY_ACCOUNT='''
 select min(pbb.updated_at), max(pbb.updated_at) from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and ba.account_id = %(account)s
 '''
@@ -199,6 +203,12 @@ def load_coinbase_crypto_trxs_by_user_and_date(account, down_range, up_range):
 
 def min_max_coinbase_date_trx_by_account(account):
   min_max = fetch(SELECT_COINBASE_TRX_MIN_MAX_UPDATED_AT_BY_ACCOUNT, {
+    "account" : account
+  })
+  return min_max["min"], min_max["max"]
+
+def min_max_bank_by_account(account):
+  min_max = fetch(SELECT_BANK_MIN_MAX_UPDATED_AT_BY_ACCOUNT, {
     "account" : account
   })
   return min_max["min"], min_max["max"]
