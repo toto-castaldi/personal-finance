@@ -67,8 +67,16 @@ SELECT_PUBLIC_ETHEREUM_ADDRESSES_BY_ACCOUNT='''
 select * from ethereum_address where account_id = %(account)s
 '''
 
+SELECT_BANK_NAMES_BY_ACCOUNT='''
+select distinct(bank_name) from bank_account_balance bab where account_id = %(account_id)s
+'''
+
 SELECT_PUBLIC_BITCOIN_AT='''
 select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and pbb.updated_at <= %(updated_at)s and ba.account_id = %(account_id)s order by updated_at desc limit 1
+'''
+
+SELECT_BANK_AMOUNT_AT='''
+select bab.* from bank_account_balance bab  where bab.bank_name = %(bank_name)s and bab.updated_at <= %(updated_at)s and bab.account_id = %(account_id)s order by updated_at desc limit 1
 '''
 
 SELECT_PUBLIC_ETHEREUM_AT='''
@@ -219,15 +227,33 @@ def get_crypto_rate(the_date, crypto_currency, native_currency):
   else:
     return None
 
-def load_public_bitcoins_amount_at(the_date, account):
+def load_public_bitcoins_amount_at(the_date, account_id):
   c = fetch(SELECT_PUBLIC_BITCOIN_AT, {
     "updated_at" : the_date,
-    "account_id" : account
+    "account_id" : account_id
   })
   if c :
     return c["amount"]
   else:
     return None
+
+def load_bank_accout_balances_at(the_date, account_id):
+  bank_names = list(map(lambda e: e["bank_name"],
+    fetch(SELECT_BANK_NAMES_BY_ACCOUNT, {
+      "account_id" : account_id
+    }, all=True))
+  )
+  result = []
+  for bank_name in bank_names:
+    c = fetch(SELECT_BANK_AMOUNT_AT, {
+      "updated_at" : the_date,
+      "account_id" : account_id,
+      "bank_name" : bank_name
+    })
+    if c :
+      result.append((bank_name, c["amount"]))
+
+  return result;
     
 def load_public_ethers_amount_at(the_date, account, smart_contract_address):
   c = fetch(SELECT_PUBLIC_ETHEREUM_AT if smart_contract_address is None else SELECT_PUBLIC_ETHEREUM_RC20_AT, {

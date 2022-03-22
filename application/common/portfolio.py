@@ -17,6 +17,7 @@ class Portfolio():
         self.public_bitcoins()
         self.public_ethers()
         self.coinbase()
+        self.bank_account()
 
     def dates(self):
         bitcoin_min_date, _ = db.min_max_public_bitcoins_date_trx_by_account(self.account)
@@ -41,12 +42,19 @@ class Portfolio():
             porfolio_point.assets.append(res)
             return res
 
+    def bank_account(self):
+        for porfolio_point in self.values:
+            balances = db.load_bank_accout_balances_at(porfolio_point.the_date, self.account)
+            for balance in balances:
+                asset_amount = self.asset(porfolio_point, "BANK", balance[0])
+                asset_amount.amount += balance[1]
+
     def public_bitcoins(self):
         for porfolio_point in self.values:
             amount = db.load_public_bitcoins_amount_at(porfolio_point.the_date, self.account)
             if amount:
                 asset_amount = self.asset(porfolio_point, "CRYPTO", "BTC")
-                asset_amount.amount += amount              
+                asset_amount.amount += amount       
 
     def public_ethers(self):
         for porfolio_point in self.values:
@@ -93,7 +101,9 @@ class Portfolio():
                 convertes_assets = []
                 total_currency = None
                 total_amount = 0
+                converted_asset_amount = None
                 for asset in portfolio_point.assets:
+                    amount = 0
                     if asset.type == "CRYPTO":
                         rate = db.get_crypto_rate(portfolio_point.the_date, asset.sub_type, native_currency )
                         if rate is not None:
@@ -105,15 +115,28 @@ class Portfolio():
                                 amount,
                                 native_currency
                             )
-                            total_amount += amount
                             convertes_assets.append(converted_asset_amount)
-                            if total_currency is None:
-                                total_currency = native_currency
-                            else:
-                                if total_currency != native_currency:
-                                    raise ValueError(f"wrong currency : was {total_currency} now is {native_currency}")
+
                         else:
                             convertes_assets.append(asset)
+                    elif asset.type == "BANK":
+                        amount = asset.amount 
+                        converted_asset_amount = bean.ConvertedAssetAmount(
+                                asset.amount,
+                                asset.type,
+                                asset.sub_type,
+                                amount,
+                                "EUR"
+                        )
+                        convertes_assets.append(converted_asset_amount)
+                    
+                    total_amount += amount
+                    if total_currency is None:
+                                total_currency = native_currency
+                    else:
+                        if total_currency != native_currency:
+                            raise ValueError(f"wrong currency : was {total_currency} now is {native_currency}")
+
                 portfolio_point.assets = convertes_assets
                 if total_currency is not None:
                     portfolio_point.total_amount = total_amount
