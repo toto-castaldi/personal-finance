@@ -16,6 +16,11 @@ class RC20:
     contract_address: str
 
 @dataclass
+class FintableAccount:
+    base_name: str
+    api_key: str
+
+@dataclass
 class CoinbaseTransaction:
     id: str
     updated_at : datetime

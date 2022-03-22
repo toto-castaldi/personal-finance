@@ -1,6 +1,5 @@
 import time
 import schedule
-import common.db as db
 import common.utils as utils
 import common.batch as batch
 
@@ -10,7 +9,8 @@ if utils.is_dev_env():
     #batch.blockchaincom_job()
     #batch.demo_data_job()
     #batch.coinbase_job()
-    batch.coinapi_job()
+    #batch.coinapi_job()
+    batch.fintable_job()
     pass
 else:
     if __name__ == '__main__':
@@ -20,9 +20,10 @@ else:
 
         schedule.every().day.at("00:10").do(batch.coinapi_job)
 
-        schedule.every(2).hours.do(batch.coinbase_job)
-        schedule.every(2).hours.do(batch.blockchaincom_job)
-        schedule.every(2).hours.do(batch.etherscan_job)
+        schedule.every().day.at("00:20").do(batch.coinbase_job)
+        schedule.every().day.at("00:30").do(batch.blockchaincom_job)
+        schedule.every().day.at("00:40").do(batch.etherscan_job)
+        schedule.every().day.at("08:30").do(batch.fintable_job)
         
         #schedule.every().day.at("01:00").do(batch.demo_data_job)
         #schedule.every().day.at("10:17").do(batch.demo_data_job)

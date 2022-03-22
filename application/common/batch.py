@@ -1,5 +1,7 @@
+from locale import currency
 import common.utils as utils
 import common.db as db
+import common.fintable as fintable
 import common.etherscan as etherscan
 import common.blockchaincom as blockchaincom
 import common.coinbase as coinbase
@@ -16,6 +18,17 @@ logger = utils.init_log()
 
 def tick_job():
     logger.info("tick...")
+
+def fintable_job():
+    logger.info("fintable")
+    accounts = db.load_all_accounts()
+    for account in accounts:
+        user_fintables = db.load_account_fintables(account)
+        for user_fintable in user_fintables:
+            today = datetime.today()
+            balances = fintable.load_bank_account_balances(user_fintable)
+            for balance in balances:
+                db.save_bank_account_balance(account, today, balance[2], balance[0], balance[1])
 
 def etherscan_job():
     logger.info("etherscan")

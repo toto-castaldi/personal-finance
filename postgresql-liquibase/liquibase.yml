@@ -170,7 +170,7 @@ databaseChangeLog:
                   type: money
                   constraints:
                     nullable: false
-  - changeSet:  
+  - changeSet:
       id: 5
       author: toto
       changes:
@@ -252,4 +252,72 @@ databaseChangeLog:
             baseTableName:  public_ethereum_balance
             referencedColumnNames:  contract_address  
             referencedTableName:  ethereum_rc20
-        
+  - changeSet:
+      id: 6
+      author: toto
+      changes:
+        - createTable:
+            tableName: fintable_user_base
+            columns:
+              - column:
+                  name: account_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: base_name
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    unique : true
+              - column:
+                  name: api_key
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName : fk_fintable_account
+            baseColumnNames:  account_id
+            baseTableName:  fintable_user_base
+            referencedColumnNames:  account_id  
+            referencedTableName:  account
+        - createTable:
+            tableName: bank_account_balance
+            columns:
+              - column:
+                  name: bank_name
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+  - changeSet:
+      id: 7
+      author: toto
+      changes:
+        - addColumn:
+            tableName: bank_account_balance
+            columns:
+            - column:
+                name: account_id
+                type: varchar
+        - addForeignKeyConstraint:
+            constraintName : fk_bab_account
+            baseColumnNames:  account_id
+            baseTableName:  bank_account_balance
+            referencedColumnNames:  account_id  
+            referencedTableName:  account
+

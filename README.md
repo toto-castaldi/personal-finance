@@ -18,6 +18,7 @@ PERSONAL-FINANCE
 * [Coinbase](https://www.coinbase.com/) USER Coinbase exchange transactions
 * [Blockchain.com](https://www.blockchain.com/api) USER Bitcoin amount
 * [Etherscan](https://etherscan.io/apis) USER Ethereum and RC20 Tokens amount
+* [Fintable](https://fintable.io/) USER Bank account balance
 
 
 # DEV

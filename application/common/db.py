@@ -59,6 +59,10 @@ SELECT_PUBLIC_ADDRESSES_BY_ACCOUNT='''
 select * from bitcoin_address where account_id = %(account)s
 '''
 
+SELECT_FINTABLES_BY_ACCOUNT='''
+select * from fintable_user_base where account_id = %(account_id)s
+'''
+
 SELECT_PUBLIC_ETHEREUM_ADDRESSES_BY_ACCOUNT='''
 select * from ethereum_address where account_id = %(account)s
 '''
@@ -95,6 +99,11 @@ VALUES (%(public_address)s, %(updated_at)s, %(amount)s)
 INSERT_PUBLIC_ETHEREUM_ADDRESS = '''
 INSERT INTO public_ethereum_balance (public_address, updated_at, amount, smart_contract_address)
 VALUES (%(public_address)s, %(updated_at)s, %(amount)s, %(smart_contract_address)s)
+'''
+
+INSERT_BANK_ACCUNT_BALANCE = '''
+INSERT INTO bank_account_balance (bank_name, updated_at, amount, currency, account_id)
+VALUES (%(bank_name)s, %(updated_at)s, %(amount)s, %(currency)s, %(account_id)s)
 '''
 
 def get_conn():
@@ -142,6 +151,18 @@ def load_bitcoin_addresses(account):
       "account" : account.id
     }, all=True))
   )
+
+def load_account_fintables(account):
+  return list(map(lambda e: 
+      bean.FintableAccount(
+                            e["base_name"], 
+                            e["api_key"]
+      ),
+    fetch(SELECT_FINTABLES_BY_ACCOUNT, {
+      "account_id" : account.id
+    }, all=True))
+  )
+  
 
 def load_ethereum_addresses(account):
   return list(map(lambda e: e["public_address"],
@@ -256,4 +277,15 @@ def save_address_ethereum_amount(today, address, bitcoin_amount, smart_contract)
           "public_address" : address,
           "amount" : bitcoin_amount,
           "smart_contract_address" : smart_contract
+        })
+
+def save_bank_account_balance(account, today, name, balance, currency):
+  with get_conn() as conn:  
+      with conn.cursor() as cursor:
+        cursor.execute(INSERT_BANK_ACCUNT_BALANCE, {
+          "account_id" : account.id,
+          "updated_at" : today,
+          "amount" : balance,
+          "bank_name" : name,
+          "currency" : currency
         })
