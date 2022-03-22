@@ -23,7 +23,7 @@ else:
         schedule.every().day.at("00:20").do(batch.coinbase_job)
         schedule.every().day.at("00:30").do(batch.blockchaincom_job)
         schedule.every().day.at("00:40").do(batch.etherscan_job)
-        schedule.every().day.at("08:30").do(batch.fintable_job)
+        schedule.every().day.at("07:33").do(batch.fintable_job)
         
         #schedule.every().day.at("01:00").do(batch.demo_data_job)
         #schedule.every().day.at("10:17").do(batch.demo_data_job)
