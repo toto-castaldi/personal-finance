@@ -1,4 +1,4 @@
-package com.totocastaldi.moneycontrol.model
+package com.totocastaldi.personalfinance.model
 
 import com.google.gson.annotations.SerializedName
 

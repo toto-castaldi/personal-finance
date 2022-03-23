@@ -1,7 +1,7 @@
-package com.totocastaldi.moneycontrol.repository
+package com.totocastaldi.personalfinance.repository
 
-import com.totocastaldi.moneycontrol.api.RetrofitInstance
-import com.totocastaldi.moneycontrol.model.Extra
+import com.totocastaldi.personalfinance.api.RetrofitInstance
+import com.totocastaldi.personalfinance.model.Extra
 import retrofit2.Response
 
 class Repository {

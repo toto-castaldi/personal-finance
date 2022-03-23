@@ -1,10 +1,10 @@
-package com.totocastaldi.moneycontrol
+package com.totocastaldi.personalfinance
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.totocastaldi.moneycontrol.model.Extra
-import com.totocastaldi.moneycontrol.repository.Repository
+import com.totocastaldi.personalfinance.model.Extra
+import com.totocastaldi.personalfinance.repository.Repository
 import kotlinx.coroutines.launch
 import retrofit2.Response
 

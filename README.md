@@ -148,6 +148,13 @@ location /api {
 }
 ```
 
+## LOCAL BUILD
+
+# MOBILE
+
+```bash
+docker run -it -v `pwd`:/app skillbillsrl/android-builder /app/build-app.sh
+```
 
 
 ## CONNECT DB

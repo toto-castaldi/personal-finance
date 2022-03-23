@@ -1,4 +1,4 @@
-package com.totocastaldi.moneycontrol
+package com.totocastaldi.personalfinance
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,7 +6,7 @@ import android.util.Log
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import com.totocastaldi.moneycontrol.repository.Repository
+import com.totocastaldi.personalfinance.repository.Repository
 
 class ExtraBudgetActivity : AppCompatActivity() {
 

@@ -1,4 +1,4 @@
-package com.totocastaldi.moneycontrol.utils
+package com.totocastaldi.personalfinance.utils
 
 class Constants {
     companion object {

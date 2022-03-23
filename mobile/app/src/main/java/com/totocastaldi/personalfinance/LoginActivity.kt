@@ -1,4 +1,4 @@
-package com.totocastaldi.moneycontrol
+package com.totocastaldi.personalfinance
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity

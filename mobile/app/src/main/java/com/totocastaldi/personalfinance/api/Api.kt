@@ -1,6 +1,6 @@
-package com.totocastaldi.moneycontrol.api
+package com.totocastaldi.personalfinance.api
 
-import com.totocastaldi.moneycontrol.model.Extra
+import com.totocastaldi.personalfinance.model.Extra
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

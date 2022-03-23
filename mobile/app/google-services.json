@@ -1,1 +1,39 @@
-{}
+{
+  "project_info": {
+    "project_number": "327454650091",
+    "project_id": "personal-finance-2eb2f",
+    "storage_bucket": "personal-finance-2eb2f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:327454650091:android:35c8d9039004e5ea0958ae",
+        "android_client_info": {
+          "package_name": "com.totocastaldi.personalfinance"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "327454650091-nfuegsbdrbth1fbrk1lid4pgu9l356kh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBfhI-V-OpiP8c-CxUEOkQCavWLQATGBgk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "327454650091-nfuegsbdrbth1fbrk1lid4pgu9l356kh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

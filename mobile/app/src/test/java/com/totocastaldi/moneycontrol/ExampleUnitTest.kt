@@ -1,4 +1,4 @@
-package com.totocastaldi.moneycontrol
+package com.totocastaldi.personalfinance
 
 import org.junit.Test
 
