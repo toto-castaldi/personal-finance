@@ -1,4 +1,26 @@
-FROM python:3.10.2
+FROM ubuntu:20.04
+
+#PACKAGES
+RUN DEBIAN_FRONTEND="noninteractive" apt-get update -y --fix-missing
+RUN DEBIAN_FRONTEND="noninteractive" apt-get upgrade -y --fix-missing
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y curl unzip gnupg lsb-release software-properties-common \
+make build-essential libssl-dev zlib1g-dev \
+libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
+libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl git \
+zip libpq-dev
+
+#PYTHON
+RUN apt-add-repository ppa:deadsnakes/ppa
+RUN DEBIAN_FRONTEND="noninteractive" apt-get update -y 
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y python3.10
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y python3-pip
+RUN ln -s /usr/bin/python3.10 /usr/bin/python
+#RUN pip install pip==21.0.1
+
+#TESSERACT
+RUN add-apt-repository ppa:alex-p/tesseract-ocr5
+RUN DEBIAN_FRONTEND="noninteractive" apt-get update -y 
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y tesseract-ocr
 
 WORKDIR /app
 COPY ./common /app/common

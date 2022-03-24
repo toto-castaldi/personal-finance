@@ -107,7 +107,7 @@ def demo_data_job():
         db.merge_transactions(account, account_transactions)
 
 def companion_images_job():
-    logger.info("demo data")
+    logger.info("companion images")
     custom_oem_psm_config = r'--oem 3 --psm 6'
     upload_folder = constants.get_config()["upload_folder"]
     worked_folder = constants.get_config()["worked_folder"]
