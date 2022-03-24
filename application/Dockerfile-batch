@@ -22,7 +22,7 @@ RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y python3.10-distutils
 RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y python3.10-dev
 RUN ln -s /usr/bin/python3.10 /usr/bin/python
 RUN wget https://bootstrap.pypa.io/get-pip.py
-RUn python get-pip.py
+RUN python get-pip.py
 
 WORKDIR /app
 COPY ./common /app/common
@@ -36,4 +36,4 @@ EXPOSE 5000
 
 ENV ENV=DOCKER
 
-CMD ["python3", "batch_server.py"]
+CMD ["python", "batch_server.py"]
