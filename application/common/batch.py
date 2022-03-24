@@ -145,6 +145,8 @@ def companion_images_job():
                 db.save_satispay(account_id, today, disponibilita_euro, risparmi_euro, "EUR")
 
                 utils.move_file(full_path, worked_folder)
+            else:
+                logger.info(f"{full_path} is UNKNOW file ")
     except:
         traceback.print_exc()
             

@@ -31,6 +31,7 @@ services:
       - LOG_LEVEL=DEBUG
       - LOG_FILE_NAME=batch
     volumes:
+      - /var/lib/buddy/upload:/upload
       - /var/lib/buddy/worked:/worked
       - /var/lib/buddy/log:/app/log
       - /var/lib/buddy/config/config-be.json:/app/common/config.json
