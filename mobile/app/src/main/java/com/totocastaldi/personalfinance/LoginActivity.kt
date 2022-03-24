@@ -2,8 +2,10 @@ package com.totocastaldi.personalfinance
 
 import android.app.ProgressDialog
 import android.content.Intent
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Parcelable
 import android.text.TextUtils
 import android.util.Log
 import android.util.Patterns
@@ -76,6 +78,20 @@ class LoginActivity : AppCompatActivity() {
             startActivityForResult(intent, RC_SIGN_IN)
         }
 
+        when {
+            intent?.action == Intent.ACTION_SEND && intent.type?.startsWith("image/") == true -> {
+                handleSendImage(intent)
+            }
+            else -> {
+                Log.d(TAG, "action ${intent?.action}")
+            }
+        }
+    }
+
+    private fun handleSendImage(intent: Intent) {
+        (intent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as? Uri)?.let {
+            Log.d(TAG, "$it")
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
