@@ -1,6 +1,4 @@
 <resources>
-    <string name="app_name">Money Control</string>
-    <string name="password">password</string>
-    <string name="login">LOGIN</string>
-    <string name="email">email</string>
+    <string name="app_name">Personal finance companion</string>
+    <string name="no_account">Not have account ? <b>SignUp</b></string>
 </resources>

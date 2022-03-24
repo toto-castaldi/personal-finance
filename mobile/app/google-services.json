@@ -7,12 +7,20 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:327454650091:android:35c8d9039004e5ea0958ae",
+        "mobilesdk_app_id": "1:327454650091:android:66f2e357a8d1478f0958ae",
         "android_client_info": {
           "package_name": "com.totocastaldi.personalfinance"
         }
       },
       "oauth_client": [
+        {
+          "client_id": "327454650091-0nn3f0v6hmjijq0dnkdoj75s8b9dvu7t.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.totocastaldi.personalfinance",
+            "certificate_hash": "ff009bd4294a3f4900193b659a268b6916303291"
+          }
+        },
         {
           "client_id": "327454650091-nfuegsbdrbth1fbrk1lid4pgu9l356kh.apps.googleusercontent.com",
           "client_type": 3

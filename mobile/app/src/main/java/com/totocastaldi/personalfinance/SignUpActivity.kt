@@ -9,11 +9,11 @@ import android.util.Patterns
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import com.google.firebase.auth.FirebaseAuth
-import com.totocastaldi.personalfinance.databinding.ActivityLoginBinding
+import com.totocastaldi.personalfinance.databinding.ActivitySignUpBinding
 
-class LoginActivity : AppCompatActivity() {
+class SignUpActivity : AppCompatActivity() {
 
-    private lateinit var binding:ActivityLoginBinding
+    private lateinit var binding: ActivitySignUpBinding
 
     private lateinit var actionBar: ActionBar
 
@@ -27,28 +27,24 @@ class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivitySignUpBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        actionBar = supportActionBar !!
-        actionBar.title = "Login"
+        actionBar = supportActionBar!!
+        actionBar.title = "Sign Up"
+        actionBar.setDisplayHomeAsUpEnabled(true)
+        actionBar.setDisplayShowHomeEnabled(true)
 
         progressDialog =  ProgressDialog(this)
         progressDialog.setTitle("Please wait")
-        progressDialog.setMessage("Loggin In ...")
+        progressDialog.setMessage("Creating account ...")
         progressDialog.setCanceledOnTouchOutside(false)
 
         firebaseAuth = FirebaseAuth.getInstance()
-        checkUser()
 
-        binding.notAccountTv.setOnClickListener {
-            startActivity(Intent(this, SignUpActivity::class.java))
-        }
-
-        binding.loginBtn.setOnClickListener {
+        binding.signUpBtn.setOnClickListener {
             validateData()
         }
-
     }
 
     private fun validateData() {
@@ -59,33 +55,34 @@ class LoginActivity : AppCompatActivity() {
             binding.emailEt.error = "Invalid email format"
         } else if (TextUtils.isEmpty(password)) {
             binding.passwordEt.error = "Please enter password"
+        } else if (password.length < 8) {
+            binding.passwordEt.error = "Password must at least 8 characters long"
         } else {
-            firebaseLogin()
+            firebaseSignUp()
         }
     }
 
-    private fun firebaseLogin() {
+    private fun firebaseSignUp() {
         progressDialog.show()
-        firebaseAuth.signInWithEmailAndPassword(email, password)
+
+        firebaseAuth.createUserWithEmailAndPassword(email, password)
             .addOnSuccessListener {
                 progressDialog.dismiss()
                 val firebaseUser = firebaseAuth.currentUser
                 val email = firebaseUser!!.email
-                Toast.makeText(this, "LoggedIn as $email", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Account created with email $email", Toast.LENGTH_SHORT).show()
+
                 startActivity(Intent(this, ProfileActivity::class.java))
                 finish()
             }
             .addOnFailureListener { e->
                 progressDialog.dismiss()
-                Toast.makeText(this, "Login failed due to ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "SignUp failed due to ${e.message}", Toast.LENGTH_SHORT).show()
             }
     }
 
-    private fun checkUser() {
-        val firebaseUser = firebaseAuth.currentUser
-        if (firebaseUser != null) {
-            startActivity(Intent(this, ProfileActivity::class.java))
-            finish()
-        }
+    override fun onSupportNavigateUp(): Boolean {
+        onBackPressed()
+        return super.onSupportNavigateUp()
     }
 }
