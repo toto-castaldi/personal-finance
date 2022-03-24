@@ -1,10 +1,13 @@
+from re import U
 import common.utils as utils
 import common.db as db
 import common.portfolio as portfolio
 import common.portfolio_serialize as portfolio_serialize
+import common.constants as constants
 import json
+import uuid
 from fastapi import Response
-from fastapi import FastAPI
+from fastapi import FastAPI, Form
 from fastapi import HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -15,6 +18,8 @@ origins = [
     "*"
 ]
 
+upload_folder = constants.get_config()["upload_folder"]
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
@@ -23,6 +28,14 @@ app.add_middleware(
     allow_headers=["*"]
 )
 
+@app.post("/file/")
+async def file(uploaded_file = Form(...), uid:str = Form(...)):
+    contents = await uploaded_file.read()
+    filename = f"{upload_folder}/{uid}-upload-{uuid.uuid4()}"
+    with open(filename, "wb") as f:
+        f.write(contents)
+
+    return {"result": "ok"}
 
 @app.get("/portfolio-values/{account_id}/{currency}")
 def portfolio_values_json(account_id: str, currency: str):

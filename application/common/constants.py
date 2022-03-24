@@ -11,7 +11,8 @@ def get_config():
         config = {
             "coinapi_key" : os.getenv("COINAPI_KEY"),
             "demo_account_id" : os.getenv("DEMO_ACCOUNT_ID"),
-            "etherscan_key" : os.getenv("ETHERSCAN_KEY")
+            "etherscan_key" : os.getenv("ETHERSCAN_KEY"),
+            "upload_folder" : os.getenv("UPLOAD_FOLDER")
         }
     else:
         with open("./common/config.json", "r") as f:

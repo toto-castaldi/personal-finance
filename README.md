@@ -68,7 +68,7 @@ LOG_LEVEL=DEBUG ENV=DEV ETHERSCAN_KEY=[KEY] COINAPI_KEY=[KEY] DEMO_ACCOUNT_ID=[A
 cd application/api
 pip install -r requirements.txt
 cd ..
-LOG_LEVEL=DEBUG ENV=DEV python api_server.py
+LOG_LEVEL=DEBUG ENV=DEV UPLOAD_FOLDER=[UPLOAD] python api_server.py
 ```
 
 ## FE

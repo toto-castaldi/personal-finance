@@ -52,6 +52,8 @@ class ProfileActivity : AppCompatActivity() {
     private fun handleSendImage(intent: Intent) {
         (intent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as? Uri)?.let {
             Log.d(TAG, "$it")
+            val uid = firebaseAuth.currentUser!!.uid
+            UploadUtility(this).uploadFile(uid, it)
         }
     }
 
