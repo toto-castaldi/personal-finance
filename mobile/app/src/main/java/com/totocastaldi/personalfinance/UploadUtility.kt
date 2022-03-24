@@ -15,7 +15,9 @@ class UploadUtility(activity: Activity) {
 
     var activity = activity;
     var dialog: ProgressDialog? = null
-    var serverURL: String = "http://192.168.1.161:5000/file"
+    //var serverURL: String = "http://192.168.1.161:5000/file"
+    //var serverURL: String = "https://personal-finance.toto-castaldi.com/api/file"
+    var serverURL: String = "http://personal-finance.toto-castaldi.com:5000/file"
 
     val client = OkHttpClient()
 
