@@ -3,6 +3,7 @@ import logging
 import logging.handlers
 import os
 import dataclasses
+import shutil
 from datetime import timedelta
 from datetime import date
 from datetime import datetime
@@ -80,4 +81,4 @@ def account_id_from_uploaded_file(file_path : str):
   return basename.split("-upload-")[0]
 
 def move_file(file, folder):
-  os.rename(file, os.path.join(folder, os.path.basename(file)))
+  shutil.move(file, os.path.join(folder, os.path.basename(file)))
