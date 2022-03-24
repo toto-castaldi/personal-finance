@@ -18,6 +18,7 @@ class Portfolio():
         self.public_ethers()
         self.coinbase()
         self.bank_account()
+        self.satispay()
 
     def dates(self):
         bitcoin_min_date, _ = db.min_max_public_bitcoins_date_trx_by_account(self.account)
@@ -46,6 +47,13 @@ class Portfolio():
             res = bean.AssetAmount(0, type, sub_type);
             porfolio_point.assets.append(res)
             return res
+
+    def satispay(self):
+        for porfolio_point in self.values:
+            amount = db.load_satispay_balances_at(porfolio_point.the_date, self.account)
+            if amount:
+                asset_amount = self.asset(porfolio_point, "BANK", "SATISPAY")
+                asset_amount.amount += amount
 
     def bank_account(self):
         for porfolio_point in self.values:

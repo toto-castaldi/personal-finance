@@ -78,6 +78,10 @@ SELECT_BANK_NAMES_BY_ACCOUNT='''
 select distinct(bank_name) from bank_account_balance bab where account_id = %(account_id)s
 '''
 
+SELECT_SATISPAY_AT='''
+select (risparmi_amount + disponibilita_amount) as amount from satispay where updated_at <= %(updated_at)s and account_id = %(account_id)s order by updated_at desc limit 1
+'''
+
 SELECT_PUBLIC_BITCOIN_AT='''
 select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and pbb.updated_at <= %(updated_at)s and ba.account_id = %(account_id)s order by updated_at desc limit 1
 '''
@@ -247,6 +251,16 @@ def get_crypto_rate(the_date, crypto_currency, native_currency):
 
 def load_public_bitcoins_amount_at(the_date, account_id):
   c = fetch(SELECT_PUBLIC_BITCOIN_AT, {
+    "updated_at" : the_date,
+    "account_id" : account_id
+  })
+  if c :
+    return c["amount"]
+  else:
+    return None
+
+def load_satispay_balances_at(the_date, account_id):
+  c = fetch(SELECT_SATISPAY_AT, {
     "updated_at" : the_date,
     "account_id" : account_id
   })
