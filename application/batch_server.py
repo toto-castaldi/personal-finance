@@ -25,7 +25,7 @@ else:
         schedule.every().day.at("00:30").do(batch.blockchaincom_job)
         schedule.every().day.at("00:40").do(batch.etherscan_job)
         schedule.every().day.at("00:50").do(batch.fintable_job)
-        schedule.every().day.at("18:48").do(batch.companion_images_job)
+        schedule.every().day.at("19:25").do(batch.companion_images_job)
         
         #schedule.every().day.at("01:00").do(batch.demo_data_job)
         #schedule.every().day.at("10:17").do(batch.demo_data_job)

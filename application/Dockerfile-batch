@@ -9,18 +9,20 @@ libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncurses5-dev \
 libncursesw5-dev xz-utils tk-dev libffi-dev liblzma-dev python-openssl git \
 zip libpq-dev
 
-#PYTHON
-RUN apt-add-repository ppa:deadsnakes/ppa
-RUN DEBIAN_FRONTEND="noninteractive" apt-get update -y 
-RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y python3.10
-RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y python3-pip
-RUN ln -s /usr/bin/python3.10 /usr/bin/python
-#RUN pip install pip==21.0.1
-
 #TESSERACT
 RUN add-apt-repository ppa:alex-p/tesseract-ocr5
 RUN DEBIAN_FRONTEND="noninteractive" apt-get update -y 
 RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y tesseract-ocr
+
+#PYTHON
+RUN apt-add-repository ppa:deadsnakes/ppa
+RUN DEBIAN_FRONTEND="noninteractive" apt-get update -y 
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y python3.10
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y python3.10-distutils
+RUN DEBIAN_FRONTEND="noninteractive" apt-get install -y python3.10-dev
+RUN ln -s /usr/bin/python3.10 /usr/bin/python
+RUN wget https://bootstrap.pypa.io/get-pip.py
+RUn python get-pip.py
 
 WORKDIR /app
 COPY ./common /app/common
@@ -34,4 +36,4 @@ EXPOSE 5000
 
 ENV ENV=DOCKER
 
-CMD ["python", "batch_server.py"]
+CMD ["python3", "batch_server.py"]
