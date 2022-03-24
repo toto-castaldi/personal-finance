@@ -5,12 +5,13 @@ import common.batch as batch
 
 
 if utils.is_dev_env():
+    batch.companion_images_job()
     #batch.etherscan_job()
     #batch.blockchaincom_job()
     #batch.demo_data_job()
     #batch.coinbase_job()
     #batch.coinapi_job()
-    batch.fintable_job()
+    #batch.fintable_job()
     pass
 else:
     if __name__ == '__main__':

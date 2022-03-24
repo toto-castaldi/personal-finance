@@ -1,3 +1,4 @@
 requests==2.27.1
 schedule==1.1.0
 psycopg2==2.8.6
+pytesseract==0.3.9

@@ -5,7 +5,6 @@ import common.portfolio as portfolio
 import common.portfolio_serialize as portfolio_serialize
 import common.constants as constants
 import json
-import uuid
 from fastapi import Response
 from fastapi import FastAPI, Form
 from fastapi import HTTPException
@@ -31,7 +30,7 @@ app.add_middleware(
 @app.post("/file/")
 async def file(uploaded_file = Form(...), uid:str = Form(...)):
     contents = await uploaded_file.read()
-    filename = f"{upload_folder}/{uid}-upload-{uuid.uuid4()}"
+    filename = utils.unique_uploaded_file_nameunique_uid_file_name(uid, upload_folder)
     with open(filename, "wb") as f:
         f.write(contents)
 

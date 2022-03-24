@@ -19,6 +19,7 @@ PERSONAL-FINANCE
 * [Blockchain.com](https://www.blockchain.com/api) USER Bitcoin amount
 * [Etherscan](https://etherscan.io/apis) USER Ethereum and RC20 Tokens amount
 * [Fintable](https://fintable.io/) USER Bank account balance
+* [Satispay](https://www.satispay.com/en-it/) USER Balance through OCR on app screenshot sent via Mobile companion app
 
 
 # DEV
@@ -58,7 +59,7 @@ docker run -it -v `pwd`:/drivers -v `pwd`/liquibase.yml:/liquibase.yml --link so
 cd application/batch
 pip install -r requirements.txt
 cd ..
-LOG_LEVEL=DEBUG ENV=DEV ETHERSCAN_KEY=[KEY] COINAPI_KEY=[KEY] DEMO_ACCOUNT_ID=[ACCOUNT_ID] python batch_server.py
+LOG_LEVEL=DEBUG ENV=DEV ETHERSCAN_KEY=[KEY] COINAPI_KEY=[KEY] DEMO_ACCOUNT_ID=[ACCOUNT_ID] UPLOAD_FOLDER=[FOLDER] WORKED_FOLDER=[FOLDER] python batch_server.py
 ```
 
 ## API
@@ -68,7 +69,7 @@ LOG_LEVEL=DEBUG ENV=DEV ETHERSCAN_KEY=[KEY] COINAPI_KEY=[KEY] DEMO_ACCOUNT_ID=[A
 cd application/api
 pip install -r requirements.txt
 cd ..
-LOG_LEVEL=DEBUG ENV=DEV UPLOAD_FOLDER=[UPLOAD] python api_server.py
+LOG_LEVEL=DEBUG ENV=DEV UPLOAD_FOLDER=[FOLDER] python api_server.py
 ```
 
 ## FE

@@ -320,4 +320,41 @@ databaseChangeLog:
             baseTableName:  bank_account_balance
             referencedColumnNames:  account_id  
             referencedTableName:  account
-
+  - changeSet:
+      id: 8
+      author: toto
+      changes:
+        - createTable:
+            tableName: satispay
+            columns:
+              - column:
+                  name: account_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: risparmi_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: disponibilita_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName : fk_sp_account
+            baseColumnNames:  account_id
+            baseTableName:  satispay
+            referencedColumnNames:  account_id  
+            referencedTableName:  account

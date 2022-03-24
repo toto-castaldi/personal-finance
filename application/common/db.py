@@ -1,3 +1,6 @@
+from datetime import date
+from decimal import Decimal
+from locale import currency
 import psycopg2
 import common.utils as utils
 import common.bean as bean
@@ -106,6 +109,11 @@ on conflict (crypto_currency, native_currency, date) do nothing;
 INSERT_PUBLIC_BITCOIN_ADDRESS = '''
 INSERT INTO public_bitcoin_balance (public_address, updated_at, amount)
 VALUES (%(public_address)s, %(updated_at)s, %(amount)s)
+'''
+
+INSERT_SATISPAY = '''
+INSERT INTO satispay (account_id, updated_at, risparmi_amount, disponibilita_amount, currency)
+VALUES (%(account_id)s, %(updated_at)s, %(risparmi_amount)s, %(disponibilita_amount)s, %(currency)s)
 '''
 
 INSERT_PUBLIC_ETHEREUM_ADDRESS = '''
@@ -303,6 +311,17 @@ def save_address_bitcoin_amount(today, address, bitcoin_amount):
           "updated_at" : today,
           "public_address" : address,
           "amount" : bitcoin_amount
+        })
+
+def save_satispay(account_id : str, today : date, disponibilita_euro : Decimal, risparmi_euro: Decimal, currency: str):
+  with get_conn() as conn:  
+      with conn.cursor() as cursor:
+        cursor.execute(INSERT_SATISPAY, {
+          "account_id" : account_id,
+          "updated_at" : today,
+          "risparmi_amount" : risparmi_euro,
+          "disponibilita_amount" : disponibilita_euro,
+          "currency" : currency
         })
 
 def save_address_ethereum_amount(today, address, bitcoin_amount, smart_contract):

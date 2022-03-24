@@ -1,12 +1,12 @@
-from decimal import Decimal
+import uuid
 import logging
 import logging.handlers
 import os
 import dataclasses
-import json
 from datetime import timedelta
 from datetime import date
 from datetime import datetime
+from decimal import Decimal
 
 
 LOG_LEVELS = {
@@ -60,11 +60,24 @@ def init_log():
   return logger
 
 def daterange(start_date, end_date):
-    for n in range(int((end_date - start_date).days) + 1):
-        yield start_date + timedelta(n)
+  for n in range(int((end_date - start_date).days) + 1):
+      yield start_date + timedelta(n)
 
 def satoshi_to_bitcoin(satoshi):
-    return satoshi / 100000000
+  return satoshi / 100000000
 
 def wei_to_ether(wei):
-    return wei / (10 ** 18)
+  return wei / (10 ** 18)
+
+def str_euro_to_number(str_euro: str):
+  return str_euro.replace('€', '').replace('.', '').replace(',','.').strip()
+
+def unique_uploaded_file_name(prefix, folder):
+  return os.path.join(folder, f"{prefix}-upload-{uuid.uuid4()}")
+
+def account_id_from_uploaded_file(file_path : str):
+  basename = os.path.basename(file_path)
+  return basename.split("-upload-")[0]
+
+def move_file(file, folder):
+  os.rename(file, os.path.join(folder, os.path.basename(file)))

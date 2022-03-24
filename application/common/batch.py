@@ -1,4 +1,3 @@
-from locale import currency
 import common.utils as utils
 import common.db as db
 import common.fintable as fintable
@@ -10,8 +9,13 @@ import common.constants as constants
 import random
 import common.bean as bean
 import uuid
+import pytesseract
+from PIL import Image
 from datetime import datetime
 from datetime import timedelta
+from os import listdir
+from os.path import isfile, join
+from decimal import Decimal
 
 
 logger = utils.init_log()
@@ -101,4 +105,44 @@ def demo_data_job():
             random.choice(["ETH", "BTC"])
         )]
         db.merge_transactions(account, account_transactions)
+
+def companion_images_job():
+    logger.info("demo data")
+    custom_oem_psm_config = r'--oem 3 --psm 6'
+    upload_folder = constants.get_config()["upload_folder"]
+    worked_folder = constants.get_config()["worked_folder"]
+    onlyfiles = [f for f in listdir(upload_folder) if isfile(join(upload_folder, f))]
+    for f in onlyfiles:
+        full_path = join(upload_folder, f)
+        image = Image.open(full_path)
+        w, h = image.size
+        footer = image.crop((0, h * (720/868), w, h ))
+        #footer.save("/home/toto/tmp/abce/footer.png")
+
+        footer_text_lines = pytesseract.image_to_string(footer, config=custom_oem_psm_config).splitlines()
+        footer_last_line = footer_text_lines[-1]
+        if "Negozi" in footer_last_line and "Contatti" in footer_last_line and "Servizi" in footer_last_line and "Invita" in footer_last_line and "Profilo" in footer_last_line :
+            logger.info(f"{full_path} is a Satispay SCREENSHOT")
+
+            disponibilita = image.crop((0, h * (115/868), w / 2, h * (225/868) ))
+            #disponibilita.save("/home/toto/tmp/abce/disponibilita.png")
+
+            risparmi = image.crop((w / 2, h * (115/868), w , h * (225/868) ))
+            #risparmi.save("/home/toto/tmp/abce/risparmi.png")
+
+            disponibilita_lines = pytesseract.image_to_string(disponibilita, config=custom_oem_psm_config).splitlines()
+            risparmi_lines = pytesseract.image_to_string(risparmi, config=custom_oem_psm_config).splitlines()
+
+            disponibilita_euro = Decimal(utils.str_euro_to_number(disponibilita_lines[-1]))
+            risparmi_euro = Decimal(utils.str_euro_to_number(risparmi_lines[-1]))
+
+            logger.debug(f"{disponibilita_euro} {risparmi_euro}")
+
+            account_id = utils.account_id_from_uploaded_file(full_path)
+            today = datetime.today()
+            db.save_satispay(account_id, today, disponibilita_euro, risparmi_euro, "EUR")
+
+            utils.move_file(full_path, worked_folder)
+            
+
 
