@@ -111,7 +111,7 @@ def companion_images_job():
     def extract_footer_last_line(image, start_y_ratio):
         w, h = image.size
         footer = image.crop((0, h * start_y_ratio, w, h ))
-        footer.save("/home/toto/tmp/abce/footer.png")
+        #footer.save("/home/toto/tmp/abce/footer.png")
         footer_text_lines = pytesseract.image_to_string(footer, config=custom_oem_psm_config).splitlines()
         return footer_text_lines[-1]
 
