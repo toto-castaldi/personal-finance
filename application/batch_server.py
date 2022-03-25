@@ -15,7 +15,7 @@ if utils.is_dev_env():
     pass
 else:
     if __name__ == '__main__':
-        batch.companion_images_job
+        batch.companion_images_job()
 
         schedule.every(10).minutes.do(batch.tick_job)
         
