@@ -116,8 +116,8 @@ VALUES (%(public_address)s, %(updated_at)s, %(amount)s)
 '''
 
 INSERT_SATISPAY = '''
-INSERT INTO satispay (account_id, updated_at, risparmi_amount, disponibilita_amount, currency)
-VALUES (%(account_id)s, %(updated_at)s, %(risparmi_amount)s, %(disponibilita_amount)s, %(currency)s)
+INSERT INTO satispay (account_id, updated_at, risparmi_amount, disponibilita_amount, currency, image_name)
+VALUES (%(account_id)s, %(updated_at)s, %(risparmi_amount)s, %(disponibilita_amount)s, %(currency)s, %(image_name)s)
 '''
 
 INSERT_PUBLIC_ETHEREUM_ADDRESS = '''
@@ -327,7 +327,7 @@ def save_address_bitcoin_amount(today, address, bitcoin_amount):
           "amount" : bitcoin_amount
         })
 
-def save_satispay(account_id : str, today : date, disponibilita_euro : Decimal, risparmi_euro: Decimal, currency: str):
+def save_satispay(account_id : str, today : date, disponibilita_euro : Decimal, risparmi_euro: Decimal, currency: str, image_name: str):
   with get_conn() as conn:  
       with conn.cursor() as cursor:
         cursor.execute(INSERT_SATISPAY, {
@@ -335,7 +335,8 @@ def save_satispay(account_id : str, today : date, disponibilita_euro : Decimal, 
           "updated_at" : today,
           "risparmi_amount" : risparmi_euro,
           "disponibilita_amount" : disponibilita_euro,
-          "currency" : currency
+          "currency" : currency,
+          "image_name" : image_name
         })
 
 def save_address_ethereum_amount(today, address, bitcoin_amount, smart_contract):

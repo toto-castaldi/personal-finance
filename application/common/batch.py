@@ -142,7 +142,7 @@ def companion_images_job():
 
                 account_id = utils.account_id_from_uploaded_file(full_path)
                 today = datetime.today()
-                db.save_satispay(account_id, today, disponibilita_euro, risparmi_euro, "EUR")
+                db.save_satispay(account_id, today, disponibilita_euro, risparmi_euro, "EUR", f)
 
                 utils.move_file(full_path, worked_folder)
             else:
