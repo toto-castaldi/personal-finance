@@ -7,14 +7,7 @@
     </div>
     <div class="row">
       <div class="col-md-12">
-        <div class="card border-primary">
-          <div class="card-header">Trend</div>
           <PortfolioTrend />
-          <div class="card-body">
-            <p class="card-text">This is the trend of your Portfolio</p>
-          </div>
-          <div class="card-footer text-muted">Updated to yesterday</div>
-        </div>
       </div>
     </div>
   </div>

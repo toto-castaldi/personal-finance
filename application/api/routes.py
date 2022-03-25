@@ -36,11 +36,17 @@ async def file(uploaded_file = Form(...), uid:str = Form(...), type:str = Form(.
 
     return {"result": "ok"}
 
-@app.get("/portfolio-values/{account_id}/{currency}")
-def portfolio_values_json(account_id: str, currency: str):
+@app.get("/portfolio-values/{account_id}/{currency}/{max_num_of_points}")
+def portfolio_values_json(account_id: str, currency: str, max_num_of_points : int):
     logger.debug(account_id)
     if db.account_info(account_id):
-        return Response(content=json.dumps(portfolio_serialize.asset_points(portfolio.Portfolio(account_id), native_currency=currency), default=utils.json_serial), media_type="application/json")
+        return Response(content=json.dumps(
+            portfolio_serialize.asset_points(
+                portfolio.Portfolio(account_id), 
+                currency,
+                max_num_of_points
+            ), 
+            default=utils.json_serial), media_type="application/json")
     else:
         raise HTTPException(status_code=404, detail="wrong account")
 

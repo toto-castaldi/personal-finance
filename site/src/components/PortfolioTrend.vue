@@ -1,5 +1,11 @@
 <template>
-  <LineChart :chartData="state.data" />
+  <div class="card border-primary">
+    <div class="card-header">Trend</div>
+      <LineChart :chartData="state.data" />
+    <div class="card-body">
+    </div>
+    <div class="card-footer text-muted">Updated to yesterday</div>
+  </div>
 </template>
 
 <script lang="ts">
@@ -20,11 +26,13 @@ export default defineComponent({
     });
 
     onMounted(async () => {
+      const ratio = Math.floor(utils.mathMap(window.screen.availWidth, 300, 1920, 30, 120));
+      console.log(ratio);
       const jConfig = await fetch("/config.json");
       const config = await jConfig.json();
       const uid = getAuth().currentUser.uid;
       const response = await fetch(
-        `${config.apiUrl}/portfolio-values/${uid}/EUR`
+        `${config.apiUrl}/portfolio-values/${uid}/EUR/${ratio}`
       );
       const rjson = await response.json();
       const labels = [];

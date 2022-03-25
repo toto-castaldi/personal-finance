@@ -71,12 +71,25 @@ def summary(porfolio : p.Portfolio, native_currency = None):
         return None
 
 
-def asset_points(porfolio : p.Portfolio, native_currency : str = None):
-    if native_currency:
-        result = []
-        for portfolio_point in porfolio.values:
-            result.append(add_amount_to_point(portfolio_point, native_currency))
+def asset_points(portfolio : p.Portfolio, native_currency : str, max_num_of_points : int ):
+    assert native_currency is not None
+    assert max_num_of_points is not None and max_num_of_points > 2
+    assert portfolio is not None
 
-        return result
+    result = []
+    len_vals = len(portfolio.values)
+    if len_vals <= max_num_of_points:
+        for portfolio_point in portfolio.values:
+            result.append(add_amount_to_point(portfolio_point, native_currency))
     else:
-        return porfolio.values
+        max_num_of_points -= 2
+        step = len_vals / max_num_of_points
+        index = 0
+        while index < len_vals:
+            result.append(add_amount_to_point(portfolio.values[index], native_currency))
+            index = int(index + step)
+
+        result.append(add_amount_to_point(portfolio.values[-1], native_currency))
+
+    return result
+    

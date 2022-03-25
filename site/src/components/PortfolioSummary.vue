@@ -1,6 +1,6 @@
 <template>
   <div class="card border-primary">
-    <div class="card-header">Portfolio</div>
+    <div class="card-header">Total</div>
     <div class="card-body">
       <p class="card-text">Amount : {{ amount }}</p>
     </div>
@@ -26,8 +26,9 @@ export default {
       );
       const rjson = await response.json();
       const amount = Number(rjson.total_amount);
+      const currency = rjson.total_currency === "EUR" ? "€" : rjson.total_currency;
 
-      this.amount = `${amount} ${rjson.total_currency} `;
+      this.amount = `${amount.toFixed(2)} ${currency} `;
     }
 }
 </script>
