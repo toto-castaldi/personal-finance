@@ -126,8 +126,8 @@ VALUES (%(public_address)s, %(updated_at)s, %(amount)s, %(smart_contract_address
 '''
 
 INSERT_BANK_ACCUNT_BALANCE = '''
-INSERT INTO bank_account_balance (bank_name, updated_at, amount, currency, account_id)
-VALUES (%(bank_name)s, %(updated_at)s, %(amount)s, %(currency)s, %(account_id)s)
+INSERT INTO bank_account_balance (bank_name, updated_at, amount, currency, account_id, image_name)
+VALUES (%(bank_name)s, %(updated_at)s, %(amount)s, %(currency)s, %(account_id)s, %(image_name)s)
 '''
 
 def get_conn():
@@ -349,13 +349,14 @@ def save_address_ethereum_amount(today, address, bitcoin_amount, smart_contract)
           "smart_contract_address" : smart_contract
         })
 
-def save_bank_account_balance(account, today, name, balance, currency):
+def save_bank_account_balance(account_id : str, today : date, name : str, balance : Decimal, currency : str, image_name : str = None):
   with get_conn() as conn:  
       with conn.cursor() as cursor:
         cursor.execute(INSERT_BANK_ACCUNT_BALANCE, {
-          "account_id" : account.id,
+          "account_id" : account_id,
           "updated_at" : today,
           "amount" : balance,
           "bank_name" : name,
-          "currency" : currency
+          "currency" : currency,
+          "image_name" : image_name
         })

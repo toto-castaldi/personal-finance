@@ -368,3 +368,13 @@ databaseChangeLog:
             - column:
                 name: image_name
                 type: varchar
+  - changeSet:
+      id: 10
+      author: toto
+      changes:
+        - addColumn:
+            tableName: bank_account_balance
+            columns:
+            - column:
+                name: image_name
+                type: varchar

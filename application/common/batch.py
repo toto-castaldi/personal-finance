@@ -33,7 +33,7 @@ def fintable_job():
             today = datetime.today()
             balances = fintable.load_bank_account_balances(user_fintable)
             for balance in balances:
-                db.save_bank_account_balance(account, today, balance[2], balance[0], balance[1])
+                db.save_bank_account_balance(account.id, today, balance[2], balance[0], balance[1])
 
 def etherscan_job():
     logger.info("etherscan")
@@ -108,22 +108,31 @@ def demo_data_job():
         db.merge_transactions(account, account_transactions)
 
 def companion_images_job():
+    def extract_footer_last_line(image, start_y_ratio):
+        w, h = image.size
+        footer = image.crop((0, h * start_y_ratio, w, h ))
+        footer.save("/home/toto/tmp/abce/footer.png")
+        footer_text_lines = pytesseract.image_to_string(footer, config=custom_oem_psm_config).splitlines()
+        return footer_text_lines[-1]
+
     logger.info("companion images")
     try:
+        today = datetime.today()
         custom_oem_psm_config = r'--oem 3 --psm 6'
         upload_folder = constants.get_config()["upload_folder"]
         worked_folder = constants.get_config()["worked_folder"]
         onlyfiles = [f for f in listdir(upload_folder) if isfile(join(upload_folder, f))]
+        
         for f in onlyfiles:
             full_path = join(upload_folder, f)
+            account_id = utils.account_id_from_uploaded_file(full_path)
             image = Image.open(full_path)
             w, h = image.size
-            footer = image.crop((0, h * (720/868), w, h ))
-            #footer.save("/home/toto/tmp/abce/footer.png")
+            image_type = None
 
-            footer_text_lines = pytesseract.image_to_string(footer, config=custom_oem_psm_config).splitlines()
-            footer_last_line = footer_text_lines[-1]
+            footer_last_line = extract_footer_last_line(image, 720/868)
             if "Negozi" in footer_last_line and "Contatti" in footer_last_line and "Servizi" in footer_last_line and "Invita" in footer_last_line and "Profilo" in footer_last_line :
+                image_type = "SATISPAY"
                 logger.info(f"{full_path} is a Satispay SCREENSHOT")
 
                 disponibilita = image.crop((0, h * (115/868), w / 2, h * (225/868) ))
@@ -139,13 +148,24 @@ def companion_images_job():
                 risparmi_euro = Decimal(utils.str_euro_to_number(risparmi_lines[-1]))
 
                 logger.debug(f"{disponibilita_euro} {risparmi_euro}")
-
-                account_id = utils.account_id_from_uploaded_file(full_path)
-                today = datetime.today()
+                
                 db.save_satispay(account_id, today, disponibilita_euro, risparmi_euro, "EUR", f)
 
                 utils.move_file(full_path, worked_folder)
-            else:
+
+            footer_last_line = footer_last_line = extract_footer_last_line(image, 760/868)
+            if "Mercato" in footer_last_line and "Preferiti" in footer_last_line and "Portafoglio" in footer_last_line and "Attivita" in footer_last_line :
+                image_type = "DEGIRO"
+                logger.info(f"{full_path} is a Degiro SCREENSHOT")
+                bank_amount_image = image.crop((w * (40/400), h * (25/868), w / 2 - w * (10/400), h * (59/868) ))
+                #bank_amount_image.save("/home/toto/tmp/abce/bank_amount.png")
+
+                bank_amount = Decimal(utils.str_euro_to_number(pytesseract.image_to_string(bank_amount_image, config=custom_oem_psm_config).splitlines()[0]))
+                logger.debug(bank_amount)
+
+                db.save_bank_account_balance(account_id, today, "Degiro", bank_amount, "EUR", f)
+
+            if not image_type:
                 logger.info(f"{full_path} is UNKNOW file ")
     except:
         traceback.print_exc()
