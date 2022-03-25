@@ -25,49 +25,51 @@ class UploadUtility(activity: Activity) {
         private const val TAG = "UPLOAD"
     }
 
-    fun uploadFile(userId: String, sourceFilePath: String, uploadedFileName: String? = null) {
-        uploadFile(userId, File(sourceFilePath), uploadedFileName)
-    }
-
-    fun uploadFile(userId: String, sourceFileUri: Uri, uploadedFileName: String? = null) {
+    fun uploadFile(sourceFileUri: Uri, dataParts: Map<String, String> ? = null) {
         val pathFromUri = URIPathHelper().getPath(activity, sourceFileUri)
-        uploadFile(userId, File(pathFromUri), uploadedFileName)
+        uploadFile(File(pathFromUri), dataParts)
     }
 
-    fun uploadFile(userId: String, sourceFile: File, uploadedFileName: String? = null) {
-        Thread {
-            val mimeType = getMimeType(sourceFile);
-            if (mimeType == null) {
-                Log.e("file error", "Not able to get mime type")
-                return@Thread
+    fun uploadFile(sourceFile: File, dataParts: Map<String, String> ? = null) = Thread {
+        val mimeType = getMimeType(sourceFile);
+        if (mimeType == null) {
+            Log.e("file error", "Not able to get mime type on sourceFile $sourceFile")
+            return@Thread
+        }
+        val fileName: String = sourceFile.name
+        toggleProgressDialog(true)
+        try {
+            var addFormDataPart = MultipartBody.Builder().setType(MultipartBody.FORM)
+                .addFormDataPart(
+                    "uploaded_file",
+                    fileName,
+                    sourceFile.asRequestBody(mimeType.toMediaTypeOrNull())
+                )
+
+
+            for ((k, v) in dataParts!!) {
+                addFormDataPart = addFormDataPart.addFormDataPart(k, v)
             }
-            val fileName: String = if (uploadedFileName == null)  sourceFile.name else uploadedFileName
-            toggleProgressDialog(true)
-            try {
-                val requestBody: RequestBody =
-                    MultipartBody.Builder().setType(MultipartBody.FORM)
-                        .addFormDataPart("uploaded_file", fileName,sourceFile.asRequestBody(mimeType.toMediaTypeOrNull()))
-                        .addFormDataPart("uid", userId)
-                        .build()
 
-                val request: Request = Request.Builder().url(serverURL).post(requestBody).build()
+            val requestBody: RequestBody = addFormDataPart.build()
 
-                val response: Response = client.newCall(request).execute()
+            val request: Request = Request.Builder().url(serverURL).post(requestBody).build()
 
-                if (response.isSuccessful) {
-                    Log.d(TAG,"success")
-                } else {
-                    Log.e(TAG, "failed $response")
-                    showToast("File uploading failed $response")
-                }
-            } catch (ex: Exception) {
-                ex.printStackTrace()
-                Log.e("File upload", "failed")
-                showToast("File uploading failed ${ex.message}")
+            val response: Response = client.newCall(request).execute()
+
+            if (response.isSuccessful) {
+                Log.d(TAG,"success")
+            } else {
+                Log.e(TAG, "failed $response")
+                showToast("File uploading failed $response")
             }
-            toggleProgressDialog(false)
-        }.start()
-    }
+        } catch (ex: Exception) {
+            ex.printStackTrace()
+            Log.e("File upload", "failed")
+            showToast("File uploading failed ${ex.message}")
+        }
+        toggleProgressDialog(false)
+    }.start()
 
     // url = file path or whatever suitable URL you want.
     fun getMimeType(file: File): String? {

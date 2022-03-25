@@ -53,7 +53,7 @@ class ProfileActivity : AppCompatActivity() {
         (intent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as? Uri)?.let {
             Log.d(TAG, "$it")
             val uid = firebaseAuth.currentUser!!.uid
-            UploadUtility(this).uploadFile(uid, it)
+            UploadUtility(this).uploadFile(it, mapOf("uid" to uid, "type" to "image"))
         }
     }
 

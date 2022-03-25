@@ -28,9 +28,9 @@ app.add_middleware(
 )
 
 @app.post("/file/")
-async def file(uploaded_file = Form(...), uid:str = Form(...)):
+async def file(uploaded_file = Form(...), uid:str = Form(...), type:str = Form(...)):
     contents = await uploaded_file.read()
-    filename = utils.unique_uploaded_file_name(uid, upload_folder)
+    filename = utils.unique_uploaded_file_name(uid, type, upload_folder)
     with open(filename, "wb") as f:
         f.write(contents)
 

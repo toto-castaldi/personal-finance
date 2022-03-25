@@ -73,8 +73,8 @@ def wei_to_ether(wei):
 def str_euro_to_number(str_euro: str):
   return str_euro.replace('€', '').replace('.', '').replace(',','.').strip()
 
-def unique_uploaded_file_name(prefix, folder):
-  return os.path.join(folder, f"{prefix}-upload-{uuid.uuid4()}")
+def unique_uploaded_file_name(prefix: str, file_type: str, folder:str):
+  return os.path.join(folder, f"{prefix}-upload-{uuid.uuid4()}-type-{file_type}")
 
 def account_id_from_uploaded_file(file_path : str):
   basename = os.path.basename(file_path)
