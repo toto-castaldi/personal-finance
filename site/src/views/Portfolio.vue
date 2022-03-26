@@ -1,15 +1,15 @@
 <template>
-  <div class="container mt-5">
-    <div class="row mb-5">
-      <div class="col-md-6">
+  <div class="container mt-3 overflow-hidden">
+    <div class="row gx-5">
+      <div class="p-3 col-4">
         <PortfolioSummary />
       </div>
-      <div class="col-md-6">
+      <div class="p-3 col-8">
           <PortfolioDistribution />
       </div>
     </div>
-    <div class="row mb-5">
-      <div class="col-md-12">
+    <div class="row gx-5">
+      <div class="p-3 col">
           <PortfolioTrend />
       </div>
     </div>

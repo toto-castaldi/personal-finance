@@ -1,6 +1,6 @@
 <template>
   <div class="card border-primary">
-    <div class="card-header">Distribution</div>
+    <div class="card-header">Trend</div>
     <div class="card-body">
       <div ref="chart"></div>
     </div>
@@ -42,6 +42,7 @@ export default {
 
       const options = {
         series: [{
+            name: "Total",
             data
         }],
           chart: {
