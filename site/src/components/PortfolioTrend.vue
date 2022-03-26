@@ -36,7 +36,7 @@ export default defineComponent({
       const rjson = await response.json();
       const labels = [];
       const dataset = {
-        label: "Crypto",
+        label: "",
         data: [],
         fill: false,
         borderColor: "rgb(75, 192, 192)",
