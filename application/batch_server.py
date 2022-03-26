@@ -22,7 +22,7 @@ if utils.is_dev_env():
     pass
 else:
     if __name__ == '__main__':
-        companion.companion_images_job()
+        companion.images_job()
 
         schedule.every(10).minutes.do(tick_job)
         
