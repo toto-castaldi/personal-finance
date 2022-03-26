@@ -13,7 +13,7 @@ def demo_data_job():
     logger.info("demo data")
     account = db.account_info(constants.get_config()["demo_account_id"])
     logger.info("coinbase trx")
-    if random.uniform(0, 31) <= 1: #one a month
+    if random.uniform(0, 31) <= 1: #once a month
         account_transactions = [bean.CoinbaseTransaction(
             str(uuid.uuid4()),
             datetime.today(),

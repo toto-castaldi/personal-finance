@@ -27,7 +27,6 @@ export default defineComponent({
 
     onMounted(async () => {
       const ratio = Math.floor(utils.mathMap(window.screen.availWidth, 300, 1920, 30, 120));
-      console.log(ratio);
       const jConfig = await fetch("/config.json");
       const config = await jConfig.json();
       const uid = getAuth().currentUser.uid;
