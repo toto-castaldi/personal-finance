@@ -4,7 +4,6 @@
     <div class="card-body">
       <div ref="pie"></div>
     </div>
-    <div class="card-footer text-muted">Updated to yesterday</div>
   </div>
 </template>
 

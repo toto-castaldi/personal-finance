@@ -1,31 +1,24 @@
 <template>
   <div class="card border-primary">
-    <div class="card-header">Trend</div>
-      <LineChart :chartData="state.data" />
+    <div class="card-header">Distribution</div>
     <div class="card-body">
+      <div ref="chart"></div>
     </div>
-    <div class="card-footer text-muted">Updated to yesterday</div>
   </div>
 </template>
 
-<script lang="ts">
-import { onMounted, reactive, defineComponent } from "vue";
-import { LineChart } from "vue-chart-3";
-import { Chart, registerables } from "chart.js";
+<script>
 import { getAuth } from "firebase/auth";
+import ApexCharts from 'apexcharts'
 import utils from "../utils.js";
 
-
-Chart.register(...registerables);
-
-export default defineComponent({
-  components: { LineChart },
-  setup() {
-    const state = reactive({
-      data: null,
-    });
-
-    onMounted(async () => {
+export default {
+    data() {
+        return {
+            amount : "..."
+        }
+    },
+    async mounted() {
       const ratio = Math.floor(utils.mathMap(window.screen.availWidth, 300, 1920, 30, 120));
       const jConfig = await fetch("/config.json");
       const config = await jConfig.json();
@@ -34,32 +27,54 @@ export default defineComponent({
         `${config.apiUrl}/portfolio-values/${uid}/EUR/${ratio}`
       );
       const rjson = await response.json();
-      const labels = [];
-      const dataset = {
-        label: "",
-        data: [],
-        fill: false,
-        borderColor: "rgb(75, 192, 192)",
-        tension: 0.1,
-      };
+
+      const data = [];
+      const categories = [];
+
       if (utils.isIterable(rjson)) {
         for (const r of rjson) {
           if (r.total_amount != null) {
-            labels.push(r.the_date);
-            dataset.data.push(r.total_amount);
+            categories.push(r.the_date);
+            data.push(Number(r.total_amount).toFixed(0));
           }
         }
       }
 
-      state.data = {
-        datasets: [dataset],
-        labels,
+      const options = {
+        series: [{
+            data
+        }],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          }
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          curve: 'straight'
+        },
+        grid: {
+          row: {
+            colors: ['#f3f3f3', 'transparent'], // takes an array which will be repeated on columns
+            opacity: 0.5
+          },
+        },
+        xaxis: {
+          categories
+        }
       };
-    });
 
-    return {
-      state,
-    };
-  },
-});
+      const chart = new ApexCharts(this.$refs.chart, options);
+      chart.render();
+    }
+}
 </script>
+<style scoped>
+  div.card-body {
+    min-height: 200px
+  }
+</style>
