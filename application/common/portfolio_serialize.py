@@ -36,7 +36,7 @@ def add_amount_to_point(portfolio_point : bean.PortfolioDay, native_currency : s
 
             else:
                 convertes_assets.append(asset)
-        elif asset.type == "BANK":
+        else: 
             amount = asset.amount 
             converted_asset_amount = bean.ConvertedAssetAmount(
                     asset.amount,

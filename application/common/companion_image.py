@@ -1,7 +1,6 @@
 import common.utils as utils
 import common.db as db
 import common.constants as constants
-import common.bean as bean
 import pytesseract
 import traceback
 from PIL import Image
@@ -13,7 +12,7 @@ from decimal import Decimal
 logger = utils.init_log()
 
 
-def images_job():
+def job():
     def extract_footer_last_line(image, start_y_ratio):
         w, h = image.size
         footer = image.crop((0, h * start_y_ratio, w, h ))
@@ -27,7 +26,7 @@ def images_job():
         custom_oem_psm_config = r'--oem 3 --psm 6'
         upload_folder = constants.get_config()["upload_folder"]
         worked_folder = constants.get_config()["worked_folder"]
-        onlyfiles = [f for f in listdir(upload_folder) if isfile(join(upload_folder, f))]
+        onlyfiles = [f for f in listdir(upload_folder) if isfile(join(upload_folder, f)) and "-type-image" in f]
         
         for f in onlyfiles:
             full_path = join(upload_folder, f)
@@ -69,7 +68,7 @@ def images_job():
                 bank_amount = Decimal(utils.str_euro_to_number(pytesseract.image_to_string(bank_amount_image, config=custom_oem_psm_config).splitlines()[0]))
                 logger.debug(bank_amount)
 
-                db.save_bank_account_balance(account_id, today, "Degiro", bank_amount, "EUR", f)
+                db.save_degiro_balance(account_id, today, bank_amount, "EUR", f)
 
             if not image_type:
                 logger.info(f"{full_path} is UNKNOW file ")

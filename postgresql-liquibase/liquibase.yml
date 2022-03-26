@@ -378,3 +378,181 @@ databaseChangeLog:
             - column:
                 name: image_name
                 type: varchar
+  - changeSet:
+      id: 11
+      author: toto
+      changes:
+        - createTable:
+            tableName: degiro_deposit
+            columns:
+              - column:
+                  name: account_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName : fk_degiro_deposit_account
+            baseColumnNames:  account_id
+            baseTableName:  degiro_deposit
+            referencedColumnNames:  account_id  
+            referencedTableName:  account
+        - createTable:
+            tableName: degiro_transaction
+            columns:
+              - column:
+                  name: account_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: date_time
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: product
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: isin
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: stock_exchange_country
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: share_market
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quantity
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quotation_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: quotation_currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: local_value_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: local_value_currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: value_currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: percantage
+                  type: varchar
+                  constraints:
+                    nullable: true
+              - column:
+                  name: commission_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: commission_currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: total_currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: order_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName : fk_degiro_transaction_account
+            baseColumnNames:  account_id
+            baseTableName:  degiro_transaction
+            referencedColumnNames:  account_id  
+            referencedTableName:  account
+  - changeSet:
+      id: 12
+      author: toto
+      changes:
+        - createTable:
+            tableName: degiro_account_balance
+            columns:
+              - column:
+                  name: account_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: image_name
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName : fk_dab_account
+            baseColumnNames:  account_id
+            baseTableName:  degiro_account_balance
+            referencedColumnNames:  account_id  
+            referencedTableName:  account
+        - dropColumn:
+            columnName: image_name
+            tableName: bank_account_balance

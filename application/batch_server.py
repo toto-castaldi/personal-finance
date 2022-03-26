@@ -1,9 +1,9 @@
-import imp
 import time
 import schedule
 import common.utils as utils
 import common.user_demo as user_demo
-import common.companion as companion
+import common.companion_image as companion_image
+import common.companion_csv as companion_csv
 import common.fiintable as fintable
 import common.coinapi as coinapi
 import common.coinbase as coinbase
@@ -18,11 +18,12 @@ def tick_job():
 
 
 if utils.is_dev_env():
-    companion.images_job()
+    companion_image.job()
     pass
 else:
     if __name__ == '__main__':
-        companion.images_job()
+        companion_image.job()
+        companion_csv.job()
 
         schedule.every(10).minutes.do(tick_job)
         
@@ -33,7 +34,8 @@ else:
         schedule.every().day.at("00:30").do(blockchaincom.blockchaincom_job)
         schedule.every().day.at("00:40").do(etherscan.etherscan_job)
         schedule.every().day.at("00:50").do(fintable.fintable_job)
-        schedule.every().day.at("01:00").do(companion.images_job)
+        schedule.every().day.at("01:00").do(companion_image.job)
+        schedule.every().day.at("01:10").do(companion_csv.job)
 
         #schedule.every(10).minutes.do(batch.companion_images_job)
         

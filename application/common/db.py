@@ -82,6 +82,10 @@ SELECT_SATISPAY_AT='''
 select (risparmi_amount + disponibilita_amount) as amount from satispay where updated_at <= %(updated_at)s and account_id = %(account_id)s order by updated_at desc limit 1
 '''
 
+SELECT_DEGIRO_AT='''
+select * from degiro_account_balance where updated_at <= %(updated_at)s and account_id = %(account_id)s order by updated_at desc limit 1
+'''
+
 SELECT_PUBLIC_BITCOIN_AT='''
 select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and pbb.updated_at <= %(updated_at)s and ba.account_id = %(account_id)s order by updated_at desc limit 1
 '''
@@ -128,6 +132,11 @@ VALUES (%(public_address)s, %(updated_at)s, %(amount)s, %(smart_contract_address
 INSERT_BANK_ACCUNT_BALANCE = '''
 INSERT INTO bank_account_balance (bank_name, updated_at, amount, currency, account_id, image_name)
 VALUES (%(bank_name)s, %(updated_at)s, %(amount)s, %(currency)s, %(account_id)s, %(image_name)s)
+'''
+
+INSERT_DEGIRO_BALANCE = '''
+INSERT INTO degiro_account_balance (updated_at, amount, currency, account_id, image_name)
+VALUES (%(updated_at)s, %(amount)s, %(currency)s, %(account_id)s, %(image_name)s)
 '''
 
 def get_conn():
@@ -269,6 +278,16 @@ def load_satispay_balances_at(the_date, account_id):
   else:
     return None
 
+def load_degiro_balances_at(the_date, account_id):
+  c = fetch(SELECT_DEGIRO_AT, {
+    "updated_at" : the_date,
+    "account_id" : account_id
+  })
+  if c :
+    return c["amount"]
+  else:
+    return None
+
 def load_bank_accout_balances_at(the_date, account_id):
   bank_names = list(map(lambda e: e["bank_name"],
     fetch(SELECT_BANK_NAMES_BY_ACCOUNT, {
@@ -339,6 +358,12 @@ def save_satispay(account_id : str, today : date, disponibilita_euro : Decimal, 
           "image_name" : image_name
         })
 
+def save_degiro_transaction(account_id : str, today : date, row):
+  pass
+
+def save_degiro_deposit(account_id : str, today : date, row):
+  pass
+
 def save_address_ethereum_amount(today, address, bitcoin_amount, smart_contract):
   with get_conn() as conn:  
       with conn.cursor() as cursor:
@@ -357,6 +382,17 @@ def save_bank_account_balance(account_id : str, today : date, name : str, balanc
           "updated_at" : today,
           "amount" : balance,
           "bank_name" : name,
+          "currency" : currency,
+          "image_name" : image_name
+        })
+
+def save_degiro_balance(account_id : str, today : date, balance : Decimal, currency : str, image_name : str = None):
+  with get_conn() as conn:  
+      with conn.cursor() as cursor:
+        cursor.execute(INSERT_DEGIRO_BALANCE, {
+          "account_id" : account_id,
+          "updated_at" : today,
+          "amount" : balance,
           "currency" : currency,
           "image_name" : image_name
         })

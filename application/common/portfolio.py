@@ -18,6 +18,7 @@ class Portfolio():
         self.public_ethers()
         self.coinbase()
         self.bank_account()
+        self.degiro()
         self.satispay()
 
     def dates(self):
@@ -61,6 +62,13 @@ class Portfolio():
             for balance in balances:
                 asset_amount = self.asset(porfolio_point, "BANK", balance[0])
                 asset_amount.amount += balance[1]
+
+    def degiro(self):
+        for porfolio_point in self.values:
+            amount = db.load_degiro_balances_at(porfolio_point.the_date, self.account)
+            if amount:
+                asset_amount = self.asset(porfolio_point, "INVEST", "DEGIRO")
+                asset_amount.amount += amount
 
     def public_bitcoins(self):
         for porfolio_point in self.values:
