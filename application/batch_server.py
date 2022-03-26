@@ -1,33 +1,39 @@
+import imp
 import time
 import schedule
 import common.utils as utils
-import common.batch as batch
+import common.user_demo as user_demo
+import common.companion as companion
+import common.fiintable as fintable
+import common.coinapi as coinapi
+import common.coinbase as coinbase
+import common.blockchaincom as blockchaincom
+import common.etherscan as etherscan
+
+
+logger = utils.init_log()
+
+def tick_job():
+    logger.info("tick...")
 
 
 if utils.is_dev_env():
-    batch.companion_images_job()
-    #batch.etherscan_job()
-    #batch.blockchaincom_job()
-    #batch.demo_data_job()
-    #batch.coinbase_job()
-    #batch.coinapi_job()
-    #batch.fintable_job()
+    companion.images_job()
     pass
 else:
     if __name__ == '__main__':
-        batch.companion_images_job()
+        user_demo.companion_images_job()
 
-        schedule.every(10).minutes.do(batch.tick_job)
+        schedule.every(10).minutes.do(tick_job)
         
-        schedule.every().day.at("00:01").do(batch.demo_data_job)
+        schedule.every().day.at("00:01").do(user_demo.demo_data_job)
 
-        schedule.every().day.at("00:10").do(batch.coinapi_job)
-
-        schedule.every().day.at("00:20").do(batch.coinbase_job)
-        schedule.every().day.at("00:30").do(batch.blockchaincom_job)
-        schedule.every().day.at("00:40").do(batch.etherscan_job)
-        schedule.every().day.at("00:50").do(batch.fintable_job)
-        schedule.every().day.at("01:00").do(batch.companion_images_job)
+        schedule.every().day.at("00:10").do(coinapi.coinapi_job)
+        schedule.every().day.at("00:20").do(coinbase.coinbase_job)
+        schedule.every().day.at("00:30").do(blockchaincom.blockchaincom_job)
+        schedule.every().day.at("00:40").do(etherscan.etherscan_job)
+        schedule.every().day.at("00:50").do(fintable.fintable_job)
+        schedule.every().day.at("01:00").do(companion.images_job)
 
         #schedule.every(10).minutes.do(batch.companion_images_job)
         

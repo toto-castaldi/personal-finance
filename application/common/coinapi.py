@@ -1,33 +1,32 @@
-import requests
 import common.utils as utils
-import common.constants as constants
-from requests.auth import AuthBase
+import common.db as db
+import common.client.coinapi_client as coinapi_client
+from datetime import datetime
+from datetime import timedelta
 
 
 logger = utils.init_log()
 
-class CoinApiAuth(AuthBase):
-    def __init__(self, coinbase_token):
-        self.coinbase_token = coinbase_token
+def coinapi_job():
+    logger.info("coinapi")
+    today = datetime.today().date()
+    currencys_from_to = db.crypto_from_to()
+    for currency_from_to in currencys_from_to:
+        logger.debug(currency_from_to)
+        currency_from = currency_from_to[0]
+        currency_to = currency_from_to[1]
+        min_date_trx, _ = db.min_max_date_trx()
+        min_date_trx = min_date_trx.date()
 
-    def __call__(self, request):
-        request.headers.update({
-            "X-CoinAPI-Key": self.coinbase_token
-        })
+        min_date_trx -= timedelta(days=1)
+        
+        logger.debug(f"{min_date_trx}")
 
-        return request
-
-def rate(currency_from, currency_to, date):
-    auth = CoinApiAuth(constants.get_config()["coinapi_key"])
-    str_time = date.isoformat()#strftime("%yyyy-%mm-%dd")
-    url = f"https://rest.coinapi.io/v1/exchangerate/{currency_from}/{currency_to}?time={str_time}"
-    logger.debug(url)
-    r = requests.get(url, auth=auth)
-    json_response = r.json()
-    logger.debug(json_response)
-    if r.status_code == 200:
-        logger.debug("OK")
-        return json_response["rate"]
-    else:
-        logger.debug("KO")
-        return None
+        for single_date in utils.daterange(min_date_trx, today):
+            logger.debug(single_date)
+            rate = db.get_crypto_rate(single_date, currency_from, currency_to)
+            if rate is None:
+                rate = coinapi_client.rate(currency_from, currency_to, single_date)
+                if rate is not None:
+                    db.save_crypto_rate(single_date, currency_from, currency_to, rate)
+                    logger.info(f"saved rate {single_date} {currency_from} -> {currency_to} = {rate}")

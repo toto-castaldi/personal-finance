@@ -19,7 +19,8 @@ PERSONAL-FINANCE
 * [Blockchain.com](https://www.blockchain.com/api) USER Bitcoin amount
 * [Etherscan](https://etherscan.io/apis) USER Ethereum and RC20 Tokens amount
 * [Fintable](https://fintable.io/) USER Bank account balance
-* [Satispay](https://www.satispay.com/en-it/) USER Balance through OCR on app screenshot sent via Mobile companion app
+* [Satispay mobile app](https://www.satispay.com/en-it/) USER Balance through OCR on app screenshot sent via Mobile companion app
+* [Degiro mobile app](https://www.degiro.it/) USER Balance through OCR on app screenshot sent via Mobile companion app
 
 
 # DEV
