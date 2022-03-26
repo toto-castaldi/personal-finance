@@ -1,10 +1,10 @@
 <template>
   <div class="container mt-3 overflow-hidden">
     <div class="row gx-5">
-      <div class="p-3 col-4">
+      <div class="p-3 col-md-4">
         <PortfolioSummary />
       </div>
-      <div class="p-3 col-8">
+      <div class="p-3 col-md-8">
           <PortfolioDistribution />
       </div>
     </div>

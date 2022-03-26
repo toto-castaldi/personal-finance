@@ -1,5 +1,5 @@
 <template>
-  <div class="card border-primary">
+  <div class="card border-primary border-2">
     <div class="card-header">Total</div>
     <div class="card-body">
       <p class="card-text">Amount : {{ amount }}</p>

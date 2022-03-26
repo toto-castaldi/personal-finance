@@ -1,5 +1,5 @@
 <template>
-  <div class="card border-primary">
+  <div class="card border-primary border-2">
     <div class="card-header">Distribution</div>
     <div class="card-body">
       <div ref="pie"></div>
