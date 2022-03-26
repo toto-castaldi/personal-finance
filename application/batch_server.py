@@ -18,7 +18,7 @@ def tick_job():
 
 
 if utils.is_dev_env():
-    companion_image.job()
+    companion_csv.job()
     pass
 else:
     if __name__ == '__main__':

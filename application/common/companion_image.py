@@ -31,6 +31,7 @@ def job():
         for f in onlyfiles:
             full_path = join(upload_folder, f)
             account_id = utils.account_id_from_uploaded_file(full_path)
+            uuid_file = utils.uuid_id_from_uploaded_file(full_path)
             image = Image.open(full_path)
             w, h = image.size
             image_type = None
@@ -56,21 +57,24 @@ def job():
                 
                 db.save_satispay(account_id, today, disponibilita_euro, risparmi_euro, "EUR", f)
 
-                utils.move_file(full_path, worked_folder)
-
             footer_last_line = footer_last_line = extract_footer_last_line(image, 760/868)
             if "Mercato" in footer_last_line and "Preferiti" in footer_last_line and "Portafoglio" in footer_last_line and "Attivita" in footer_last_line :
                 image_type = "DEGIRO"
                 logger.info(f"{full_path} is a Degiro SCREENSHOT")
-                bank_amount_image = image.crop((w * (40/400), h * (25/868), w / 2 - w * (10/400), h * (59/868) ))
-                #bank_amount_image.save("/home/toto/tmp/abce/bank_amount.png")
+                bank_amount_image = image.crop((w * (40/400), h * (27/868), w / 2 - w * (6/400), h * (59/868) ))
+                if utils.is_dev_env():
+                    bank_amount_image.save(f"{uuid_file}-bank_amount.png")
 
-                bank_amount = Decimal(utils.str_euro_to_number(pytesseract.image_to_string(bank_amount_image, config=custom_oem_psm_config).splitlines()[0]))
+                amount_tesseract = pytesseract.image_to_string(bank_amount_image, config=custom_oem_psm_config);
+
+                bank_amount = Decimal(utils.str_euro_to_number(amount_tesseract.splitlines()[0]))
                 logger.debug(bank_amount)
 
                 db.save_degiro_balance(account_id, today, bank_amount, "EUR", f)
 
-            if not image_type:
+            if image_type:
+                utils.move_file(full_path, worked_folder)
+            else:
                 logger.info(f"{full_path} is UNKNOW file ")
     except:
         traceback.print_exc()

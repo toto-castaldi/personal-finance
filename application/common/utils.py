@@ -71,7 +71,14 @@ def wei_to_ether(wei):
   return wei / (10 ** 18)
 
 def str_euro_to_number(str_euro: str):
-  return str_euro.replace('€', '').replace('.', '').replace(',','.').strip()
+  def allowed(c):
+    return str.isdigit(c) or c == '.'
+
+  step0 = str_euro.replace('€', '').replace('.', '').replace(',','.').strip()
+  step1 = ''.join(filter(allowed, step0))
+
+  return step1
+
 
 def unique_uploaded_file_name(prefix: str, file_type: str, folder:str):
   return os.path.join(folder, f"{prefix}-upload-{uuid.uuid4()}-type-{file_type}")
@@ -79,6 +86,10 @@ def unique_uploaded_file_name(prefix: str, file_type: str, folder:str):
 def account_id_from_uploaded_file(file_path : str):
   basename = os.path.basename(file_path)
   return basename.split("-upload-")[0]
+
+def uuid_id_from_uploaded_file(file_path : str):
+  basename = os.path.basename(file_path)
+  return basename.split("-upload-")[1].split("-type-")[0]
 
 def move_file(file, folder):
   shutil.move(file, os.path.join(folder, os.path.basename(file)))
