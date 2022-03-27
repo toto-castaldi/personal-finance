@@ -29,7 +29,6 @@ export default {
       const consolidated = {};
 
       for (const asset of rjson.assets) {
-        console.log(asset);
         let total = 0;
         let assetType = asset.type;
         if (assetType in consolidated) {
@@ -39,7 +38,6 @@ export default {
         consolidated[assetType] = total;
       }
 
-      console.log(consolidated);
 
       const options = {
         series: Object.values(consolidated),

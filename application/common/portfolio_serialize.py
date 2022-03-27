@@ -70,6 +70,23 @@ def summary(porfolio : p.Portfolio, native_currency = None):
     else:
         return None
 
+def level(portfolio : p.Portfolio, level_number : int = 0, parent_type : str = None):
+    assert portfolio is not None
+    result = []
+    for portfolio_point in portfolio.values:
+        for asset in portfolio_point.assets:
+            t = None
+            if level_number == 0:
+                t = asset.type
+            elif level_number == 1:
+                if parent_type == asset.type:
+                    t = asset.sub_type
+            logger.debug(t)
+            if t is not None and t not in result:
+                result.append(t)
+    
+
+    return result
 
 def asset_points(portfolio : p.Portfolio, native_currency : str, max_num_of_points : int ):
     assert native_currency is not None
