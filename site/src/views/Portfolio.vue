@@ -2,20 +2,20 @@
   <div class="container mt-3 overflow-hidden">
     <div class="row gx-5">
       <div class="p-3 col">
-          <PortfolioLevel />
+          <PortfolioLevel @changeLevel="changeLevel" />
       </div>
     </div>
     <div class="row gx-5">
       <div class="p-3 col-md-4">
-        <PortfolioSummary />
+        <PortfolioSummary :levelInfo="newLevel" />
       </div>
       <div class="p-3 col-md-8">
-          <PortfolioDistribution />
+          <PortfolioDistribution :levelInfo="newLevel"  />
       </div>
     </div>
     <div class="row gx-5">
       <div class="p-3 col">
-          <PortfolioTrend />
+          <PortfolioTrend :levelInfo="newLevel" />
       </div>
     </div>    
   </div>
@@ -29,10 +29,17 @@ import PortfolioLevel from "../components/PortfolioLevel.vue";
 
 export default {
     data() {
-        return {}
+        return {
+          newLevel : { level : 0, node : undefined}
+        }
     },
     components: {
       PortfolioTrend, PortfolioSummary, PortfolioDistribution, PortfolioLevel
+    },
+    methods : {
+      changeLevel(newLevel) {
+        this.newLevel = newLevel;
+      }
     }
 }
 
