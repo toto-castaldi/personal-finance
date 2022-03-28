@@ -21,24 +21,29 @@ if utils.is_dev_env():
     fintable.fintable_job()
     pass
 else:
-    if __name__ == '__main__':
-        companion_image.job()
-        companion_csv.job()
+    if __name__ == '__main__':        
+        user_demo.demo_data_job()
+        coinapi.coinapi_job()
+        coinbase.coinbase_job()
         blockchaincom.blockchaincom_job()
         etherscan.etherscan_job()
         fintable.fintable_job()
+        companion_image.job()
+        companion_csv.job()
 
         schedule.every(10).minutes.do(tick_job)
         
         schedule.every().day.at("00:01").do(user_demo.demo_data_job)
 
         schedule.every().day.at("00:10").do(coinapi.coinapi_job)
+
         schedule.every().day.at("00:20").do(coinbase.coinbase_job)
         schedule.every().day.at("00:30").do(blockchaincom.blockchaincom_job)
         schedule.every().day.at("00:40").do(etherscan.etherscan_job)
         schedule.every().day.at("00:50").do(fintable.fintable_job)
-        schedule.every().day.at("01:00").do(companion_image.job)
-        schedule.every().day.at("01:10").do(companion_csv.job)
+        
+        schedule.every(1).minutes.do(companion_image.job)
+        schedule.every(1).minutes.do(companion_csv.job)
 
         #schedule.every(10).minutes.do(batch.companion_images_job)
         

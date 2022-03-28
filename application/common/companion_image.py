@@ -26,6 +26,7 @@ def job():
         custom_oem_psm_config = r'--oem 3 --psm 6'
         upload_folder = constants.get_config()["upload_folder"]
         worked_folder = constants.get_config()["worked_folder"]
+        unknow_folder = constants.get_config()["unknow_folder"]
         onlyfiles = [f for f in listdir(upload_folder) if isfile(join(upload_folder, f)) and "-type-image" in f]
         
         for f in onlyfiles:
@@ -76,5 +77,6 @@ def job():
                 utils.move_file(full_path, worked_folder)
             else:
                 logger.info(f"{full_path} is UNKNOW file ")
+                utils.move_file(full_path, unknow_folder)
     except:
         traceback.print_exc()
