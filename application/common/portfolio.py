@@ -69,7 +69,7 @@ class Portfolio():
 
     def bank_account(self):
         for porfolio_point in self.values:
-            balances = db.load_bank_accout_balances_at(porfolio_point.the_date , self.account)
+            balances = db.load_bank_accout_balances_at(porfolio_point.the_date + timedelta(days=1), self.account)
             for balance in balances:
                 if self.check_level("BANK", balance[0]):
                     asset_amount = self.asset(porfolio_point, "BANK", balance[0])

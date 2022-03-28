@@ -18,7 +18,7 @@ def tick_job():
 
 
 if utils.is_dev_env():
-    etherscan.etherscan_job()
+    fintable.fintable_job()
     pass
 else:
     if __name__ == '__main__':
@@ -26,6 +26,7 @@ else:
         companion_csv.job()
         blockchaincom.blockchaincom_job()
         etherscan.etherscan_job()
+        fintable.fintable_job()
 
         schedule.every(10).minutes.do(tick_job)
         

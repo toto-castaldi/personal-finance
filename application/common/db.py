@@ -91,7 +91,7 @@ select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.publ
 '''
 
 SELECT_BANK_AMOUNT_AT='''
-select bab.* from bank_account_balance bab  where bab.bank_name = %(bank_name)s and bab.updated_at <= %(updated_at)s and bab.account_id = %(account_id)s order by updated_at desc limit 1
+select bab.* from bank_account_balance bab  where bab.bank_name = %(bank_name)s and bab.updated_at < %(updated_at)s and bab.account_id = %(account_id)s order by updated_at desc limit 1
 '''
 
 SELECT_PUBLIC_ETHEREUM_AT='''
@@ -130,8 +130,8 @@ VALUES (%(public_address)s, %(updated_at)s, %(amount)s, %(smart_contract_address
 '''
 
 INSERT_BANK_ACCUNT_BALANCE = '''
-INSERT INTO bank_account_balance (bank_name, updated_at, amount, currency, account_id, image_name)
-VALUES (%(bank_name)s, %(updated_at)s, %(amount)s, %(currency)s, %(account_id)s, %(image_name)s)
+INSERT INTO bank_account_balance (bank_name, updated_at, amount, currency, account_id)
+VALUES (%(bank_name)s, %(updated_at)s, %(amount)s, %(currency)s, %(account_id)s)
 '''
 
 INSERT_DEGIRO_BALANCE = '''
@@ -375,7 +375,7 @@ def save_address_ethereum_amount(today, address, bitcoin_amount, smart_contract)
           "smart_contract_address" : smart_contract
         })
 
-def save_bank_account_balance(account_id : str, today : date, name : str, balance : Decimal, currency : str, image_name : str = None):
+def save_bank_account_balance(account_id : str, today : date, name : str, balance : Decimal, currency : str):
   with get_conn() as conn:  
       with conn.cursor() as cursor:
         cursor.execute(INSERT_BANK_ACCUNT_BALANCE, {
@@ -383,8 +383,7 @@ def save_bank_account_balance(account_id : str, today : date, name : str, balanc
           "updated_at" : today,
           "amount" : balance,
           "bank_name" : name,
-          "currency" : currency,
-          "image_name" : image_name
+          "currency" : currency
         })
 
 def save_degiro_balance(account_id : str, today : date, balance : Decimal, currency : str, image_name : str = None):
