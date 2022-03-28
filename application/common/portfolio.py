@@ -62,7 +62,7 @@ class Portfolio():
     def satispay(self):
         if self.check_level("BANK", "SATISPAY"):
             for porfolio_point in self.values:
-                amount = db.load_satispay_balances_at(porfolio_point.the_date, self.account)
+                amount = db.load_satispay_balances_at(porfolio_point.the_date + timedelta(days=1), self.account)
                 if amount:
                     asset_amount = self.asset(porfolio_point, "BANK", "SATISPAY")
                     asset_amount.amount += amount
@@ -78,7 +78,7 @@ class Portfolio():
     def degiro(self):
         if self.check_level("INVEST", "DEGIRO"):
             for porfolio_point in self.values:
-                amount = db.load_degiro_balances_at(porfolio_point.the_date, self.account)
+                amount = db.load_degiro_balances_at(porfolio_point.the_date + timedelta(days=1), self.account)
                 if amount:
                     asset_amount = self.asset(porfolio_point, "INVEST", "DEGIRO")
                     asset_amount.amount += amount

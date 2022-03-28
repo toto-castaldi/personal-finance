@@ -79,7 +79,7 @@ select distinct(bank_name) from bank_account_balance bab where account_id = %(ac
 '''
 
 SELECT_SATISPAY_AT='''
-select (risparmi_amount + disponibilita_amount) as amount from satispay where updated_at <= %(updated_at)s and account_id = %(account_id)s order by updated_at desc limit 1
+select (risparmi_amount + disponibilita_amount) as amount from satispay where updated_at < %(updated_at)s and account_id = %(account_id)s order by updated_at desc limit 1
 '''
 
 SELECT_DEGIRO_AT='''
