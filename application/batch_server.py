@@ -18,7 +18,7 @@ def tick_job():
 
 
 if utils.is_dev_env():
-    blockchaincom.blockchaincom_job()
+    etherscan.etherscan_job()
     pass
 else:
     if __name__ == '__main__':

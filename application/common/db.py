@@ -87,7 +87,7 @@ select * from degiro_account_balance where updated_at <= %(updated_at)s and acco
 '''
 
 SELECT_PUBLIC_BITCOIN_AT='''
-select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and pbb.public_address = %(public_address)s and pbb.updated_at <= %(updated_at)s and ba.account_id = %(account_id)s order by updated_at desc limit 1
+select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and pbb.public_address = %(public_address)s and pbb.updated_at < %(updated_at)s and ba.account_id = %(account_id)s order by updated_at desc limit 1
 '''
 
 SELECT_BANK_AMOUNT_AT='''
@@ -95,11 +95,11 @@ select bab.* from bank_account_balance bab  where bab.bank_name = %(bank_name)s 
 '''
 
 SELECT_PUBLIC_ETHEREUM_AT='''
-select peb.* from (select * from public_ethereum_balance left join ethereum_rc20 on smart_contract_address = contract_address) peb, ethereum_address ea   where peb.public_address = ea.public_address and peb.updated_at <= %(updated_at)s and ea.account_id = %(account_id)s and peb.smart_contract_address  is null order by updated_at desc limit 1
+select peb.* from (select * from public_ethereum_balance left join ethereum_rc20 on smart_contract_address = contract_address) peb, ethereum_address ea   where peb.public_address = ea.public_address and peb.updated_at < %(updated_at)s and ea.account_id = %(account_id)s and peb.smart_contract_address  is null order by updated_at desc limit 1
 '''
 
 SELECT_PUBLIC_ETHEREUM_RC20_AT='''
-select peb.* from (select * from public_ethereum_balance left join ethereum_rc20 on smart_contract_address = contract_address) peb, ethereum_address ea   where peb.public_address = ea.public_address and peb.updated_at <= %(updated_at)s and ea.account_id = %(account_id)s and peb.smart_contract_address = %(smart_contract_address)s order by updated_at desc limit 1
+select peb.* from (select * from public_ethereum_balance left join ethereum_rc20 on smart_contract_address = contract_address) peb, ethereum_address ea   where peb.public_address = ea.public_address and peb.updated_at < %(updated_at)s and ea.account_id = %(account_id)s and peb.smart_contract_address = %(smart_contract_address)s order by updated_at desc limit 1
 '''
 
 INSERT_COINBASE_TRANSACTION = '''

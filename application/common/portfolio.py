@@ -69,7 +69,7 @@ class Portfolio():
 
     def bank_account(self):
         for porfolio_point in self.values:
-            balances = db.load_bank_accout_balances_at(porfolio_point.the_date, self.account)
+            balances = db.load_bank_accout_balances_at(porfolio_point.the_date , self.account)
             for balance in balances:
                 if self.check_level("BANK", balance[0]):
                     asset_amount = self.asset(porfolio_point, "BANK", balance[0])
@@ -88,7 +88,7 @@ class Portfolio():
             for porfolio_point in self.values:
                 addresses = db.load_bitcoin_addresses(self.account)
                 for address in addresses:
-                    amount = db.load_public_bitcoins_amount_at(porfolio_point.the_date, self.account, address)
+                    amount = db.load_public_bitcoins_amount_at(porfolio_point.the_date  + timedelta(days=1), self.account, address)
                     logger.debug(f"{porfolio_point.the_date}, {self.account}, {address} => {amount}")
                     if amount:
                         asset_amount = self.asset(porfolio_point, "CRYPTO", "BTC")
@@ -97,14 +97,14 @@ class Portfolio():
     def public_ethers(self):
         for porfolio_point in self.values:
             if self.check_level("CRYPTO", "ETH"):
-                amount = db.load_public_ethers_amount_at(porfolio_point.the_date, self.account, None)
+                amount = db.load_public_ethers_amount_at(porfolio_point.the_date + timedelta(days=1), self.account, None)
                 if amount:
                     asset_amount = self.asset(porfolio_point, "CRYPTO", "ETH")
                     asset_amount.amount += amount              
             rc20s = db.load_all_rc20()
             for rc20 in rc20s:
                 if self.check_level("CRYPTO", rc20.name):
-                    amount = db.load_public_ethers_amount_at(porfolio_point.the_date, self.account, rc20.contract_address)
+                    amount = db.load_public_ethers_amount_at(porfolio_point.the_date + timedelta(days=1), self.account, rc20.contract_address)
                     if amount:
                         asset_amount = self.asset(porfolio_point, "CRYPTO", rc20.name)
                         asset_amount.amount += amount
