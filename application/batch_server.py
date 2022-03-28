@@ -18,12 +18,14 @@ def tick_job():
 
 
 if utils.is_dev_env():
-    companion_csv.job()
+    blockchaincom.blockchaincom_job()
     pass
 else:
     if __name__ == '__main__':
         companion_image.job()
         companion_csv.job()
+        blockchaincom.blockchaincom_job()
+        etherscan.etherscan_job()
 
         schedule.every(10).minutes.do(tick_job)
         

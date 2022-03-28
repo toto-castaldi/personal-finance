@@ -87,7 +87,7 @@ select * from degiro_account_balance where updated_at <= %(updated_at)s and acco
 '''
 
 SELECT_PUBLIC_BITCOIN_AT='''
-select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and pbb.updated_at <= %(updated_at)s and ba.account_id = %(account_id)s order by updated_at desc limit 1
+select pbb.* from public_bitcoin_balance pbb, bitcoin_address ba  where pbb.public_address = ba.public_address and pbb.public_address = %(public_address)s and pbb.updated_at <= %(updated_at)s and ba.account_id = %(account_id)s order by updated_at desc limit 1
 '''
 
 SELECT_BANK_AMOUNT_AT='''
@@ -178,10 +178,10 @@ def load_all_accounts():
 def load_all_rc20():
   return list(map(lambda e: bean.RC20(e["name"], e["contract_address"]), fetch(SELECT_ALL_RC20, all=True)))
 
-def load_bitcoin_addresses(account):
+def load_bitcoin_addresses(account_id):
   return list(map(lambda e: e["public_address"],
     fetch(SELECT_PUBLIC_ADDRESSES_BY_ACCOUNT, {
-      "account" : account.id
+      "account" : account_id
     }, all=True))
   )
 
@@ -258,10 +258,11 @@ def get_crypto_rate(the_date, crypto_currency, native_currency):
   else:
     return None
 
-def load_public_bitcoins_amount_at(the_date, account_id):
+def load_public_bitcoins_amount_at(the_date: date, account_id: str, public_address: str):
   c = fetch(SELECT_PUBLIC_BITCOIN_AT, {
     "updated_at" : the_date,
-    "account_id" : account_id
+    "account_id" : account_id,
+    "public_address" : public_address
   })
   if c :
     return c["amount"]

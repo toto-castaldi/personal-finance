@@ -11,7 +11,7 @@ def blockchaincom_job():
     logger.info("blockchaincom")
     accounts = db.load_all_accounts()
     for account in accounts:
-        addresses = db.load_bitcoin_addresses(account)
+        addresses = db.load_bitcoin_addresses(account.id)
         for address in addresses:
             today = datetime.today()
             bitcoin_amount = blockchaincom_client.load_bitcoin_amount(address)

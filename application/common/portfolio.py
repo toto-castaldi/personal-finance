@@ -86,10 +86,13 @@ class Portfolio():
     def public_bitcoins(self):
         if self.check_level("CRYPTO", "BTC"):
             for porfolio_point in self.values:
-                amount = db.load_public_bitcoins_amount_at(porfolio_point.the_date, self.account)
-                if amount:
-                    asset_amount = self.asset(porfolio_point, "CRYPTO", "BTC")
-                    asset_amount.amount += amount       
+                addresses = db.load_bitcoin_addresses(self.account)
+                for address in addresses:
+                    amount = db.load_public_bitcoins_amount_at(porfolio_point.the_date, self.account, address)
+                    logger.debug(f"{porfolio_point.the_date}, {self.account}, {address} => {amount}")
+                    if amount:
+                        asset_amount = self.asset(porfolio_point, "CRYPTO", "BTC")
+                        asset_amount.amount += amount       
 
     def public_ethers(self):
         for porfolio_point in self.values:
