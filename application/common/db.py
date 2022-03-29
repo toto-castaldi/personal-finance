@@ -83,7 +83,7 @@ select (risparmi_amount + disponibilita_amount) as amount from satispay where up
 '''
 
 SELECT_DEGIRO_AT='''
-select * from degiro_account_balance where updated_at <= %(updated_at)s and account_id = %(account_id)s order by updated_at desc limit 1
+select * from degiro_account_balance where updated_at < %(updated_at)s and account_id = %(account_id)s order by updated_at desc limit 1
 '''
 
 SELECT_PUBLIC_BITCOIN_AT='''

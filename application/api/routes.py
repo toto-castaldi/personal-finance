@@ -31,10 +31,13 @@ app.add_middleware(
 async def file(uploaded_file = Form(...), uid:str = Form(...), type:str = Form(...)):
     contents = await uploaded_file.read()
     filename = utils.unique_uploaded_file_name(uid, type, upload_folder)
+
+    logger.info(f"{filename} uploaded")
+
     with open(filename, "wb") as f:
         f.write(contents)
 
-    return {"result": "ok"}
+    return filename
 
 @app.get("/portfolio-values/{account_id}/{level}/{node}/{currency}/{max_num_of_points}")
 def portfolio_values_json(account_id: str, level: int, node : str, currency: str, max_num_of_points : int):

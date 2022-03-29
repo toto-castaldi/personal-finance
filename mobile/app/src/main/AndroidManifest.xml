@@ -27,13 +27,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="image/*" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:host="*" />
-                <data android:scheme="content" />
-                <data android:mimeType="text/*"/>
-            </intent-filter>
         </activity>
         <activity
             android:name=".SignUpActivity"
