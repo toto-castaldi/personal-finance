@@ -25,6 +25,19 @@ PERSONAL-FINANCE
 
 # DEV
 
+## SYSTEM
+
+```bash
+apt install -y build-essential
+apt install -y zlib1g-dev zlibc
+apt install -y libssl1.1 || apt install -y libssl1.0
+apt install -y libedit-dev
+apt install -y libncurses5-dev
+apt install -y make libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
+apt install -y libpq-dev
+```
+
+
 ## PYTHON
 
 ```
@@ -150,20 +163,23 @@ location /api {
 }
 ```
 
-## LOCAL BUILD
-
-# MOBILE
-
-```bash
-docker run -it -v `pwd`:/app skillbillsrl/android-builder /app/build-app.sh
-```
-
-
 ## CONNECT DB
 
 ```shell
-
 cd /var/lib/buddy
 docker exec -it buddy_postgresql_1 psql -U dbpsql
+```
 
+## DUMP DB
+
+```shell
+docker exec -it buddy_postgresql_1 pg_dump -U dbpsql -a > dump.sql
+```
+
+# LOCAL BUILD
+
+## MOBILE
+
+```bash
+docker run -it -v `pwd`:/app skillbillsrl/android-builder /app/build-app.sh
 ```

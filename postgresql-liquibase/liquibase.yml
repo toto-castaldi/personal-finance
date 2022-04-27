@@ -556,3 +556,77 @@ databaseChangeLog:
         - dropColumn:
             columnName: image_name
             tableName: bank_account_balance
+  - changeSet:
+      id: 13
+      author: toto
+      changes:
+        - createTable:
+            tableName: moonpay_trx
+            columns:
+              - column:
+                  name: account_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: trx_id
+                  type: varchar
+                  constraints:
+                    nullable: false
+                    unique : true
+              - column:
+                  name: operation
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: native_amount_currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: native_amount_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  constraints:
+                    nullable: false
+              - column:
+                  name: crypto_amount_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: crypto_amount_currency
+                  type: varchar
+                  constraints:
+                    nullable: false
+              - column:
+                  name: fee_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: extrafee_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: networkfee_amount
+                  type: money
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: varchar
+                  constraints:
+                    nullable: false
+        - addForeignKeyConstraint:
+            constraintName : fk_moonpay_trx_account  
+            baseColumnNames:  account_id  
+            baseTableName:  moonpay_trx
+            referencedColumnNames:  account_id  
+            referencedTableName:  account
