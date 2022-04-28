@@ -32,9 +32,13 @@ def job():
                         csv_type = "DEGIRO-TRANSASCTIONS"
                     if header_csv == "Data,Ora,Data Valore,Prodotto,ISIN,Descrizione,Borsa,Variazioni,,Saldo,,ID Ordine":
                         csv_type = "DEGIRO-ACCOUNT"
+                    if header_csv == '"id","operation","baseCurrency","baseCurrencyAmount","createdAt","quoteCurrency","quoteCurrencyAmount","feeAmount","extraFeeAmount","networkFeeAmount","status"':
+                        csv_type = "MOONPAY-TRX"
                 else:
                     if csv_type == "DEGIRO-TRANSASCTIONS":
                         db.save_degiro_transaction(account_id, today, row)
+                    if csv_type == "MOONPAY-TRX":
+                        db.save_moonpay_transaction(account_id, today, row)
                     if csv_type == "DEGIRO-ACCOUNT":
                         if row[5] == "Deposito flatex":
                             db.save_degiro_deposit(account_id, today, row)
