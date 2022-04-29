@@ -73,7 +73,7 @@ docker run -it -v `pwd`:/drivers -v `pwd`/liquibase.yml:/liquibase.yml --link so
 cd application/batch
 pip install -r requirements.txt
 cd ..
-LOG_LEVEL=DEBUG ENV=DEV ETHERSCAN_KEY=[KEY] COINAPI_KEY=[KEY] DEMO_ACCOUNT_ID=[ACCOUNT_ID] UPLOAD_FOLDER=[FOLDER] WORKED_FOLDER=[FOLDER] python batch_server.py
+LOG_LEVEL=DEBUG ENV=DEV ETHERSCAN_KEY=[KEY] COINAPI_KEY=[KEY] DEMO_ACCOUNT_ID=[ACCOUNT_ID] WORKED_FOLDER=[FOLDER] UPLOAD_FOLDER=[FOLDER] WORKED_FOLDER=[FOLDER] python batch_server.py
 ```
 
 ## API

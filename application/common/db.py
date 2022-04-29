@@ -1,6 +1,5 @@
 from datetime import date
 from decimal import Decimal
-from locale import currency
 import psycopg2
 import common.utils as utils
 import common.bean as bean
@@ -122,6 +121,15 @@ VALUES (%(public_address)s, %(updated_at)s, %(amount)s)
 INSERT_SATISPAY = '''
 INSERT INTO satispay (account_id, updated_at, risparmi_amount, disponibilita_amount, currency, image_name)
 VALUES (%(account_id)s, %(updated_at)s, %(risparmi_amount)s, %(disponibilita_amount)s, %(currency)s, %(image_name)s)
+'''
+
+INSERT_MOONPAY_TRANSACTION = '''
+INSERT INTO moonpay_trx
+(account_id, trx_id, operation, native_amount_currency, native_amount_amount, updated_at, crypto_amount_amount, crypto_amount_currency, fee_amount, extrafee_amount, networkfee_amount, status)
+VALUES(
+  %(account_id)s, %(trx_id)s, %(operation)s, %(native_amount_currency)s, %(native_amount_amount)s, %(updated_at)s, %(crypto_amount_amount)s, 
+  %(crypto_amount_currency)s, %(fee_amount)s, %(extrafee_amount)s, %(networkfee_amount)s, %(status)s)
+on conflict (trx_id) do nothing;
 '''
 
 INSERT_PUBLIC_ETHEREUM_ADDRESS = '''
@@ -359,10 +367,31 @@ def save_satispay(account_id : str, today : date, disponibilita_euro : Decimal, 
           "image_name" : image_name
         })
 
-def save_degiro_transaction(account_id : str, today : date, row):
-  pass
+def save_moonpay_transaction(account_id : str, today : date, row):
+  # account_id, trx_id, operation, native_amount_currency, native_amount_amount, updated_at, crypto_amount_amount, crypto_amount_currency, fee_amount, extrafee_amount, networkfee_amount, status
+  # ['1311654b-b5f0-4351-a973-9d08998a9df2', 'buy', 'usd', '478.86', '2022-03-10T10:14:19.447Z', 'eth', '', '15.56', '4.55', '1.03', 'failed']
+
+  with get_conn() as conn:  
+      with conn.cursor() as cursor:
+        cursor.execute(INSERT_MOONPAY_TRANSACTION, {
+          "account_id" : account_id,
+          "trx_id" : row[0],
+          "operation" : row[1],
+          "native_amount_currency" : utils.native_currency(row[2]),
+          "native_amount_amount" :row[3],
+          "updated_at" :row[4],
+          "crypto_amount_currency" :utils.crypto_currency(row[5]),
+          "crypto_amount_amount" : row[6] if len(row[6]) > 0 else 0, 
+          "fee_amount" : row[7],
+          "extrafee_amount" : row[8],
+          "networkfee_amount" : row[9],
+          "status" : row[10],
+        })
 
 def save_degiro_deposit(account_id : str, today : date, row):
+  pass
+
+def save_degiro_transaction(account_id : str, today : date, row):
   pass
 
 def save_address_ethereum_amount(today, address, bitcoin_amount, smart_contract):

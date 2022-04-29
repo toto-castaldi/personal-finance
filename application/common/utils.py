@@ -9,7 +9,6 @@ from datetime import date
 from datetime import datetime
 from decimal import Decimal
 
-
 LOG_LEVELS = {
   'INFO' : 20,
   'DEBUG' : 10,
@@ -21,6 +20,9 @@ LOG_LEVELS = {
 log_level =  LOG_LEVELS.get(os.environ.get("LOG_LEVEL","INFO"))
 logger_filename = os.environ.get("LOG_FILE_NAME", None)
 logger = None
+EUR = "EUR"
+USD = "USD"
+NATIVE_CURRENCIES = [EUR, USD]
 
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
@@ -83,6 +85,8 @@ def str_euro_to_number(str_euro: str):
 def unique_uploaded_file_name(prefix: str, file_type: str, folder:str):
   return os.path.join(folder, f"{prefix}-upload-{uuid.uuid4()}-type-{file_type}")
 
+#[ACCOUNT_ID]-upload-[UID]-type-image
+#[ACCOUNT_ID]-upload-[UID]-type-CSV
 def account_id_from_uploaded_file(file_path : str):
   basename = os.path.basename(file_path)
   return basename.split("-upload-")[0]
@@ -93,3 +97,16 @@ def uuid_id_from_uploaded_file(file_path : str):
 
 def move_file(file, folder):
   shutil.move(file, os.path.join(folder, os.path.basename(file)))
+
+def native_currency(raw: str):
+  clean = raw.strip().upper()
+  if clean in NATIVE_CURRENCIES:
+    return clean
+  else:
+    raise ValueError(f"{clean} is an UNKNOW CURRENCY")
+
+def crypto_currency(raw: str):
+  return raw.strip().upper() #NOW WE SUPPORT EVERY CRYPTO AND TOKENS (no check)
+
+def usd_to_eur(usd: Decimal):
+  return usd * 0.95

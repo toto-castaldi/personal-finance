@@ -32,7 +32,7 @@ def job():
                         csv_type = "DEGIRO-TRANSASCTIONS"
                     if header_csv == "Data,Ora,Data Valore,Prodotto,ISIN,Descrizione,Borsa,Variazioni,,Saldo,,ID Ordine":
                         csv_type = "DEGIRO-ACCOUNT"
-                    if header_csv == '"id","operation","baseCurrency","baseCurrencyAmount","createdAt","quoteCurrency","quoteCurrencyAmount","feeAmount","extraFeeAmount","networkFeeAmount","status"':
+                    if header_csv == "id,operation,baseCurrency,baseCurrencyAmount,createdAt,quoteCurrency,quoteCurrencyAmount,feeAmount,extraFeeAmount,networkFeeAmount,status":
                         csv_type = "MOONPAY-TRX"
                 else:
                     if csv_type == "DEGIRO-TRANSASCTIONS":
