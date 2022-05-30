@@ -176,6 +176,12 @@ docker exec -it buddy_postgresql_1 psql -U dbpsql
 docker exec -it buddy_postgresql_1 pg_dump -U dbpsql -a > dump.sql
 ```
 
+## RESTORE DB
+
+```shell
+psql -h localhost -U dbpsql -W -f dump.sql
+```
+
 # LOCAL BUILD
 
 ## MOBILE
