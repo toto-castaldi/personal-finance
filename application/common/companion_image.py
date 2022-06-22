@@ -62,6 +62,7 @@ def job():
 
                 except:
                     logger.error("exception ",exc_info=1)
+                    image_type = None
                     utils.move_file(full_path, error_folder)
 
             footer_last_line = footer_last_line = extract_footer_last_line(image, 760/868)
@@ -81,6 +82,7 @@ def job():
                     db.save_degiro_balance(account_id, today, bank_amount, "EUR", f)
                 except:
                     logger.error("exception ",exc_info=1)
+                    image_type = None
                     utils.move_file(full_path, error_folder)
 
             if image_type:
