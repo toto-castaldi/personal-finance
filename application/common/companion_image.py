@@ -80,3 +80,4 @@ def job():
                 utils.move_file(full_path, unknow_folder)
     except:
         traceback.print_exc()
+        logger.error("exception ",exc_info=1)
