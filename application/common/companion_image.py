@@ -1,4 +1,3 @@
-from turtle import width
 import common.utils as utils
 import common.db as db
 import common.constants as constants
