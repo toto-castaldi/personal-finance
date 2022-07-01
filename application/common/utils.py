@@ -23,6 +23,7 @@ logger = None
 EUR = "EUR"
 USD = "USD"
 NATIVE_CURRENCIES = [EUR, USD]
+EURO_CHAR = '€'
 
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
@@ -76,7 +77,7 @@ def str_euro_to_number(str_euro: str):
   def allowed(c):
     return str.isdigit(c) or c == '.'
 
-  step0 = str_euro.replace('€', '').replace('.', '').replace(',','.').strip()
+  step0 = str_euro.replace(EURO_CHAR, '').replace('.', '').replace(',','.').strip()
   step1 = ''.join(filter(allowed, step0))
 
   return step1

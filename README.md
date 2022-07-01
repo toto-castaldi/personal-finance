@@ -35,6 +35,7 @@ apt install -y libedit-dev
 apt install -y libncurses5-dev
 apt install -y make libssl-dev zlib1g-dev libbz2-dev libreadline-dev libsqlite3-dev wget curl llvm libncursesw5-dev xz-utils tk-dev libxml2-dev libxmlsec1-dev libffi-dev liblzma-dev
 apt install -y libpq-dev
+apt install -y tesseract-ocr
 ```
 
 
@@ -92,6 +93,17 @@ LOG_LEVEL=DEBUG ENV=DEV UPLOAD_FOLDER=[FOLDER] python api_server.py
 cd site
 npm install
 npm run dev
+```
+
+## TEST-BOOK COMPANION_IMAGE
+
+```shell
+. .venv/bin/activate
+cd application/batch
+pip install -r requirements.txt
+cd ..
+LOG_LEVEL=DEBUG TEST_BOOK=[TEST_BOOK_FILE] python companion_image_test_book.py
+
 ```
 
 # CLOUD SERVER
