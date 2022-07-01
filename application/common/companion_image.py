@@ -128,9 +128,9 @@ def job():
                 try:
                     logger.info(f"{full_path} is a Degiro SCREENSHOT")
                     
-                    image_value_degiro = image_value_degiro(image)
+                    degiro_value = image_value_degiro(image)
 
-                    db.save_degiro_balance(account_id, today, image_value_degiro, "EUR", f)
+                    db.save_degiro_balance(account_id, today, degiro_value, "EUR", f)
                     utils.move_file(full_path, worked_folder)
                 except:
                     logger.error("exception ",exc_info=1)
