@@ -108,7 +108,6 @@ def job():
         for f in onlyfiles:
             full_path = join(upload_folder, f)
             account_id = utils.account_id_from_uploaded_file(full_path)
-            uuid_file = utils.uuid_id_from_uploaded_file(full_path)
 
             image, image_type_ = image_type(full_path)
 
@@ -119,9 +118,9 @@ def job():
                     disponibilita_euro, risparmi_euro = image_value_satispay(image)
                     
                     db.save_satispay(account_id, today, disponibilita_euro, risparmi_euro, "EUR", f)
+                    utils.move_file(full_path, worked_folder)
                 except:
                     logger.error("exception ",exc_info=1)
-                    image_type_ = None
                     utils.move_file(full_path, error_folder)
 
             if image_type_ == "DEGIRO" :
@@ -131,14 +130,12 @@ def job():
                     image_value_degiro = image_value_degiro(image)
 
                     db.save_degiro_balance(account_id, today, image_value_degiro, "EUR", f)
+                    utils.move_file(full_path, worked_folder)
                 except:
                     logger.error("exception ",exc_info=1)
-                    image_type_ = None
                     utils.move_file(full_path, error_folder)
 
-            if image_type_:
-                utils.move_file(full_path, worked_folder)
-            else:
+            if image_type_ is None:
                 logger.info(f"{full_path} is UNKNOW file ")
                 utils.move_file(full_path, unknow_folder)
     except:
