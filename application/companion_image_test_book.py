@@ -17,8 +17,7 @@ class Testbook(unittest.TestCase):
             logger.debug(test_book)
             for test_def_file_path in test_book:
                 test_def_value = test_book[test_def_file_path]
-                logger.debug(test_def_file_path)
-                logger.debug(test_def_value)
+                
 
                 if test_def_value.get("skip", False) != True:
                     image, image_type = companion_image.image_type(test_def_file_path)
@@ -30,11 +29,9 @@ class Testbook(unittest.TestCase):
                         self.assertAlmostEqual(disponibilita, Decimal(test_def_value["disponibilita"]))
                         self.assertAlmostEqual(risparmi, Decimal(test_def_value["risparmi"]))
 
-                    if image_type == "DEGIRO":
+                    if image_type == "ADEGIRO":
                         value = companion_image.image_value_degiro(image)
                         wanted = Decimal(test_def_value["value"])
-                        logger.debug(type(value))
-                        logger.debug(type(wanted))
                         self.assertAlmostEqual(value, wanted)
 
 if __name__ == "__main__":

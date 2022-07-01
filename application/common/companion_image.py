@@ -21,7 +21,6 @@ def extract_footer_last_lines(image, start_y_ratio):
         debug_counter = debug_counter + 1
         cropped.save(f"cropped-debug-{debug_counter}.png")
     footer_text_lines = pytesseract.image_to_string(cropped, config=custom_oem_psm_config).splitlines()
-    logger.debug(footer_text_lines)
     return footer_text_lines
 
 def image_type(full_path):
@@ -32,10 +31,12 @@ def image_type(full_path):
             return image, "SATISPAY"
             
     footer_last_lines = footer_last_line = extract_footer_last_lines(image, 760/868)
-    logger.debug(footer_last_lines)
     for footer_last_line in footer_last_lines:
+        logger.debug(footer_last_line)
         if "Mercato" in footer_last_line and "Preferiti" in footer_last_line and "Portafoglio" in footer_last_line :
             return image, "DEGIRO"
+
+    logger.warning("UNKNOW image....")
 
     return image, None
 
