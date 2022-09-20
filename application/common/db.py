@@ -54,11 +54,19 @@ select min(pbb.updated_at), max(pbb.updated_at) from public_bitcoin_balance pbb,
 '''
 
 SELECT_CRYPTO_RATE='''
- select amount from crypto_rate where crypto_currency = %(crypto_currency)s and native_currency = %(native_currency)s and date = %(date)s;
+select amount from crypto_rate where crypto_currency = %(crypto_currency)s and native_currency = %(native_currency)s and date = %(date)s;
 '''
 
 SELECT_COINBASE_TRX_BY_ACCOUN_DATES='''
 select * from coinbase_trx where account_id = %(account)s and updated_at >= %(date_from)s and updated_at < %(date_to)s
+'''
+
+SELECT_COINBASE_TRX_BY_ACCOUNT='''
+select * from coinbase_trx where account_id = %(account)s 
+'''
+
+SELECT_MOONPAY_TRX_BY_ACCOUNT='''
+select * from moonpay_trx where account_id = %(account)s 
 '''
 
 SELECT_PUBLIC_ADDRESSES_BY_ACCOUNT='''
@@ -160,7 +168,6 @@ def get_conn():
   if not conn and connection_param:
     logger.debug(connection_param)
     conn = psycopg2.connect(dbname=connection_param["dbname"], user=connection_param["user"], password=connection_param["password"], host=connection_param["host"], port=connection_param["port"], cursor_factory=RealDictCursor)
-       
   return conn
 
 
@@ -227,6 +234,42 @@ def load_coinbase_crypto_trxs_by_user_and_date(account, down_range, up_range):
       "account" : account,
       "date_from" : down_range,
       "date_to" : up_range
+    }, all=True))
+  )
+
+def load_coinbase_crypto_trxs_by_user(account:str):
+  return list(map(lambda e: 
+      bean.CoinbaseTransaction(
+                            e["trx_id"], 
+                            e["updated_at"], 
+                            e["native_amount_amount"],  
+                            e["native_amount_currency"],
+                            e["buy_sell"],
+                            e["crypto_amount_amount"],  
+                            e["crypto_amount_currency"]
+      ),
+    fetch(SELECT_COINBASE_TRX_BY_ACCOUNT, {
+      "account" : account
+    }, all=True))
+  )
+
+def load_moonpay_crypto_trxs_by_user(account:str):
+  return list(map(lambda e: 
+      bean.MoonpayTransaction(
+                            e["trx_id"], 
+                            e["operation"], 
+                            Decimal(e["native_amount_amount"]),  
+                            e["native_amount_currency"],
+                            e["updated_at"], 
+                            e["crypto_amount_amount"],  
+                            e["crypto_amount_currency"],
+                            e["fee_amount"],
+                            e["extrafee_amount"],
+                            e["networkfee_amount"],
+                            e["status"]
+      ),
+    fetch(SELECT_MOONPAY_TRX_BY_ACCOUNT, {
+      "account" : account
     }, all=True))
   )
 

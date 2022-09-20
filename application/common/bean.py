@@ -31,6 +31,31 @@ class CoinbaseTransaction:
     crypto_amount_currency : str
 
 @dataclass
+class CryptoTransaction:
+    id: str
+    native_amount_amount : Decimal
+    updated_at : datetime
+    crypto_amount_amount : Decimal
+    provider : str
+    crypto_amount_currency: str
+    native_amount_currency : str
+
+
+@dataclass
+class MoonpayTransaction:
+    id: str
+    type : str
+    native_amount_amount : Decimal
+    native_amount_currency : str
+    updated_at : datetime
+    crypto_amount_amount : Decimal
+    crypto_amount_currency : str
+    fee_amount : Decimal
+    extrafee_amount : Decimal
+    networkfee_amount : Decimal
+    status : Decimal
+
+@dataclass
 class AssetAmount:
     amount : Decimal
     type : str

@@ -190,7 +190,11 @@ docker exec -it buddy_postgresql_1 pg_dump -U dbpsql -a > dump.sql
 
 ## RESTORE DB
 
+
 ```shell
+sed "1i SET session_replication_role = 'replica';\ntruncate account cascade;\ntruncate databasechangelog cascade;\ntruncate databasechangeloglock  cascade;\ntruncate ethereum_rc20 cascade;" dump.sql > dump.sql.replica
+echo "SET session_replication_role = 'origin';" >> dump.sql.replica
+mv dump.sql.replica dump.sql
 psql -h localhost -U dbpsql -W -f dump.sql
 ```
 

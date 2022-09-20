@@ -24,6 +24,10 @@ EUR = "EUR"
 USD = "USD"
 NATIVE_CURRENCIES = [EUR, USD]
 EURO_CHAR = '€'
+BUYING = "buy"
+COMPLETED = "completed"
+PROVIDER_COINBASE = "COINBASE"
+PROVIDER_MOONPAY = "MOONPAY"
 
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
@@ -110,4 +114,4 @@ def crypto_currency(raw: str):
   return raw.strip().upper() #NOW WE SUPPORT EVERY CRYPTO AND TOKENS (no check)
 
 def usd_to_eur(usd: Decimal):
-  return usd * 0.95
+  return usd * Decimal(0.95)

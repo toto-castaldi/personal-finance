@@ -1,6 +1,5 @@
 import uvicorn
 import common.utils as utils
-import common.db as db
 
 if __name__ == "__main__":
   if utils.is_dev_env():

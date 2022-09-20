@@ -20,6 +20,9 @@
               <router-link class="nav-link active" to="/portfolio" :class="{ disabled: isLoggedOut }" >Portfolio</router-link>
             </li>
             <li class="nav-item">
+              <router-link class="nav-link active" to="/crypto" :class="{ disabled: isLoggedOut }" >Crypto</router-link>
+            </li>
+            <li class="nav-item">
               <router-link class="nav-link active" to="/register" :class="{ disabled: isLoggedIn }" >Register</router-link>
             </li>
             <li class="nav-item">
