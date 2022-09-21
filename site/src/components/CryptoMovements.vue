@@ -1,7 +1,8 @@
 <template>
   <div class="card border-primary border-2">
     <div class="card-header">Crypto buiyng</div>
-    <div class="card-body">
+    <div class="table-responsive">
+      <p class="card-text">Total : {{ amount }}</p>
       <table class="table">
         <thead>
           <tr>
@@ -20,7 +21,6 @@
           </tr>
         </tbody>
       </table>
-      <p class="card-text">Total : {{ amount }}</p>
     </div>
   </div>
 </template>
