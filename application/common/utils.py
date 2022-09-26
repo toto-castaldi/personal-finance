@@ -20,12 +20,17 @@ LOG_LEVELS = {
 log_level =  LOG_LEVELS.get(os.environ.get("LOG_LEVEL","INFO"))
 logger_filename = os.environ.get("LOG_FILE_NAME", None)
 logger = None
+
 EUR = "EUR"
 USD = "USD"
 NATIVE_CURRENCIES = [EUR, USD]
 EURO_CHAR = '€'
+
 BUYING = "buy"
 COMPLETED = "completed"
+
+PORTFOLIO_NODE_CRYPTO="CRYPTO"
+
 PROVIDER_COINBASE = "COINBASE"
 PROVIDER_MOONPAY = "MOONPAY"
 
