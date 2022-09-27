@@ -1,7 +1,9 @@
 <template>
   <div class="card border-primary border-2">
     <div class="card-header">Crypto APR</div>
-    <p class="card-text">{{apr}}</p>
+    <div class="card-body">
+      <p class="card-text">{{ apr }} {{ delta }}</p>
+    </div>
   </div>
 </template>
 
@@ -11,7 +13,8 @@ import { getAuth } from "firebase/auth";
 export default {
   data() {
       return {
-          apr : "..."
+          apr : "...",
+          delta : "..."
       }
   },
   methods : {
@@ -21,9 +24,13 @@ export default {
       const uid = getAuth().currentUser.uid;
       const response = await fetch(`${config.apiUrl}/crypto-apr/${uid}/EUR`);
       const rjson = await response.json();
-      const amount = Number(rjson.apr);
+      const currency = rjson.native_amount_currency === "EUR" ? "€" : rjson.native_amount_currency;
 
+      let amount = Number(rjson.apr);
       this.apr = `${amount.toFixed(4)} %`;      
+
+      amount = Number(rjson.delta);
+      this.delta = `${amount.toFixed(4)} ${currency}`;      
     }
   },
   async mounted() {

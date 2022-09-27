@@ -1,26 +1,28 @@
 <template>
   <div class="card border-primary border-2">
     <div class="card-header">Crypto buiyng</div>
-    <div class="table-responsive">
-      <p class="card-text">Total : {{ amount }}</p>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Date</th>
-            <th scope="col">Provider</th>
-            <th scope="col">Fiat</th>
-            <th scope="col">Crypto amount</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="m in movements" :key="m.id">
-            <th scope="row">{{m.updated_at}}</th>
-            <td>{{m.provider}}</td>
-            <td>{{m.native_amount_amount}}</td>
-            <td>{{m.crypto_amount_currency}} {{m.crypto_amount_amount}}</td>
-          </tr>
-        </tbody>
-      </table>
+    <div class="card-body">
+      <div class="table-responsive">
+        <p class="card-text">Total : {{ amount }}</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Provider</th>
+              <th scope="col">Fiat</th>
+              <th scope="col">Crypto amount</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="m in movements" :key="m.id">
+              <th scope="row">{{m.updated_at}}</th>
+              <td>{{m.provider}}</td>
+              <td>{{m.native_amount_amount}}</td>
+              <td>{{m.crypto_amount_currency}} {{m.crypto_amount_amount}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>

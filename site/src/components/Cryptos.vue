@@ -1,23 +1,24 @@
 <template>
   <div class="card border-primary border-2">
     <div class="card-header">Cryptos</div>
-    <div class="table-responsive">
-      <p class="card-text">Total : {{amount}}</p>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">Amount</th>
-            <th scope="col">Crypto</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="m in assets" >
-            <td>{{m.amount}}</td>
-            <td>{{m.sub_type}}</td>
-          </tr>
-        </tbody>
-      </table>
-      
+    <div class="card-body">
+      <div class="table-responsive">  
+        <p class="card-text">Value : {{amount}}</p>
+        <table class="table">
+          <thead>
+            <tr>
+              <th scope="col">Amount</th>
+              <th scope="col">Crypto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="m in assets" >
+              <td>{{m.amount}}</td>
+              <td>{{m.sub_type}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </div>
 </template>

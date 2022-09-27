@@ -77,13 +77,16 @@ def portfolio_level(account_id: str, level: int, node : str):
 def crypto_apr(account_id: str, currency: str):
     if db.account_info(account_id):
         total_crypto = portfolio_serialize.summary(portfolio.Portfolio(account_id, 1, utils.PORTFOLIO_NODE_CRYPTO), native_currency=currency)
-        actual_value = total_crypto.total_amount
         buying = crypto.buying(account_id, currency)
 
-        days = (datetime.today() - buying["movements"][0].updated_at).days
-        apr =((actual_value/buying["total_amount"]-1)/Decimal(days/365))
+        actual_value = total_crypto.total_amount
+        buying_value = buying["total_amount"]
 
-        return Response(content=json.dumps({ "apr" : apr}, default=utils.json_serial), media_type="application/json")
+        days = (datetime.today() - buying["movements"][0].updated_at).days
+        apr =((actual_value/buying_value-1)/Decimal(days/365))
+        delta = actual_value - buying_value
+
+        return Response(content=json.dumps({ "apr" : apr, "delta" : delta, "native_amount_currency" : currency}, default=utils.json_serial), media_type="application/json")
     else:
         raise HTTPException(status_code=404, detail="wrong account")
 
