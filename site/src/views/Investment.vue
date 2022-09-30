@@ -7,6 +7,11 @@
     </div>
     <div class="row gx-5">
       <div class="p-3 col">
+        <Investments />
+      </div>
+    </div>
+    <div class="row gx-5">
+      <div class="p-3 col">
           <PortfolioTrend :levelInfo="newLevel" />
       </div>
     </div>
@@ -22,7 +27,7 @@
 import InvestmentApr from "../components/InvestmentApr.vue";
 import PortfolioTrend from "../components/PortfolioTrend.vue";
 import InvestmentDeposits from "../components/InvestmentDeposits.vue";
-
+import Investments from "../components/Investments.vue";
 
 export default {
     data() {
@@ -31,7 +36,7 @@ export default {
         }
     },
     components: {
-      InvestmentApr, PortfolioTrend, InvestmentDeposits
+      InvestmentApr, PortfolioTrend, InvestmentDeposits, Investments
     },
     methods : {
     }
