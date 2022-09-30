@@ -2,7 +2,8 @@
   <div class="card border-primary border-2">
     <div class="card-header">Crypto APR</div>
     <div class="card-body">
-      <p class="card-text">{{ apr }} {{ delta }}</p>
+      <p class="card-text">Apr   : {{ apr }}</p>
+      <p class="card-text">Delta : {{ delta }}</p>
     </div>
   </div>
 </template>

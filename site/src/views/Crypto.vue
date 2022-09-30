@@ -12,6 +12,11 @@
     </div>
     <div class="row gx-5">
       <div class="p-3 col">
+          <PortfolioTrend :levelInfo="newLevel" />
+      </div>
+    </div>  
+    <div class="row gx-5">
+      <div class="p-3 col">
           <CryptoMovements />
       </div>
     </div>
@@ -19,7 +24,7 @@
 </template>
 
 <script>
-
+import PortfolioTrend from "../components/PortfolioTrend.vue";
 import CryptoMovements from "../components/CryptoMovements.vue";
 import Cryptos from "../components/Cryptos.vue";
 import CryptoApr from "../components/CryptoApr.vue";
@@ -27,10 +32,11 @@ import CryptoApr from "../components/CryptoApr.vue";
 export default {
     data() {
         return {
+          newLevel : { level : 1, node : "CRYPTO"}
         }
     },
     components: {
-      CryptoMovements, Cryptos, CryptoApr
+      CryptoMovements, Cryptos, CryptoApr, PortfolioTrend
     },
     methods : {
     }
