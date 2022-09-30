@@ -8,7 +8,8 @@ const router = createRouter({
     routes: [{
             path: "/",
             component: () =>
-                import ("../views/Home.vue")
+                import ("../views/Home.vue"),
+            meta: { requiresAuth: true }
         },
         {
             path: "/register",
@@ -21,12 +22,6 @@ const router = createRouter({
             component: () =>
                 import ("../views/SignIn.vue"),
             meta: { requiresAuth: false }
-        },
-        {
-            path: "/portfolio",
-            component: () =>
-                import ("../views/Portfolio.vue"),
-            meta: { requiresAuth: true }
         },
         {
             path: "/crypto",

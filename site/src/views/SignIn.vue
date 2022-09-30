@@ -58,7 +58,7 @@
         const provide = new GoogleAuthProvider();
         signInWithPopup(getAuth(), provide)
             .then((result) => {
-                router.push("/portfolio");
+                router.push("/");
             })
             .catch((error) => {
                 toastStore.error(error);

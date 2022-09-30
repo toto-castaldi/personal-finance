@@ -36,7 +36,7 @@
     const register = () => {
         createUserWithEmailAndPassword(getAuth(), email.value, password.value)
         .then((data) => {
-            router.push("/portfolio");
+            router.push("/");
         })
         .catch((error) => {
             toastStore.error(error.message);
