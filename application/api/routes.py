@@ -118,3 +118,14 @@ def crypto_buing(account_id: str, currency: str):
         return Response(content=json.dumps(result, default=utils.json_serial), media_type="application/json")
     else:
         raise HTTPException(status_code=404, detail="wrong account")
+
+@app.get("/investment-deposit/{account_id}/{currency}")
+def crypto_buing(account_id: str, currency: str):
+    if currency != utils.EUR:
+        raise HTTPException(status_code=404, detail="we support only EUR")
+    if db.account_info(account_id):
+        result = invest.buying(account_id, currency)
+
+        return Response(content=json.dumps(result, default=utils.json_serial), media_type="application/json")
+    else:
+        raise HTTPException(status_code=404, detail="wrong account")
