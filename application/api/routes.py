@@ -5,6 +5,7 @@ import common.portfolio as portfolio
 import common.portfolio_serialize as portfolio_serialize
 import common.constants as constants
 import common.crypto as crypto
+import common.invest as invest
 import json
 from datetime import datetime
 from fastapi import Response
@@ -80,6 +81,23 @@ def crypto_apr(account_id: str, currency: str):
         buying = crypto.buying(account_id, currency)
 
         actual_value = total_crypto.total_amount
+        buying_value = buying["total_amount"]
+
+        days = (datetime.today() - buying["movements"][0].updated_at).days
+        apr =((actual_value/buying_value-1)/Decimal(days/365))
+        delta = actual_value - buying_value
+
+        return Response(content=json.dumps({ "apr" : apr, "delta" : delta, "native_amount_currency" : currency}, default=utils.json_serial), media_type="application/json")
+    else:
+        raise HTTPException(status_code=404, detail="wrong account")
+
+@app.get("/investment-apr/{account_id}/{currency}")
+def investment_apr(account_id: str, currency: str):
+    if db.account_info(account_id):
+        total_invest = portfolio_serialize.summary(portfolio.Portfolio(account_id, 1, utils.PORTFOLIO_NODE_INVEST), native_currency=currency)
+        buying = invest.buying(account_id, currency)
+
+        actual_value = total_invest.total_amount
         buying_value = buying["total_amount"]
 
         days = (datetime.today() - buying["movements"][0].updated_at).days

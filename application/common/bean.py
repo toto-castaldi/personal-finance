@@ -31,6 +31,12 @@ class CoinbaseTransaction:
     crypto_amount_currency : str
 
 @dataclass
+class DegiroDeposit:
+    updated_at : datetime
+    amount : Decimal
+    currency : str
+
+@dataclass
 class CryptoTransaction:
     id: str
     native_amount_amount : Decimal

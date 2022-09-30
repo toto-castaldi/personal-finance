@@ -29,6 +29,12 @@ const router = createRouter({
                 import ("../views/Crypto.vue"),
             meta: { requiresAuth: true }
         },
+        {
+            path: "/investment",
+            component: () =>
+                import ("../views/Investment.vue"),
+            meta: { requiresAuth: true }
+        }
     ],
 });
 

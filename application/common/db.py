@@ -1,4 +1,4 @@
-from datetime import date
+from datetime import date, datetime
 from decimal import Decimal
 import psycopg2
 import common.utils as utils
@@ -81,6 +81,10 @@ SELECT_PUBLIC_ETHEREUM_ADDRESSES_BY_ACCOUNT='''
 select * from ethereum_address where account_id = %(account)s
 '''
 
+SELECT_DEGIRO_DEPOSIT_BY_ACCOUNT='''
+select * from degiro_deposit where account_id = %(account_id)s
+'''
+
 SELECT_BANK_NAMES_BY_ACCOUNT='''
 select distinct(bank_name) from bank_account_balance bab where account_id = %(account_id)s
 '''
@@ -138,6 +142,13 @@ VALUES(
   %(account_id)s, %(trx_id)s, %(operation)s, %(native_amount_currency)s, %(native_amount_amount)s, %(updated_at)s, %(crypto_amount_amount)s, 
   %(crypto_amount_currency)s, %(fee_amount)s, %(extrafee_amount)s, %(networkfee_amount)s, %(status)s)
 on conflict (trx_id) do nothing;
+'''
+
+INSERT_DEGIRO_DEPOSIT = '''
+INSERT INTO degiro_deposit
+(account_id, updated_at, amount, currency)
+VALUES(
+  %(account_id)s, %(updated_at)s, %(amount)s, %(currency)s);
 '''
 
 INSERT_PUBLIC_ETHEREUM_ADDRESS = '''
@@ -216,6 +227,18 @@ def load_ethereum_addresses(account):
   return list(map(lambda e: e["public_address"],
     fetch(SELECT_PUBLIC_ETHEREUM_ADDRESSES_BY_ACCOUNT, {
       "account" : account.id
+    }, all=True))
+  )
+
+def load_degiro_deposits_by_user(account_id):
+  return list(map(lambda e: 
+      bean.DegiroDeposit(
+                            e["updated_at"], 
+                            e["amount"],  
+                            e["currency"]
+      ),
+    fetch(SELECT_DEGIRO_DEPOSIT_BY_ACCOUNT, {
+      "account_id" : account_id
     }, all=True))
   )
     
@@ -432,7 +455,17 @@ def save_moonpay_transaction(account_id : str, today : date, row):
         })
 
 def save_degiro_deposit(account_id : str, today : date, row):
-  pass
+  # ['28-09-2022', '10:50', '28-09-2022', '', '', 'Deposito flatex', '', 'EUR', '400,00', 'EUR', '420,43', '']
+  logger.debug(row)
+  logger.debug(account_id)
+  with get_conn() as conn:  
+      with conn.cursor() as cursor:
+        cursor.execute(INSERT_DEGIRO_DEPOSIT, {
+          "account_id" : account_id,
+          "updated_at" : datetime.strptime(row[0], '%d-%m-%Y'),
+          "amount" : utils.str_euro_to_number(row[8]),
+          "currency" : row[7]
+        })
 
 def save_degiro_transaction(account_id : str, today : date, row):
   pass

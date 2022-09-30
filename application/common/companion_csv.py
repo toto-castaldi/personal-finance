@@ -34,6 +34,7 @@ def job():
                         csv_type = "DEGIRO-ACCOUNT"
                     if header_csv == "id,operation,baseCurrency,baseCurrencyAmount,createdAt,quoteCurrency,quoteCurrencyAmount,feeAmount,extraFeeAmount,networkFeeAmount,status":
                         csv_type = "MOONPAY-TRX"
+                    logger.debug(f"CSV TYPE {csv_type}")
                 else:
                     if csv_type == "DEGIRO-TRANSASCTIONS":
                         db.save_degiro_transaction(account_id, today, row)
