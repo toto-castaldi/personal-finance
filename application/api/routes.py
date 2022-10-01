@@ -84,7 +84,7 @@ def crypto_apr(account_id: str, currency: str):
         buying_value = buying["total_amount"]
 
         days = (datetime.today() - buying["movements"][0].updated_at).days
-        apr =((actual_value/buying_value-1)/Decimal(days/365))
+        apr = 100 * ((actual_value/buying_value-1)/Decimal(days/365))
         delta = actual_value - buying_value
 
         return Response(content=json.dumps({ "apr" : apr, "delta" : delta, "native_amount_currency" : currency}, default=utils.json_serial), media_type="application/json")
@@ -101,7 +101,7 @@ def investment_apr(account_id: str, currency: str):
         buying_value = buying["total_amount"]
 
         days = (datetime.today() - buying["movements"][0].updated_at).days
-        apr =((actual_value/buying_value-1)/Decimal(days/365))
+        apr = 100 * ((actual_value/buying_value-1)/Decimal(days/365))
         delta = actual_value - buying_value
 
         return Response(content=json.dumps({ "apr" : apr, "delta" : delta, "native_amount_currency" : currency}, default=utils.json_serial), media_type="application/json")
