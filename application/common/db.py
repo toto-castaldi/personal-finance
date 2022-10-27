@@ -148,7 +148,8 @@ INSERT_DEGIRO_DEPOSIT = '''
 INSERT INTO degiro_deposit
 (account_id, updated_at, amount, currency)
 VALUES(
-  %(account_id)s, %(updated_at)s, %(amount)s, %(currency)s);
+  %(account_id)s, %(updated_at)s, %(amount)s, %(currency)s)
+on conflict do nothing;
 '''
 
 INSERT_PUBLIC_ETHEREUM_ADDRESS = '''

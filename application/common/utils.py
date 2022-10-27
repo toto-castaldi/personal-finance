@@ -97,7 +97,7 @@ def unique_uploaded_file_name(prefix: str, file_type: str, folder:str):
   return os.path.join(folder, f"{prefix}-upload-{uuid.uuid4()}-type-{file_type}")
 
 #[ACCOUNT_ID]-upload-[UID]-type-image
-#[ACCOUNT_ID]-upload-[UID]-type-CSV
+#[ACCOUNT_ID]-upload-[UID]-type-csv
 def account_id_from_uploaded_file(file_path : str):
   basename = os.path.basename(file_path)
   return basename.split("-upload-")[0]

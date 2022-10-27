@@ -630,3 +630,11 @@ databaseChangeLog:
             baseTableName:  moonpay_trx
             referencedColumnNames:  account_id  
             referencedTableName:  account
+  - changeSet:
+      id: 14
+      author: toto
+      changes:
+        - addUniqueConstraint:  
+            columnNames:  account_id, updated_at, amount, currency
+            constraintName:  unique_degiro_deposit
+            tableName:  degiro_deposit
