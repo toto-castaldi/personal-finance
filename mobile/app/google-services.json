@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "327454650091-mk673sio9hq3mspk0bdrr1be7oe3v66c.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.totocastaldi.personalfinance",
+            "certificate_hash": "2c9fa277e8c79b55d97d75fd309fd6335a1a430f"
+          }
+        },
+        {
           "client_id": "327454650091-nfuegsbdrbth1fbrk1lid4pgu9l356kh.apps.googleusercontent.com",
           "client_type": 3
         }

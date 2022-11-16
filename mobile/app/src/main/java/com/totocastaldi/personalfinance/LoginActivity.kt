@@ -1,3 +1,5 @@
+@file:Suppress("OverrideDeprecatedMigration")
+
 package com.totocastaldi.personalfinance
 
 import android.app.ProgressDialog
@@ -82,6 +84,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
 
+    @Deprecated ("onActivityResult deprecated")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 

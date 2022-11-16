@@ -2,13 +2,15 @@ package com.totocastaldi.personalfinance
 
 import android.content.Intent
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.totocastaldi.personalfinance.databinding.ActivityProfileBinding
+
 
 class ProfileActivity : AppCompatActivity() {
 
@@ -50,6 +52,13 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private fun handleSendImage(intent: Intent) {
+        ActivityCompat.requestPermissions(
+            this, arrayOf(
+                android.Manifest.permission.READ_EXTERNAL_STORAGE,
+                android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
+            ), 1
+        )
+
         (intent.getParcelableExtra<Parcelable>(Intent.EXTRA_STREAM) as? Uri)?.let {
             Log.d(TAG, "$it")
             val uid = firebaseAuth.currentUser!!.uid
