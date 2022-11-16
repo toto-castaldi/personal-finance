@@ -13,10 +13,12 @@ logger = utils.init_log()
 debug_counter = 0
 custom_oem_psm_config = r'--oem 3 --psm 6'
 
-def extract_footer_last_lines(image, start_y_ratio):
+def extract_footer_last_lines(image, start_y_ratio, end_x_ratio = None, end_y_ratio = None):
     global debug_counter
     w, h = image.size
-    cropped = image.crop((0, h * start_y_ratio, w, h ))
+    y_end = h if end_y_ratio is None else h * end_y_ratio
+    w_end = w if end_x_ratio is None else w * end_x_ratio
+    cropped = image.crop((0, h * start_y_ratio, w_end, y_end ))
     if utils.is_dev_env():
         debug_counter = debug_counter + 1
         cropped.save(f"cropped-debug-{debug_counter}.png")
@@ -34,6 +36,11 @@ def image_type(full_path):
     for footer_last_line in footer_last_lines:
         logger.debug(footer_last_line)
         if "Mercato" in footer_last_line and "Preferiti" in footer_last_line and "Portafoglio" in footer_last_line :
+            return image, "DEGIRO"
+    
+    footer_last_lines = footer_last_line = extract_footer_last_lines(image, 795/868, 0.5, 815/868)
+    for footer_last_line in footer_last_lines:
+        if "Mercato" in footer_last_line and "Preferiti" in footer_last_line :
             return image, "DEGIRO"
 
     logger.warning("UNKNOW image....")

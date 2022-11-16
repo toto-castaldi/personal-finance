@@ -29,10 +29,10 @@ class Testbook(unittest.TestCase):
                         self.assertAlmostEqual(disponibilita, Decimal(test_def_value["disponibilita"]))
                         self.assertAlmostEqual(risparmi, Decimal(test_def_value["risparmi"]))
 
-                    if image_type == "ADEGIRO":
+                    if image_type == "DEGIRO":
                         value = companion_image.image_value_degiro(image)
-                        wanted = Decimal(test_def_value["value"])
-                        self.assertAlmostEqual(value, wanted)
+                        
+                        self.assertAlmostEqual(value, Decimal(test_def_value["value"]))
 
 if __name__ == "__main__":
     unittest.main()
