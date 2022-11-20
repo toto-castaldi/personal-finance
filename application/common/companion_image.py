@@ -86,7 +86,7 @@ def image_value_degiro(image):
 
     while amount_tesseract_lines[0][0] != utils.EURO_CHAR and width > 0:
 
-        bank_amount_image = image.crop((w * (40/400), h * (27/868), width, h * (59/868) ))
+        bank_amount_image = image.crop((w * (40/400), h * (27/868), width, h * (60/868) ))
 
         if utils.is_dev_env():
             debug_counter = debug_counter + 1

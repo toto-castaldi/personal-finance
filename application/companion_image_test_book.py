@@ -31,7 +31,7 @@ class Testbook(unittest.TestCase):
 
                     if image_type == "DEGIRO":
                         value = companion_image.image_value_degiro(image)
-                        
+
                         self.assertAlmostEqual(value, Decimal(test_def_value["value"]))
 
 if __name__ == "__main__":

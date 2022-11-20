@@ -92,7 +92,6 @@ def str_euro_to_number(str_euro: str):
 
   return step1
 
-
 def unique_uploaded_file_name(prefix: str, file_type: str, folder:str):
   return os.path.join(folder, f"{prefix}-upload-{uuid.uuid4()}-type-{file_type}")
 

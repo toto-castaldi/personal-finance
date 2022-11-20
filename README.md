@@ -197,11 +197,3 @@ echo "SET session_replication_role = 'origin';" >> dump.sql.replica
 mv dump.sql.replica dump.sql
 psql -h localhost -U dbpsql -W -f dump.sql
 ```
-
-# LOCAL BUILD
-
-## MOBILE
-
-```bash
-docker run -it -v `pwd`:/app skillbillsrl/android-builder /app/build-app.sh
-```
