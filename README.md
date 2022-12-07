@@ -3,9 +3,11 @@ PERSONAL-FINANCE
 
 [![buddy pipeline](https://app.buddy.works/skillbill-bw/personal-finance/pipelines/pipeline/373011/badge.svg?token=107d3bbbb60ecabcdb08e0c4f842888977cc5d7b269e84936f8b8074747daf78 "buddy pipeline")](https://app.buddy.works/skillbill-bw/personal-finance/pipelines/pipeline/373011)
 
-[DEMO](https://personal-finance.toto-castaldi.com/) (demo@demo.com / demo1234)
+![Demo Portfolio](Screenshot_2022-12-07_20-51-42.png)
 
-![Demo Portfolio](Screenshot_2022-03-19_10-57-23.png)
+![Demo Investment](Screenshot_2022-12-07_20-52-25.png)
+
+![Demo Investment](Screenshot_2022-12-07_20-52-59.png)
 
 # INTEGRATIONS
 
