@@ -44,8 +44,6 @@ export default {
         );
         const rjson = await response.json();
 
-        console.log(rjson);
-
         const amount = Number(rjson.total_amount);
         const currency = rjson.total_currency === "EUR" ? "€" : rjson.total_currency;
         this.amount = `${amount.toFixed(2)} ${currency} `;
@@ -54,6 +52,8 @@ export default {
           const amount = Number(m.native_amount_amount);
           const currency = m.native_amount_currency === "EUR" ? "€" : m.native_amount_currency;
           m.native_amount_amount = `${amount.toFixed(2)} ${currency} `;
+          m.updated_at = new Date(Date.parse(m.updated_at)).toLocaleDateString(navigator.language, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+
           return m;
         });
       }
