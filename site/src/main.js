@@ -11,7 +11,7 @@ import { createI18n } from "vue-i18n";
 const numberFormats = {
     "en-US": {
         currency: {
-            style: 'currency', currency: 'USD', notation: 'standard'
+            style: 'currency', currency: 'EUR', notation: 'standard'
         },
         decimal: {
             style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2
