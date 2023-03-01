@@ -6,6 +6,34 @@ import App from "./App.vue";
 import router from "./router";
 import { initializeApp } from "firebase/app";
 import { createPinia } from "pinia";
+import { createI18n } from "vue-i18n";
+
+const numberFormats = {
+    "en-US": {
+        currency: {
+            style: 'currency', currency: 'USD', notation: 'standard'
+        },
+        decimal: {
+            style: 'decimal', minimumFractionDigits: 2, maximumFractionDigits: 2
+        },
+        percent: {
+            style: 'percent', minimumFractionDigits: 2, maximumFractionDigits: 2, useGrouping: true
+        }
+    }
+}; 
+
+const messages = {
+    "en": {
+        hello: "hello!"
+    }
+};
+
+const i18n = createI18n({
+    locale: navigator.language, // set locale
+    fallbackLocale: "en", // set fallback locale
+    messages,
+    numberFormats
+});
 
 const firebaseConfig = {
     apiKey: "AIzaSyCfzN6Xogvmd6AasFEDSEUMGgpgG3RNir0",
@@ -18,10 +46,12 @@ const firebaseConfig = {
 };
 
 initializeApp(firebaseConfig);
-const app = createApp(App);
 
+const app = createApp(App);
+  
 app.use(createPinia());
 app.use(router);
+app.use(i18n);
 app.mount("#app");
 
 import "bootstrap/dist/js/bootstrap.js";

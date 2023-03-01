@@ -3,7 +3,8 @@
     <div class="card-header">Investment deposits</div>
     <div class="card-body">
       <div class="table-responsive">
-        <p class="card-text">Total : {{ amount }}</p>
+        <p class="card-text" v-if="amount">Total : {{ $n(amount, 'currency') }}</p>
+        <p class="card-text" v-else>Total : ...</p>
         <table class="table">
           <thead>
             <tr>
@@ -14,7 +15,7 @@
           <tbody>
             <tr v-for="m in movements" >
               <th scope="row">{{m.updated_at}}</th>
-              <td>{{m.amount}}</td>
+              <td>{{ $n(m.amount, 'currency') }}</td>
             </tr>
           </tbody>
         </table>
@@ -29,7 +30,7 @@ import { getAuth } from "firebase/auth";
 export default {
     data() {
         return {
-          amount : "...",
+          amount : undefined,
           movements : []
         }
     },
@@ -44,16 +45,11 @@ export default {
         );
         const rjson = await response.json();
 
-        const amount = Number(rjson.total_amount);
-        const currency = rjson.total_currency === "EUR" ? "€" : rjson.total_currency;
-        this.amount = `${amount.toFixed(2)} ${currency} `;
+        this.amount = Number(rjson.total_amount);
 
         this.movements = rjson.movements.map(m => {
-          const amount = Number(m.native_amount_amount);
-          const currency = m.native_amount_currency === "EUR" ? "€" : m.native_amount_currency;
-          m.native_amount_amount = `${amount.toFixed(2)} ${currency} `;
           m.updated_at = new Date(Date.parse(m.updated_at)).toLocaleDateString(navigator.language, { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-
+          m.amount = Number(m.amount);
           return m;
         });
       }

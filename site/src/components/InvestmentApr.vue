@@ -2,8 +2,10 @@
   <div class="card border-primary border-2">
     <div class="card-header">Ivestment APR</div>
     <div class="card-body">
-      <p class="card-text">Apr   : {{ apr }}</p>
-      <p class="card-text">Delta : {{ delta }}</p>
+      <p class="card-text" v-if="apr">Apr : {{ $n(apr/100, 'percent') }}</p>
+      <p class="card-text" v-else>Apr : ...</p>
+      <p class="card-text" v-if="delta">Delta : {{ $n(delta, 'currency') }}</p>
+      <p class="card-text" v-else>Delta : ...</p>
     </div>
   </div>
 </template>
@@ -14,8 +16,8 @@ import { getAuth } from "firebase/auth";
 export default {
   data() {
       return {
-          apr : "...",
-          delta : "..."
+          apr : undefined,
+          delta : undefined
       }
   },
   methods : {
@@ -25,13 +27,8 @@ export default {
       const uid = getAuth().currentUser.uid;
       const response = await fetch(`${config.apiUrl}/investment-apr/${uid}/EUR`);
       const rjson = await response.json();
-      const currency = rjson.native_amount_currency === "EUR" ? "€" : rjson.native_amount_currency;
-
-      let amount = Number(rjson.apr);
-      this.apr = `${amount.toFixed(4)} %`;      
-
-      amount = Number(rjson.delta);
-      this.delta = `${amount.toFixed(4)} ${currency}`;      
+      this.apr = Number(rjson.apr);      
+      this.delta = Number(rjson.delta);
     }
   },
   async mounted() {
