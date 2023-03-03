@@ -15,7 +15,7 @@ services:
     depends_on:
       - postgresql-liquibase
     environment:
-      - LOG_LEVEL=DEBUG
+      - LOG_LEVEL=INFO
       - LOG_FILE_NAME=api
     volumes:
       - /var/lib/buddy/log:/app/log

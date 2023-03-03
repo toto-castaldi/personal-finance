@@ -48,8 +48,6 @@ export default {
         );
         const rjson = await response.json();
 
-        console.log(rjson);
-
         const amount = Number(rjson.total_amount);
         const currency = rjson.total_currency === "EUR" ? "€" : rjson.total_currency;
         this.amount = `${amount.toFixed(2)} ${currency} `;
