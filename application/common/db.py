@@ -457,6 +457,7 @@ def save_moonpay_transaction(account_id : str, today : date, row):
 
 def save_degiro_deposit(account_id : str, today : date, row):
   # ['28-09-2022', '10:50', '28-09-2022', '', '', 'Deposito flatex', '', 'EUR', '400,00', 'EUR', '420,43', '']
+  # ['24-05-2023', '18:31', '25-05-2023', '', '', 'Prelievo flatex', '', 'EUR', '-4500,00', 'EUR', '-4349,13', '']
   logger.debug(row)
   logger.debug(account_id)
   with get_conn() as conn:  

@@ -85,7 +85,7 @@ def wei_to_ether(wei):
 
 def str_euro_to_number(str_euro: str):
   def allowed(c):
-    return str.isdigit(c) or c == '.'
+    return str.isdigit(c) or c == '.' or c == '-'
 
   step0 = str_euro.replace(EURO_CHAR, '').replace('.', '').replace(',','.').strip()
   step1 = ''.join(filter(allowed, step0))

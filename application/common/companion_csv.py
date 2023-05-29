@@ -43,6 +43,9 @@ def job():
                     if csv_type == "DEGIRO-ACCOUNT":
                         if row[5] == "Deposito flatex":
                             db.save_degiro_deposit(account_id, today, row)
+                        if row[5] == "Prelievo flatex":
+                            logger.debug(f"Prelievo flatex {row}")
+                            db.save_degiro_deposit(account_id, today, row)
                 line_count += 1
             if csv_type:
                 utils.move_file(full_path, worked_folder)
