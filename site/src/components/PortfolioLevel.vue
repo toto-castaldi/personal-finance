@@ -47,9 +47,8 @@ export default {
           const jConfig = await fetch("/config.json");
           const config = await jConfig.json();
           const uid = getAuth().currentUser.uid;
-          const n = node ? node : 'fake';
           const response = await fetch(
-            `${config.apiUrl}/portfolio-level/${uid}/${this.level}/${n}`
+            node ? `${config.apiUrl}/portfolio-level/${uid}/${this.level}/${node}` : `${config.apiUrl}/portfolio-level/${uid}/${this.level}`
           );
           const rjson = await response.json();
           this.nodes = rjson;

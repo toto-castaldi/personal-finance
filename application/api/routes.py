@@ -67,9 +67,18 @@ def portfolio_values_json(account_id: str, level: int, node : str, currency: str
         raise HTTPException(status_code=404, detail="wrong account")
 
 @app.get("/portfolio-level/{account_id}/{level}/{node}")
-def portfolio_level(account_id: str, level: int, node : str):
+def portfolio_level_node(account_id: str, level: int, node : str):
     if db.account_info(account_id):
         nodes = portfolio_serialize.level(portfolio.Portfolio(account_id), level, node);
+        return Response(content=json.dumps(nodes, default=utils.json_serial), media_type="application/json")
+    else:
+        raise HTTPException(status_code=404, detail="wrong account")
+    
+@app.get("/portfolio-level/{account_id}/{level}")
+@utils.timed
+def portfolio_level_root(account_id: str, level: int):
+    if db.account_info(account_id):
+        nodes = portfolio_serialize.level(portfolio.Portfolio(account_id), level);
         return Response(content=json.dumps(nodes, default=utils.json_serial), media_type="application/json")
     else:
         raise HTTPException(status_code=404, detail="wrong account")

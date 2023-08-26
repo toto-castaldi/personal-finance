@@ -205,6 +205,7 @@ def load_all_accounts():
 def load_all_rc20():
   return list(map(lambda e: bean.RC20(e["name"], e["contract_address"]), fetch(SELECT_ALL_RC20, all=True)))
 
+@utils.timed
 def load_bitcoin_addresses(account_id):
   return list(map(lambda e: e["public_address"],
     fetch(SELECT_PUBLIC_ADDRESSES_BY_ACCOUNT, {
@@ -333,6 +334,7 @@ def get_crypto_rate(the_date, crypto_currency, native_currency):
   else:
     return None
 
+@utils.timed
 def load_public_bitcoins_amount_at(the_date: date, account_id: str, public_address: str):
   c = fetch(SELECT_PUBLIC_BITCOIN_AT, {
     "updated_at" : the_date,

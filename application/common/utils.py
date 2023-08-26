@@ -4,6 +4,8 @@ import logging.handlers
 import os
 import dataclasses
 import shutil
+import time
+from functools import wraps
 from datetime import timedelta
 from datetime import date
 from datetime import datetime
@@ -34,6 +36,19 @@ PORTFOLIO_NODE_INVEST="INVEST"
 
 PROVIDER_COINBASE = "COINBASE"
 PROVIDER_MOONPAY = "MOONPAY"
+
+def timed(func):
+    """This decorator prints the execution time for the decorated function."""
+
+    @wraps(func)
+    def wrapper(*args, **kwargs):
+        start = time.time()
+        result = func(*args, **kwargs)
+        end = time.time()
+        logger.debug("{} ran in {}s".format(func.__name__, round(end - start, 2)))
+        return result
+
+    return wrapper
 
 def json_serial(obj):
     """JSON serializer for objects not serializable by default json code"""
@@ -73,9 +88,13 @@ def init_log():
     
   return logger
 
-def daterange(start_date, end_date):
-  for n in range(int((end_date - start_date).days) + 1):
-      yield start_date + timedelta(n)
+def daterange(start_date, end_date, step=timedelta(days=1)):
+  current = start_date
+  while current <= end_date:
+     yield current
+     current += step
+  if current > end_date:
+     yield end_date
 
 def satoshi_to_bitcoin(satoshi):
   return satoshi / 100000000

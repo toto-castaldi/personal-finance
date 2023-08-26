@@ -8,6 +8,8 @@ from datetime import timedelta
 logger = utils.init_log()
 
 class Portfolio():
+
+    @utils.timed
     def __init__(self, account, level: int = 0, node : str = None):
         self.values = []
         self.account = account
@@ -24,6 +26,7 @@ class Portfolio():
         self.degiro()
         self.satispay()
 
+    @utils.timed
     def dates(self):
         bitcoin_min_date, _ = db.min_max_public_bitcoins_date_trx_by_account(self.account)
         coinbase_min_date, _ = db.min_max_coinbase_date_trx_by_account(self.account)
@@ -36,12 +39,19 @@ class Portfolio():
             bank_min_date if bank_min_date else datetime.today(),
         )
         min_date = min_date.date()
-        for the_date in utils.daterange(min_date, self.today):
+
+        step = (self.today - min_date) / 150 #MAGIC NUMBER HERE
+
+        for the_date in utils.daterange(min_date, self.today, step):
             logger.debug(the_date)
             self.values.append(bean.PortfolioDay(
                 the_date,
                 []
             ))
+
+        logger.debug(self.today)
+        logger.debug(self.values[0])
+        logger.debug(self.values[len(self.values) - 1])
 
     def check_level(self, asset_type : str, asset_subtype : str):
         if self.level == 0: return True
@@ -59,6 +69,7 @@ class Portfolio():
             porfolio_point.assets.append(res)
             return res
 
+    @utils.timed
     def satispay(self):
         if self.check_level("BANK", "SATISPAY"):
             for porfolio_point in self.values:
@@ -67,6 +78,7 @@ class Portfolio():
                     asset_amount = self.asset(porfolio_point, "BANK", "SATISPAY")
                     asset_amount.amount += amount
 
+    @utils.timed
     def bank_account(self):
         for porfolio_point in self.values:
             balances = db.load_bank_accout_balances_at(porfolio_point.the_date + timedelta(days=1), self.account)
@@ -75,6 +87,7 @@ class Portfolio():
                     asset_amount = self.asset(porfolio_point, "BANK", balance[0])
                     asset_amount.amount += balance[1]
 
+    @utils.timed
     def degiro(self):
         if self.check_level("INVEST", "DEGIRO"):
             for porfolio_point in self.values:
@@ -83,10 +96,11 @@ class Portfolio():
                     asset_amount = self.asset(porfolio_point, "INVEST", "DEGIRO")
                     asset_amount.amount += amount
 
+    @utils.timed
     def public_bitcoins(self):
         if self.check_level("CRYPTO", "BTC"):
+            addresses = db.load_bitcoin_addresses(self.account)
             for porfolio_point in self.values:
-                addresses = db.load_bitcoin_addresses(self.account)
                 for address in addresses:
                     amount = db.load_public_bitcoins_amount_at(porfolio_point.the_date  + timedelta(days=1), self.account, address)
                     logger.debug(f"{porfolio_point.the_date}, {self.account}, {address} => {amount}")
@@ -94,6 +108,7 @@ class Portfolio():
                         asset_amount = self.asset(porfolio_point, "CRYPTO", "BTC")
                         asset_amount.amount += amount       
 
+    @utils.timed
     def public_ethers(self):
         for porfolio_point in self.values:
             if self.check_level("CRYPTO", "ETH"):
@@ -109,7 +124,7 @@ class Portfolio():
                         asset_amount = self.asset(porfolio_point, "CRYPTO", rc20.name)
                         asset_amount.amount += amount
             
-            
+    @utils.timed        
     def coinbase(self):
         def trx_amount(crypto_trx):
             if crypto_trx.type == "buy":
