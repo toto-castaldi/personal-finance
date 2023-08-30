@@ -89,6 +89,18 @@ cd ..
 LOG_LEVEL=DEBUG ENV=DEV UPLOAD_FOLDER=[FOLDER] python api_server.py
 ```
 
+## LOCAL dev tests
+
+```shell
+. .venv/bin/activate
+cd application/api
+pip install -r requirements.txt
+cd application/batch
+pip install -r requirements.txt
+cd ..
+LOG_LEVEL=DEBUG ENV=DEV python local.py [USER_ID]
+```
+
 ## FE
 
 ```shell

@@ -1,9 +1,9 @@
-from tabnanny import check
 import common.utils as utils
 import common.db as db
 import common.bean as bean
 from datetime import datetime
 from datetime import timedelta
+from functools import reduce
 
 logger = utils.init_log()
 
@@ -21,7 +21,9 @@ class Portfolio():
 
         self.public_bitcoins()
         self.public_ethers()
+        #call after punlic_*
         self.coinbase()
+
         self.bank_account()
         self.degiro()
         self.satispay()
@@ -43,7 +45,6 @@ class Portfolio():
         step = (self.today - min_date) / 150 #MAGIC NUMBER HERE
 
         for the_date in utils.daterange(min_date, self.today, step):
-            logger.debug(the_date)
             self.values.append(bean.PortfolioDay(
                 the_date,
                 []
@@ -103,7 +104,6 @@ class Portfolio():
             for porfolio_point in self.values:
                 for address in addresses:
                     amount = db.load_public_bitcoins_amount_at(porfolio_point.the_date  + timedelta(days=1), self.account, address)
-                    logger.debug(f"{porfolio_point.the_date}, {self.account}, {address} => {amount}")
                     if amount:
                         asset_amount = self.asset(porfolio_point, "CRYPTO", "BTC")
                         asset_amount.amount += amount       
@@ -123,30 +123,32 @@ class Portfolio():
                     if amount:
                         asset_amount = self.asset(porfolio_point, "CRYPTO", rc20.name)
                         asset_amount.amount += amount
-            
-    @utils.timed        
-    def coinbase(self):
+
+    def extract_coinbase_crypto_currencies(self, coinbase_crypto_trxs):
+        return set(map(lambda trx: trx.crypto_amount_currency, coinbase_crypto_trxs))
+
+    def coinbase_amount_at(self, the_date, currency, coinbase_crypto_trxs):
+
         def trx_amount(crypto_trx):
             if crypto_trx.type == "buy":
                 return abs(crypto_trx.crypto_amount_amount)
             if crypto_trx.type == "send":
                 return -abs(crypto_trx.crypto_amount_amount)
-            logger.warn(f"unknow trx type {crypto_trx.type}")
-            return crypto_trx.crypto_amount_amount
+            raise Exception(f"unknow trx type {crypto_trx.type}")
+    
+        return sum([trx_amount(x) for x in coinbase_crypto_trxs if x.updated_at.date() <= the_date and x.crypto_amount_currency == currency])
+            
+    @utils.timed        
+    def coinbase(self):
+                
+        coinbase_crypto_trxs = db.load_coinbase_crypto_trxs_by_user(self.account)
 
-        coinbase_balance = {}
+        coinbase_crypto_currencies = self.extract_coinbase_crypto_currencies(coinbase_crypto_trxs)
 
         for porfolio_point in self.values:
-            up_range = porfolio_point.the_date + timedelta(days=1)
-            coinbase_crypto_trxs = db.load_coinbase_crypto_trxs_by_user_and_date(self.account, porfolio_point.the_date, up_range)
-                        
-            for crypto_trx in coinbase_crypto_trxs:
-                prev_amount = coinbase_balance[crypto_trx.crypto_amount_currency] if crypto_trx.crypto_amount_currency in coinbase_balance else 0
-                coinbase_balance[crypto_trx.crypto_amount_currency] = prev_amount + trx_amount(crypto_trx)
 
-            for balance_currency, balance_amount in coinbase_balance.items():
-                if self.check_level("CRYPTO", balance_currency):
-                    asset_amount = self.asset(porfolio_point, "CRYPTO", balance_currency)
-                    asset_amount.amount += balance_amount
-
-    
+            for currency in coinbase_crypto_currencies:
+                if self.check_level("CRYPTO", currency):
+                    asset_amount = self.asset(porfolio_point, "CRYPTO", currency)
+                    asset_amount.amount += self.coinbase_amount_at(porfolio_point.the_date, currency, coinbase_crypto_trxs)
+        

@@ -57,12 +57,8 @@ SELECT_CRYPTO_RATE='''
 select amount from crypto_rate where crypto_currency = %(crypto_currency)s and native_currency = %(native_currency)s and date = %(date)s;
 '''
 
-SELECT_COINBASE_TRX_BY_ACCOUN_DATES='''
-select * from coinbase_trx where account_id = %(account)s and updated_at >= %(date_from)s and updated_at < %(date_to)s
-'''
-
 SELECT_COINBASE_TRX_BY_ACCOUNT='''
-select * from coinbase_trx where account_id = %(account)s 
+select * from coinbase_trx where account_id = %(account)s order by updated_at
 '''
 
 SELECT_MOONPAY_TRX_BY_ACCOUNT='''
@@ -244,24 +240,7 @@ def load_degiro_deposits_by_user(account_id):
     }, all=True))
   )
     
-def load_coinbase_crypto_trxs_by_user_and_date(account, down_range, up_range):
-  return list(map(lambda e: 
-      bean.CoinbaseTransaction(
-                            e["trx_id"], 
-                            e["updated_at"], 
-                            e["native_amount_amount"],  
-                            e["native_amount_currency"],
-                            e["buy_sell"],
-                            e["crypto_amount_amount"],  
-                            e["crypto_amount_currency"]
-      ),
-    fetch(SELECT_COINBASE_TRX_BY_ACCOUN_DATES, {
-      "account" : account,
-      "date_from" : down_range,
-      "date_to" : up_range
-    }, all=True))
-  )
-
+#order by date
 def load_coinbase_crypto_trxs_by_user(account:str):
   return list(map(lambda e: 
       bean.CoinbaseTransaction(
@@ -334,7 +313,6 @@ def get_crypto_rate(the_date, crypto_currency, native_currency):
   else:
     return None
 
-@utils.timed
 def load_public_bitcoins_amount_at(the_date: date, account_id: str, public_address: str):
   c = fetch(SELECT_PUBLIC_BITCOIN_AT, {
     "updated_at" : the_date,
