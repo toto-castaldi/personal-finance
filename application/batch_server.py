@@ -27,7 +27,7 @@ else:
         coinapi.coinapi_job()
         coinbase.coinbase_job()
         blockchaincom.blockchaincom_job()
-        haskoin.blockchaincom_job()
+        haskoin.job()
         etherscan.etherscan_job()
         fintable.fintable_job()
         companion_image.job()
