@@ -1,19 +1,20 @@
 import common.utils as utils
 import common.db as db
-import common.client.blockchaincom_client as blockchaincom_client
+import common.client.haskoin_client as haskoin_client
 from datetime import datetime
 
 
 logger = utils.init_log()
 
 
-def blockchaincom_job():
-    logger.info("blockchaincom")
+def job():
+    logger.info("haskoin")
     accounts = db.load_all_accounts()
     for account in accounts:
         addresses = db.load_bitcoin_addresses(account.id)
         for address in addresses:
-            if not address.startswith("xpub"):
+            logger.debug(address)
+            if address.startswith("xpub"):
                 today = datetime.today()
-                bitcoin_amount = blockchaincom_client.load_bitcoin_amount(address)
+                bitcoin_amount = haskoin_client.load_bitcoin_amount(address)
                 db.save_address_bitcoin_amount(today, address, bitcoin_amount)

@@ -8,6 +8,7 @@ import common.fiintable as fintable
 import common.coinapi as coinapi
 import common.coinbase as coinbase
 import common.blockchaincom as blockchaincom
+import common.haskoin as haskoin
 import common.etherscan as etherscan
 
 
@@ -18,7 +19,7 @@ def tick_job():
 
 
 if utils.is_dev_env():
-    companion_csv.job()
+    haskoin.job()
     pass
 else:
     if __name__ == '__main__':        
@@ -26,6 +27,7 @@ else:
         coinapi.coinapi_job()
         coinbase.coinbase_job()
         blockchaincom.blockchaincom_job()
+        haskoin.blockchaincom_job()
         etherscan.etherscan_job()
         fintable.fintable_job()
         companion_image.job()
